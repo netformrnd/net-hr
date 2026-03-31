@@ -1,0 +1,1964 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>출산휴가·육아휴직 안내 및 신청 | 넷폼알앤디</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Noto Sans KR', sans-serif; background: #f5f5f5; min-height: 100vh; color: #333; }
+
+        /* ========== Guide Page ========== */
+        .guide-page { max-width: 1100px; margin: 0 auto; background: #fff; min-height: 100vh; }
+        .guide-page.hidden { display: none; }
+
+        .header { background: #2c3e50; padding: 40px 40px 28px; color: white; }
+        .company-name { font-size: 13px; opacity: 0.8; margin-bottom: 10px; letter-spacing: 1px; }
+        .header h1 { font-size: 28px; font-weight: 700; margin-bottom: 6px; line-height: 1.3; }
+        .header .subtitle { font-size: 14px; opacity: 0.75; line-height: 1.5; }
+        .update-tag { display: inline-block; background: #e74c3c; padding: 5px 14px; border-radius: 4px; font-size: 12px; font-weight: 600; margin-top: 12px; }
+
+        .content { padding: 28px 40px 40px; }
+
+        .greeting { background: #f8f9fa; border-radius: 8px; padding: 18px 24px; margin-bottom: 24px; font-size: 15px; line-height: 1.6; }
+        .greeting .highlight { color: #2c3e50; font-weight: 600; }
+        .greeting .contact { margin-top: 10px; padding-top: 10px; border-top: 1px solid #e9ecef; font-size: 13px; color: #666; }
+
+        /* Tab Navigation - PC */
+        .tab-nav { display: flex; justify-content: center; gap: 48px; background: #fff; border-bottom: 2px solid #e9ecef; margin: 0 -40px; padding: 0 40px; position: relative; }
+        .tab-btn { flex: none; padding: 18px 40px 14px; border: none; background: none; font-size: 15px; font-weight: 500; color: #999; cursor: pointer; font-family: 'Noto Sans KR', sans-serif; white-space: nowrap; transition: color 0.3s; position: relative; text-align: center; min-width: 180px; }
+        .tab-btn.active { font-weight: 700; }
+        .tab-btn[data-tab="maternity"].active { color: #e91e63; }
+        .tab-btn[data-tab="pregnant"].active { color: #ff9800; }
+        .tab-btn[data-tab="childcare"].active { color: #1976d2; }
+        .tab-indicator { position: absolute; bottom: -2px; left: 0; height: 3px; border-radius: 2px; transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1); }
+
+        /* Tab content wrapper with sidebar */
+        .tab-content { display: none; padding-top: 24px; }
+        .tab-content.active { display: block; }
+
+        .tab-content-wrapper { display: flex; gap: 28px; }
+        .quick-nav { width: 220px; flex-shrink: 0; position: sticky; top: 20px; align-self: flex-start; background: #f8f9fa; border-radius: 10px; padding: 18px; border: 1px solid #e9ecef; }
+        .quick-nav h4 { font-size: 13px; font-weight: 700; color: #2c3e50; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 2px solid #e9ecef; text-transform: uppercase; letter-spacing: 0.5px; }
+        .quick-nav-list { list-style: none; }
+        .quick-nav-item { display: block; padding: 9px 12px; font-size: 13px; color: #666; text-decoration: none; border-radius: 6px; margin-bottom: 3px; cursor: pointer; transition: all 0.2s; border-left: 3px solid transparent; }
+        .quick-nav-item:hover { background: #e9ecef; color: #333; }
+        .quick-nav-item.active { background: #e3f2fd; color: #1976d2; font-weight: 600; border-left-color: #1976d2; }
+        .quick-nav-item.active-pink { background: #fce4ec; color: #c2185b; font-weight: 600; border-left-color: #e91e63; }
+        .quick-nav-item.active-orange { background: #fff3e0; color: #e65100; font-weight: 600; border-left-color: #ff9800; }
+        .quick-nav-item.active-blue { background: #e3f2fd; color: #1565c0; font-weight: 600; border-left-color: #1976d2; }
+        .quick-nav-btn { display: block; width: 100%; padding: 12px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: 'Noto Sans KR', sans-serif; color: white; margin-top: 14px; transition: opacity 0.2s; text-align: center; }
+        .quick-nav-btn:hover { opacity: 0.9; }
+        .quick-nav-btn.pink { background: #e91e63; }
+        .quick-nav-btn.orange { background: #ff9800; }
+        .quick-nav-btn.blue { background: #1976d2; }
+
+        .tab-main-content { flex: 1; min-width: 0; }
+
+        /* Sections */
+        .section { margin-bottom: 24px; }
+        .section-title { font-size: 16px; font-weight: 700; margin-bottom: 14px; padding: 12px 16px; border-left: 4px solid #2c3e50; background: #f8f9fa; border-radius: 0 6px 6px 0; display: flex; align-items: center; gap: 8px; }
+        .section-title.color-pink { border-left-color: #e91e63; color: #c2185b; }
+        .section-title.color-orange { border-left-color: #ff9800; color: #e65100; }
+        .section-title.color-blue { border-left-color: #1976d2; color: #1565c0; }
+
+        .info-card { background: #f8f9fa; border-radius: 8px; padding: 16px; margin-bottom: 12px; }
+        .info-card h4 { font-size: 15px; font-weight: 600; margin-bottom: 8px; color: #2c3e50; }
+        .info-card p, .info-card li { font-size: 14px; color: #555; line-height: 1.7; }
+        .info-card ul { list-style: none; margin-top: 6px; }
+        .info-card li { padding: 3px 0 3px 20px; position: relative; }
+        .info-card li::before { content: '\2022'; position: absolute; left: 4px; color: #888; font-weight: bold; }
+
+        .law-ref { font-size: 12px; color: #999; margin-top: 8px; font-style: italic; }
+
+        .highlight-box { border-radius: 8px; padding: 18px; margin-bottom: 12px; }
+        .highlight-box.pink { background: #fce4ec; border: 1px solid #f8bbd0; }
+        .highlight-box.orange { background: #fff3e0; border: 1px solid #ffe0b2; }
+        .highlight-box.blue { background: #e3f2fd; border: 1px solid #90caf9; }
+        .highlight-box h4 { font-size: 15px; font-weight: 600; margin-bottom: 10px; }
+        .highlight-box.pink h4 { color: #c2185b; }
+        .highlight-box.orange h4 { color: #e65100; }
+        .highlight-box.blue h4 { color: #1565c0; }
+        .highlight-box li, .highlight-box p { font-size: 14px; line-height: 1.7; }
+
+        .change-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(0,0,0,0.06); font-size: 14px; }
+        .change-item:last-child { border-bottom: none; }
+        .change-item .label { color: #666; }
+        .change-item .value { font-weight: 600; }
+
+        /* 2-column info grid */
+        .info-grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+
+        /* Tables */
+        .simple-table { width: 100%; border-collapse: collapse; font-size: 14px; margin-top: 10px; border-radius: 8px; overflow: hidden; }
+        .simple-table th { padding: 12px 10px; font-weight: 500; text-align: center; color: white; }
+        .simple-table th.pink-bg { background: #e91e63; }
+        .simple-table th.orange-bg { background: #ff9800; }
+        .simple-table th.blue-bg { background: #1976d2; }
+        .simple-table td { padding: 12px 10px; text-align: center; border-bottom: 1px solid #e9ecef; font-size: 13px; }
+        .simple-table .amount { font-weight: 600; color: #e74c3c; }
+        .simple-table .note-row td { background: #fff8e1; font-size: 12px; text-align: left; padding: 10px 12px; color: #795548; }
+
+        /* Process lists */
+        .process-list { list-style: none; }
+        .process-item { display: flex; align-items: flex-start; gap: 14px; padding: 14px 0; border-bottom: 1px solid #f0f0f0; }
+        .process-item:last-child { border-bottom: none; }
+        .process-num { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; color: white; }
+        .process-num.pink { background: #e91e63; }
+        .process-num.orange { background: #ff9800; }
+        .process-num.blue { background: #1976d2; }
+        .process-text h5 { font-size: 15px; font-weight: 600; margin-bottom: 2px; color: #333; }
+        .process-text p { font-size: 13px; color: #888; }
+
+        /* Document list */
+        .doc-list { list-style: none; }
+        .doc-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border: 1px solid #e9ecef; border-radius: 6px; margin-bottom: 8px; font-size: 14px; }
+        .doc-item .name { font-weight: 500; flex: 1; }
+        .tag { font-size: 11px; padding: 3px 10px; border-radius: 4px; font-weight: 500; white-space: nowrap; margin-left: 8px; }
+        .tag-required { background: #ffebee; color: #c62828; }
+        .tag-optional { background: #e3f2fd; color: #1565c0; }
+
+        /* Apply button inside tab */
+        .apply-btn-wrap { margin-top: 20px; }
+        .apply-btn { display: block; width: 100%; padding: 16px; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; font-family: 'Noto Sans KR', sans-serif; color: white; transition: opacity 0.2s; }
+        .apply-btn:hover { opacity: 0.9; }
+        .apply-btn.pink { background: #e91e63; }
+        .apply-btn.orange { background: #ff9800; }
+        .apply-btn.blue { background: #1976d2; }
+
+        /* Common sections - 2x2 grid on PC */
+        .common-sections { margin-top: 36px; padding-top: 28px; border-top: 2px solid #e9ecef; }
+        .common-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+        .contact-box { background: #2c3e50; color: white; border-radius: 8px; padding: 20px; }
+        .contact-box h4 { font-size: 15px; font-weight: 600; margin-bottom: 12px; }
+        .contact-row { font-size: 13px; padding: 4px 0; opacity: 0.9; }
+
+        .insurance-card { background: #f8f9fa; border-radius: 8px; padding: 16px; }
+        .insurance-card h4 { font-size: 14px; font-weight: 600; margin-bottom: 10px; color: #2c3e50; }
+        .insurance-card li { font-size: 13px; padding: 4px 0 4px 20px; position: relative; color: #555; line-height: 1.6; }
+        .insurance-card li::before { content: '\2022'; position: absolute; left: 4px; color: #888; }
+
+        .warning-box { background: #fff8e1; border-left: 3px solid #ffc107; padding: 16px; border-radius: 0 8px 8px 0; }
+        .warning-box .title { font-size: 14px; font-weight: 600; margin-bottom: 6px; color: #f57c00; }
+        .warning-box p { font-size: 13px; color: #555; line-height: 1.6; }
+        .warning-box .penalty { color: #c62828; font-weight: 600; margin-top: 6px; font-size: 12px; }
+
+        .external-info { background: #fafafa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 16px; }
+        .external-info h4 { font-size: 14px; font-weight: 600; margin-bottom: 10px; color: #555; }
+        .external-info ul { list-style: none; }
+        .external-info li { font-size: 13px; padding: 4px 0; color: #666; }
+
+        /* ========== Form Page ========== */
+        .form-page { display: none; max-width: 1000px; margin: 0 auto; padding: 28px 40px; background: #f5f5f5; min-height: 100vh; }
+        .form-page.active { display: block; }
+
+        .form-top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .back-btn { display: inline-flex; align-items: center; gap: 4px; background: #2c3e50; color: white; padding: 10px 18px; border-radius: 6px; border: none; font-size: 13px; cursor: pointer; font-family: 'Noto Sans KR', sans-serif; }
+        .back-btn:hover { background: #34495e; }
+
+        .progress-container { background: white; border-radius: 8px; padding: 18px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .progress-title { font-size: 14px; font-weight: 600; color: #2c3e50; }
+        .progress-percent { font-size: 14px; font-weight: 700; color: #27ae60; }
+        .progress-bar-bg { width: 100%; height: 8px; background: #e9ecef; border-radius: 4px; overflow: hidden; }
+        .progress-bar-fill { height: 100%; background: linear-gradient(90deg, #27ae60, #2ecc71); border-radius: 4px; transition: width 0.3s ease; width: 0%; }
+        .progress-hint { font-size: 12px; color: #888; margin-top: 8px; }
+
+        .form-container { background: white; border-radius: 8px; padding: 36px 32px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .form-header { text-align: center; padding-bottom: 24px; margin-bottom: 28px; border-bottom: 2px solid #2c3e50; }
+        .form-header h1 { font-size: 22px; font-weight: 700; color: #2c3e50; margin-bottom: 6px; }
+        .form-header p { font-size: 12px; color: #888; }
+
+        .form-section { margin-bottom: 32px; }
+        .form-section.hidden { display: none; }
+        .form-section-title { font-size: 15px; font-weight: 700; color: #2c3e50; padding: 12px 16px; background: #f8f9fa; border-left: 3px solid #2c3e50; margin-bottom: 18px; transition: all 0.3s; }
+        .form-section-title.active { background: #e3f2fd; border-left-color: #1976d2; color: #1976d2; }
+
+        /* Form 2-column layout */
+        .form-row-2col { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px 24px; }
+
+        .form-group { display: flex; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px; }
+        .form-label { min-width: 110px; font-size: 13px; font-weight: 500; color: #333; }
+        .form-label.required::after { content: '*'; color: #e74c3c; margin-left: 2px; }
+
+        .form-input { flex: 1; min-width: 120px; padding: 11px 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; font-family: 'Noto Sans KR', sans-serif; transition: all 0.2s; }
+        .form-input:focus { outline: none; border-color: #2c3e50; box-shadow: 0 0 0 3px rgba(44,62,80,0.1); background: #fafbfc; }
+        .form-input.short { max-width: 200px; }
+        .form-input[readonly] { background: #f8f9fa; color: #666; border-color: #e9ecef; }
+        select.form-input { cursor: pointer; appearance: auto; }
+
+        .radio-group { display: flex; flex-wrap: wrap; gap: 10px; }
+        .radio-item { display: flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer; padding: 10px 18px; border: 2px solid #e0e0e0; border-radius: 8px; transition: all 0.2s; }
+        .radio-item:hover { border-color: #aaa; }
+        .radio-item input[type="radio"] { width: 16px; height: 16px; cursor: pointer; accent-color: #2c3e50; }
+        .radio-item.selected { border-color: #2c3e50; background: #f0f4f8; }
+
+        .checkbox-group { display: flex; flex-wrap: wrap; gap: 14px; }
+        .checkbox-item { display: flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer; }
+        .checkbox-item input { width: 18px; height: 18px; cursor: pointer; accent-color: #2c3e50; }
+
+        .form-info { background: #e3f2fd; border-radius: 6px; padding: 14px; margin: 14px 0; font-size: 13px; line-height: 1.6; color: #1565c0; }
+        .form-info .title { font-weight: 600; margin-bottom: 6px; }
+
+        .form-notice { background: #fff8e1; border-left: 3px solid #ffc107; padding: 14px; margin: 14px 0; font-size: 13px; border-radius: 0 6px 6px 0; }
+        .form-notice .title { font-weight: 600; margin-bottom: 6px; color: #f57c00; }
+
+        .form-textarea { width: 100%; min-height: 100px; padding: 12px 14px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; font-family: 'Noto Sans KR', sans-serif; resize: vertical; transition: all 0.2s; }
+        .form-textarea:focus { outline: none; border-color: #2c3e50; box-shadow: 0 0 0 3px rgba(44,62,80,0.1); }
+
+        /* File table */
+        .file-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        .file-table th, .file-table td { padding: 10px; border: 1px solid #e9ecef; text-align: left; }
+        .file-table th { background: #f8f9fa; font-weight: 500; }
+        .file-upload-wrapper { display: flex; align-items: center; gap: 8px; }
+        .file-input { display: none; }
+        .file-btn { padding: 6px 12px; background: #2c3e50; color: white; border-radius: 4px; font-size: 12px; cursor: pointer; white-space: nowrap; }
+        .filename { font-size: 12px; color: #666; max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .file-remove { background: #e74c3c; color: white; border: none; border-radius: 50%; width: 18px; height: 18px; font-size: 11px; cursor: pointer; display: none; line-height: 18px; text-align: center; }
+
+        /* Signature + Notice side by side on PC */
+        .signature-notice-row { display: flex; gap: 28px; align-items: flex-start; }
+        .signature-notice-row .signature-area { flex: 1; }
+        .signature-notice-row .notice-section { flex: 1; }
+
+        /* Signature */
+        .signature-area { text-align: center; padding: 24px 0; margin-top: 24px; border-top: 1px solid #e9ecef; }
+        .signature-date { font-size: 15px; margin-bottom: 20px; }
+        .signature-box { max-width: 400px; margin: 0 auto; }
+        .signature-line { font-size: 15px; margin-bottom: 24px; }
+        .signature-line input { width: 120px; padding: 8px 10px; border: none; border-bottom: 2px solid #333; text-align: center; font-size: 15px; font-family: 'Noto Sans KR', sans-serif; }
+        .signature-line input:focus { outline: none; border-bottom-color: #2c3e50; }
+        .signature-section { text-align: left; }
+        .signature-label { font-size: 14px; font-weight: 600; color: #2c3e50; margin-bottom: 12px; }
+        .signature-tabs { display: flex; gap: 8px; margin-bottom: 12px; }
+        .sig-tab { flex: 1; padding: 10px 16px; border: 2px solid #e0e0e0; background: #f8f9fa; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer; font-family: 'Noto Sans KR', sans-serif; transition: all 0.2s; }
+        .sig-tab:hover { border-color: #2c3e50; }
+        .sig-tab.active { border-color: #2c3e50; background: #2c3e50; color: white; }
+        .sig-tab-content { display: none; }
+        .sig-tab-content.active { display: block; }
+        .canvas-container { border: 2px dashed #ccc; border-radius: 8px; background: #fafafa; margin-bottom: 10px; overflow: hidden; }
+        #signatureCanvas { display: block; width: 100%; height: 120px; cursor: crosshair; touch-action: none; }
+        .canvas-buttons { display: flex; gap: 8px; margin-bottom: 8px; }
+        .canvas-btn { flex: 1; padding: 8px 12px; border: 1px solid #ddd; background: white; border-radius: 6px; font-size: 13px; cursor: pointer; font-family: 'Noto Sans KR', sans-serif; }
+        .canvas-btn:hover { background: #f5f5f5; }
+        .canvas-btn.primary { background: #2c3e50; color: white; border-color: #2c3e50; }
+        .canvas-hint { font-size: 12px; color: #888; text-align: center; }
+        .sig-upload-area { border: 2px dashed #ccc; border-radius: 8px; padding: 24px; text-align: center; background: #fafafa; cursor: pointer; transition: all 0.2s; }
+        .sig-upload-area:hover { border-color: #2c3e50; background: #f5f5f5; }
+        .sig-upload-label { display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; }
+        .sig-upload-label span { font-size: 13px; color: #555; }
+        .sig-upload-label .upload-hint { font-size: 11px; color: #999; }
+        .signature-preview { margin-top: 16px; padding: 16px; border: 2px solid #27ae60; border-radius: 8px; background: #f0fff4; }
+        .preview-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-size: 13px; font-weight: 600; color: #27ae60; }
+        .remove-sig-btn { padding: 4px 10px; background: #e74c3c; color: white; border: none; border-radius: 4px; font-size: 12px; cursor: pointer; font-family: 'Noto Sans KR', sans-serif; }
+        .signature-preview img { max-width: 100%; max-height: 100px; display: block; margin: 0 auto; }
+
+        .oath-box { background: #fff8e1; border-left: 3px solid #ffc107; padding: 14px; border-radius: 0 6px 6px 0; font-size: 13px; line-height: 1.7; }
+
+        .company-line { margin-top: 40px; text-align: center; font-size: 18px; font-weight: 700; color: #2c3e50; }
+
+        .notice-section { background: #f8f9fa; border-radius: 8px; padding: 20px; margin-top: 24px; border-top: 2px solid #2c3e50; }
+        .notice-section h4 { font-size: 14px; font-weight: 700; color: #2c3e50; margin-bottom: 12px; }
+        .notice-section ul { padding-left: 20px; margin: 0; }
+        .notice-section li { font-size: 13px; line-height: 1.8; color: #555; }
+        .notice-section li strong { color: #c62828; }
+
+        .btn-group { display: flex; justify-content: center; gap: 12px; margin-top: 28px; }
+        .btn { padding: 14px 36px; border: none; border-radius: 6px; font-size: 15px; font-weight: 500; cursor: pointer; font-family: 'Noto Sans KR', sans-serif; }
+        .btn-primary { background: #2c3e50; color: white; }
+        .btn-primary:hover { background: #34495e; }
+        .btn-success { background: #27ae60; color: white; }
+        .btn-success:hover { background: #2ecc71; }
+
+        /* Modals */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); z-index: 1000; justify-content: center; align-items: center; }
+        .modal.show { display: flex; }
+        .modal-box { background: white; border-radius: 12px; width: 90%; max-width: 480px; text-align: center; padding: 36px 28px; }
+        .modal-icon { font-size: 48px; margin-bottom: 16px; }
+        .modal-title { font-size: 18px; font-weight: 600; margin-bottom: 8px; color: #2c3e50; }
+        .modal-text { font-size: 14px; color: #666; margin-bottom: 20px; line-height: 1.6; }
+        .modal-btn { padding: 10px 32px; background: #2c3e50; color: white; border: none; border-radius: 6px; font-size: 14px; cursor: pointer; font-family: 'Noto Sans KR', sans-serif; }
+        .modal-attach-list { text-align: left; margin: 16px 0; }
+        .modal-attach-item { padding: 8px 12px; background: #e8f5e9; border-radius: 5px; margin-bottom: 5px; font-size: 13px; }
+        .modal-no-attach { color: #999; font-size: 13px; padding: 10px; text-align: center; background: #f5f5f5; border-radius: 5px; }
+        .modal-submit-info { background: #f8f9fa; border-radius: 8px; padding: 14px; margin-bottom: 16px; text-align: left; }
+        .modal-submit-info .info-row { display: flex; margin-bottom: 6px; font-size: 13px; }
+        .modal-submit-info .info-label { font-weight: 600; width: 70px; color: #555; }
+        .modal-submit-info .info-value { color: #333; }
+
+        /* Print styles */
+        @media print {
+            .no-print, .back-btn, .btn-group, .bottom-bar, .progress-container, .signature-tabs, .canvas-buttons, .canvas-hint, .sig-upload-area, .tab-nav, .quick-nav, .form-top-bar { display: none !important; }
+            body { background: white; }
+            .form-page { display: block !important; padding: 0; max-width: 100%; }
+            .guide-page { display: none !important; }
+            .form-container { box-shadow: none; padding: 20px; }
+            .signature-preview { border: 1px solid #333; background: white; }
+            .form-section.hidden { display: none !important; }
+            .signature-notice-row { flex-direction: column; }
+        }
+
+        /* ========== Responsive Breakpoints ========== */
+        /* Tablet: 768-1024 */
+        @media (max-width: 1024px) {
+            .quick-nav { display: none; }
+            .tab-content-wrapper { flex-direction: column; }
+            .guide-page { max-width: 100%; }
+            .content { padding: 24px 24px 40px; }
+            .header { padding: 32px 24px 20px; }
+            .tab-nav { margin: 0 -24px; padding: 0 24px; }
+            .tab-btn { min-width: auto; flex: 1; padding: 14px 12px 12px; font-size: 14px; }
+            .form-page { padding: 20px; max-width: 100%; }
+            .signature-notice-row { flex-direction: column; }
+        }
+
+        /* Mobile: < 768 */
+        @media (max-width: 768px) {
+            .header h1 { font-size: 22px; }
+            .header { padding: 28px 20px 18px; }
+            .content { padding: 20px; }
+            .tab-nav { margin: 0 -20px; padding: 0 20px; overflow-x: auto; }
+            .tab-btn { font-size: 13px; padding: 12px 8px 10px; min-width: 0; }
+            .info-grid-2, .common-grid, .form-row-2col { grid-template-columns: 1fr; }
+            .form-page { padding: 16px; }
+            .form-container { padding: 20px 16px; }
+            .form-group { flex-direction: column; align-items: flex-start; }
+            .form-label { min-width: 100%; margin-bottom: 4px; }
+            .form-input { width: 100%; max-width: none; }
+            .form-input.short { max-width: none; }
+            .radio-group { flex-direction: column; }
+            .radio-item { width: 100%; }
+            .change-item { font-size: 13px; }
+            .section-title { font-size: 15px; }
+            .signature-notice-row { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ==================== GUIDE PAGE ==================== -->
+<div class="guide-page" id="guidePage">
+    <div class="header">
+        <div class="company-name">주식회사 넷폼알앤디</div>
+        <h1>출산휴가·육아휴직 안내</h1>
+        <p class="subtitle">일·가정 양립을 위한 모성보호·육아지원 제도 종합 안내</p>
+        <div class="update-tag">2025~2026년 개정법 반영</div>
+    </div>
+
+    <div class="content">
+        <div class="greeting">
+            <p>안녕하세요, <span class="highlight">임직원</span>님.</p>
+            <p>출산휴가 및 육아휴직에 대한 종합 안내를 드립니다.</p>
+            <div class="contact">경영관리팀 070-4412-1775 | yoojin83@netformrnd.com</div>
+        </div>
+
+        <!-- Tab Navigation -->
+        <div class="tab-nav" id="tabNav">
+            <button class="tab-btn active" data-tab="maternity" onclick="switchTab('maternity')">출산휴가</button>
+            <button class="tab-btn" data-tab="pregnant" onclick="switchTab('pregnant')">육아휴직(임신중)</button>
+            <button class="tab-btn" data-tab="childcare" onclick="switchTab('childcare')">육아휴직(자녀양육)</button>
+            <div class="tab-indicator" id="tabIndicator"></div>
+        </div>
+
+        <!-- ===== TAB 1: 출산휴가 ===== -->
+        <div class="tab-content active" id="tab-maternity">
+            <div class="tab-content-wrapper">
+                <!-- PC Sidebar -->
+                <nav class="quick-nav" id="quickNav-maternity">
+                    <h4>바로가기</h4>
+                    <ul class="quick-nav-list">
+                        <li><a class="quick-nav-item active-pink" data-section="mat-s1" onclick="scrollToSection('mat-s1')">1. 정의 및 안내</a></li>
+                        <li><a class="quick-nav-item" data-section="mat-s2" onclick="scrollToSection('mat-s2')">2. 주요 안내사항</a></li>
+                        <li><a class="quick-nav-item" data-section="mat-s3" onclick="scrollToSection('mat-s3')">3. 신청 자격 요건</a></li>
+                        <li><a class="quick-nav-item" data-section="mat-s4" onclick="scrollToSection('mat-s4')">4. 급여 관련 안내</a></li>
+                        <li><a class="quick-nav-item" data-section="mat-s5" onclick="scrollToSection('mat-s5')">5. 신청 절차</a></li>
+                        <li><a class="quick-nav-item" data-section="mat-s6" onclick="scrollToSection('mat-s6')">6. 필요 서류</a></li>
+                    </ul>
+                    <button class="quick-nav-btn pink" onclick="showFormPage()">신청서 작성하기 &rarr;</button>
+                </nav>
+                <!-- Main Content -->
+                <div class="tab-main-content">
+                    <!-- Sub-tab navigation -->
+                    <div style="display:flex; gap:8px; margin-bottom:20px;">
+                        <button class="sub-tab active" data-sub="self" onclick="switchSubTab('self')"
+                                style="flex:1; padding:12px; border:2px solid #e91e63; background:#e91e63; color:white; border-radius:8px; font-size:14px; font-weight:600; cursor:pointer; font-family:'Noto Sans KR',sans-serif;">
+                            본인 출산
+                        </button>
+                        <button class="sub-tab" data-sub="spouse" onclick="switchSubTab('spouse')"
+                                style="flex:1; padding:12px; border:2px solid #1565c0; background:white; color:#1565c0; border-radius:8px; font-size:14px; font-weight:600; cursor:pointer; font-family:'Noto Sans KR',sans-serif;">
+                            배우자 출산
+                        </button>
+                    </div>
+
+                    <!-- ===== 본인 출산 ===== -->
+                    <div id="sub-self">
+                        <div class="section" id="mat-s1">
+                            <div class="section-title color-pink">1. 정의 및 안내</div>
+                            <div class="info-grid-2">
+                                <div class="info-card">
+                                    <p>출산전후휴가는 임신 중인 여성 근로자의 모성 보호를 위해 출산 전·후로 부여되는 법정 보호 휴가입니다.</p>
+                                    <p class="law-ref">근거법: 근로기준법 제74조</p>
+                                </div>
+                                <div class="info-card">
+                                    <h4>유·사산 휴가 (임신기간별 차등)</h4>
+                                    <ul>
+                                        <li>11주 이내: 5일</li>
+                                        <li>12~15주: 10일</li>
+                                        <li>16~21주: 30일</li>
+                                        <li>22~27주: 60일</li>
+                                        <li>28주 이후: 90일</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section" id="mat-s2">
+                            <div class="section-title color-pink">2. 주요 안내사항</div>
+                            <div class="highlight-box pink">
+                                <h4>출산전후휴가</h4>
+                                <div class="change-item"><span class="label">휴가 기간</span><span class="value" style="color:#c2185b;">90일 (다태아 120일)</span></div>
+                                <div class="change-item"><span class="label">출산 후 확보</span><span class="value" style="color:#c2185b;">45일 이상 (다태아 60일)</span></div>
+                                <div class="change-item"><span class="label">해고 금지</span><span class="value" style="color:#c2185b;">출산전후휴가 중 해고 금지</span></div>
+                            </div>
+                        </div>
+
+                        <div class="section" id="mat-s3">
+                            <div class="section-title color-pink">3. 신청 자격 요건</div>
+                            <div class="info-grid-2">
+                                <div class="info-card">
+                                    <h4>출산전후휴가</h4>
+                                    <p>임신 중인 여성 근로자</p>
+                                    <ul>
+                                        <li>근속기간 무관</li>
+                                        <li>정규직·계약직·기간제·파견직 등 <strong>고용형태 무관</strong></li>
+                                        <li style="font-size:12px; color:#888; padding-left:20px;">근거: 근로기준법 제74조 (고용형태를 구분하지 않고 모든 여성 근로자에게 적용)</li>
+                                        <li style="font-size:12px; color:#888; padding-left:20px;">기간제·파견 근로자는 계약 만료 시에도 잔여 휴가 급여 보장 (고용보험법 제76조의2)</li>
+                                    </ul>
+                                </div>
+                                <div class="info-card">
+                                    <h4>유·사산 휴가</h4>
+                                    <p>유산 또는 사산한 여성 근로자</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section" id="mat-s4">
+                            <div class="section-title color-pink">4. 급여 관련 안내</div>
+                            <div class="highlight-box pink">
+                                <h4>넷폼알앤디 기준 (우선지원대상기업)</h4>
+                                <div class="change-item"><span class="label">90일 전체</span><span class="value" style="color:#c2185b;">고용보험에서 지급</span></div>
+                                <div class="change-item"><span class="label">급여 상한</span><span class="value" style="color:#c2185b;">월 220만원 (90일 총 660만원)</span></div>
+                                <div class="change-item"><span class="label">회사 부담</span><span class="value" style="color:#c2185b;">통상임금이 상한 초과 시 차액만</span></div>
+                                <div class="change-item"><span class="label">지급 방식</span><span class="value" style="color:#c2185b;">회사 선지급 → 고용보험 환급</span></div>
+                            </div>
+                            <div class="info-card" style="padding:18px;">
+                                <h4 style="margin-bottom:14px;">💡 쉽게 알아보는 출산전후휴가 급여</h4>
+                                <div style="background:#fff0f3; border-radius:10px; padding:16px; margin-bottom:14px;">
+                                    <p style="font-size:14px; font-weight:600; color:#c2185b; margin-bottom:8px;">한 줄 요약</p>
+                                    <p style="font-size:15px; font-weight:700; color:#333;">90일간 매달 <span style="color:#e91e63;">최대 220만원</span>씩 받습니다.</p>
+                                    <p style="font-size:13px; color:#666; margin-top:4px;">내 월급이 220만원 이하면 월급 그대로, 220만원 넘으면 220만원까지만 정부 지원</p>
+                                </div>
+                                <p style="font-size:14px; font-weight:600; color:#333; margin-bottom:10px;">예시로 살펴볼까요?</p>
+                                <div style="background:#f8f9fa; border-radius:8px; padding:14px; margin-bottom:10px; border-left:4px solid #e91e63;">
+                                    <p style="font-size:13px; color:#555; margin-bottom:4px;">월급(통상임금) <strong>200만원</strong>인 경우</p>
+                                    <p style="font-size:16px; font-weight:700; color:#c2185b;">→ 90일간 총 <span style="font-size:18px;">600만원</span> 수령</p>
+                                    <p style="font-size:12px; color:#888;">월 200만원 × 3개월 = 600만원 (상한 이하이므로 전액 정부 지원)</p>
+                                </div>
+                                <div style="background:#f8f9fa; border-radius:8px; padding:14px; margin-bottom:10px; border-left:4px solid #e91e63;">
+                                    <p style="font-size:13px; color:#555; margin-bottom:4px;">월급(통상임금) <strong>300만원</strong>인 경우</p>
+                                    <p style="font-size:16px; font-weight:700; color:#c2185b;">→ 90일간 총 <span style="font-size:18px;">900만원</span> 수령</p>
+                                    <p style="font-size:12px; color:#888;">정부 지원 660만원 (상한) + 회사가 차액 240만원 추가 지급 = 월급 그대로 받음</p>
+                                </div>
+                                <div style="background:#f8f9fa; border-radius:8px; padding:14px; margin-bottom:10px; border-left:4px solid #e91e63;">
+                                    <p style="font-size:13px; color:#555; margin-bottom:4px;">월급(통상임금) <strong>400만원</strong>인 경우</p>
+                                    <p style="font-size:16px; font-weight:700; color:#c2185b;">→ 90일간 총 <span style="font-size:18px;">1,200만원</span> 수령</p>
+                                    <p style="font-size:12px; color:#888;">정부 지원 660만원 (상한) + 회사가 차액 540만원 추가 지급 = 월급 그대로 받음</p>
+                                </div>
+                                <div style="background:#fff8e1; border-radius:8px; padding:12px; font-size:13px; color:#795548; line-height:1.6;">
+                                    <strong>핵심:</strong> 월급이 얼마든 <strong>휴가 전 월급 그대로</strong> 받습니다.<br>
+                                    정부가 월 220만원까지 지원하고, 그 이상은 회사가 메꿔주는 구조입니다.<br>
+                                    <span style="font-size:12px; color:#999;">※ 통상임금 = 기본급 + 고정수당 (상여금·성과급 제외)</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section" id="mat-s5">
+                            <div class="section-title color-pink">5. 신청 절차</div>
+                            <div class="info-card" style="background:#fff0f3; border:1px solid #f8bbd0; margin-bottom:12px;">
+                                <h4 style="color:#c2185b;">전체 흐름: 신청 → 승인 → 휴가 → 급여 수령</h4>
+                            </div>
+                            <ul class="process-list">
+                                <li class="process-item"><div class="process-num pink">1</div><div class="process-text"><h5>출산 예정일 확인 및 휴가 시작일 결정</h5><p>출산 예정일 기준 휴가 기간 산정 (출산 후 45일 이상 확보)</p></div></li>
+                                <li class="process-item"><div class="process-num pink">2</div><div class="process-text"><h5>회사에 신청서 + 증빙서류 제출</h5><p>경영관리팀에 제출 (출산 예정일 전)</p></div></li>
+                                <li class="process-item"><div class="process-num pink">3</div><div class="process-text"><h5>경영관리팀 검토 및 승인</h5><p>서류 확인 → 휴가 승인 처리</p></div></li>
+                                <li class="process-item"><div class="process-num pink">4</div><div class="process-text"><h5>휴가 개시 (회사에서 급여 선지급)</h5><p>승인된 일자부터 90일 휴가 시작. 회사가 통상임금 지급</p></div></li>
+                                <li class="process-item"><div class="process-num pink">5</div><div class="process-text"><h5>회사 → 고용보험 확인서 제출</h5><p>경영관리팀에서 별지 제107호서식 확인서 제출</p></div></li>
+                                <li class="process-item"><div class="process-num pink">6</div><div class="process-text"><h5>본인 → 고용24에서 급여 신청</h5><p>www.work24.go.kr (휴가 시작 1개월 후 ~ 종료 후 12개월 이내)</p></div></li>
+                                <li class="process-item"><div class="process-num pink">7</div><div class="process-text"><h5>고용보험 → 급여 지급</h5><p>심사 후 본인 계좌로 지급 (회사에 환급)</p></div></li>
+                            </ul>
+                        </div>
+
+                        <div class="section" id="mat-s6">
+                            <div class="section-title color-pink">6. 필요 서류</div>
+                            <ul class="doc-list">
+                                <li class="doc-item"><span class="name">출산전후휴가 신청서</span><span class="tag tag-required">필수</span></li>
+                                <li class="doc-item"><span class="name">출산(예정)일 증빙서류 (의사진단서 또는 출생증명서)</span><span class="tag tag-required">필수</span></li>
+                                <li class="doc-item"><span class="name">다태아 증빙서류</span><span class="tag tag-optional">해당 시</span></li>
+                                <li class="doc-item"><span class="name">유·사산 진단서</span><span class="tag tag-optional">해당 시</span></li>
+                            </ul>
+                        </div>
+
+                        <div class="apply-btn-wrap">
+                            <button class="apply-btn pink" onclick="showFormPage()">7. 신청서 작성하기</button>
+                        </div>
+                    </div>
+
+                    <!-- ===== 배우자 출산 ===== -->
+                    <div id="sub-spouse" style="display:none;">
+                        <div class="section" id="mat-sp-s1">
+                            <div class="section-title" style="border-left-color:#1565c0; color:#1565c0;">1. 정의 및 안내</div>
+                            <div class="info-card">
+                                <p>배우자 출산휴가는 배우자의 출산 시 남녀 근로자에게 부여되는 유급 휴가입니다.</p>
+                                <p class="law-ref">근거법: 남녀고용평등법 제18조의2</p>
+                            </div>
+                        </div>
+
+                        <div class="section" id="mat-sp-s2">
+                            <div class="section-title" style="border-left-color:#1565c0; color:#1565c0;">2. 주요 안내사항</div>
+                            <div class="highlight-box blue">
+                                <h4>배우자 출산휴가 (2025.2.23 시행)</h4>
+                                <div class="change-item"><span class="label">휴가 기간</span><span class="value" style="color:#1565c0;">20일 (유급)</span></div>
+                                <div class="change-item"><span class="label">사용 기한</span><span class="value" style="color:#1565c0;">출산일로부터 120일 이내</span></div>
+                                <div class="change-item"><span class="label">분할 사용</span><span class="value" style="color:#1565c0;">최대 4회 분할 가능</span></div>
+                                <div class="change-item"><span class="label">급여 지원</span><span class="value" style="color:#1565c0;">20일 전액 정부 지원</span></div>
+                                <div class="change-item"><span class="label">고지제</span><span class="value" style="color:#1565c0;">승인 불요, 알리기만 하면 OK</span></div>
+                            </div>
+                        </div>
+
+                        <div class="section" id="mat-sp-s3">
+                            <div class="section-title" style="border-left-color:#1565c0; color:#1565c0;">3. 신청 자격 요건</div>
+                            <div class="info-card">
+                                <h4>배우자 출산휴가</h4>
+                                <p>배우자가 출산한 근로자 (출산일로부터 120일 이내 신청, 최대 4회 분할 사용)</p>
+                                <ul>
+                                    <li>근속기간 무관</li>
+                                    <li>정규직·계약직·기간제·파견직 등 <strong>고용형태 무관</strong></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="section" id="mat-sp-s4">
+                            <div class="section-title" style="border-left-color:#1565c0; color:#1565c0;">4. 급여 관련 안내</div>
+                            <div class="highlight-box blue">
+                                <h4>넷폼알앤디 기준 (우선지원대상기업)</h4>
+                                <div class="change-item"><span class="label">20일 전체</span><span class="value" style="color:#1565c0;">고용보험에서 지급</span></div>
+                                <div class="change-item"><span class="label">급여 상한</span><span class="value" style="color:#1565c0;">약 160만원 (1일 80,382원 × 20일)</span></div>
+                                <div class="change-item"><span class="label">회사 부담</span><span class="value" style="color:#1565c0;">통상임금이 상한 초과 시 차액만</span></div>
+                                <div class="change-item"><span class="label">지급 방식</span><span class="value" style="color:#1565c0;">회사 선지급 → 고용보험 환급</span></div>
+                            </div>
+                            <div class="info-card" style="padding:18px;">
+                                <h4 style="margin-bottom:14px;">💡 쉽게 알아보는 배우자 출산휴가 급여</h4>
+                                <div style="background:#e3f2fd; border-radius:10px; padding:16px; margin-bottom:14px;">
+                                    <p style="font-size:14px; font-weight:600; color:#1565c0; margin-bottom:8px;">한 줄 요약</p>
+                                    <p style="font-size:15px; font-weight:700; color:#333;">20일간 <span style="color:#1565c0;">월급 그대로</span> 받으면서 쉽니다.</p>
+                                    <p style="font-size:13px; color:#666; margin-top:4px;">회사가 먼저 급여를 주고, 정부가 회사에 돌려줍니다 (내가 신경 쓸 건 없음)</p>
+                                </div>
+                                <p style="font-size:14px; font-weight:600; color:#333; margin-bottom:10px;">예시로 살펴볼까요?</p>
+                                <div style="background:#f8f9fa; border-radius:8px; padding:14px; margin-bottom:10px; border-left:4px solid #1565c0;">
+                                    <p style="font-size:13px; color:#555; margin-bottom:4px;">월급(통상임금) <strong>200만원</strong>인 경우</p>
+                                    <p style="font-size:16px; font-weight:700; color:#1565c0;">→ 20일간 약 <span style="font-size:18px;">182만원</span> 수령</p>
+                                    <p style="font-size:12px; color:#888;">일급 약 9.1만원 × 20일 (상한 이하이므로 전액 정부 환급)</p>
+                                </div>
+                                <div style="background:#f8f9fa; border-radius:8px; padding:14px; margin-bottom:10px; border-left:4px solid #1565c0;">
+                                    <p style="font-size:13px; color:#555; margin-bottom:4px;">월급(통상임금) <strong>300만원</strong>인 경우</p>
+                                    <p style="font-size:16px; font-weight:700; color:#1565c0;">→ 20일간 약 <span style="font-size:18px;">273만원</span> 수령</p>
+                                    <p style="font-size:12px; color:#888;">일급 약 13.6만원 × 20일. 정부 160만원 + 회사 113만원 = 월급 그대로</p>
+                                </div>
+                                <div style="background:#fff8e1; border-radius:8px; padding:12px; font-size:13px; color:#795548; line-height:1.6;">
+                                    <strong>핵심:</strong> 월급이 얼마든 <strong>20일간 월급 그대로</strong> 받습니다.<br>
+                                    정부가 약 160만원까지 지원, 나머지는 회사 부담. 근로자 입장에서는 차이 없음.<br>
+                                    <span style="font-size:12px; color:#999;">※ 토·일·공휴일은 20일에 포함되지 않으므로 실제 쉬는 기간은 약 4주</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section" id="mat-sp-s5">
+                            <div class="section-title" style="border-left-color:#1565c0; color:#1565c0;">5. 신청 절차</div>
+                            <div class="info-card" style="background:#e3f2fd; border:1px solid #90caf9; margin-bottom:12px;">
+                                <h4 style="color:#1565c0;">전체 흐름: 고지 → 휴가 → 급여 수령</h4>
+                                <p style="font-size:12px; color:#555;">※ 2025년부터 '신청'이 아닌 '고지'로 변경 — 회사 승인 없이 알리기만 하면 됩니다</p>
+                            </div>
+                            <ul class="process-list">
+                                <li class="process-item"><div class="process-num" style="background:#1565c0;">1</div><div class="process-text"><h5>회사에 배우자 출산 사실 고지</h5><p>출산일로부터 120일 이내. 신청서 + 출생증명서 제출</p></div></li>
+                                <li class="process-item"><div class="process-num" style="background:#1565c0;">2</div><div class="process-text"><h5>휴가 사용 (최대 4회 분할 가능)</h5><p>20일간 유급 휴가. 회사가 통상임금 선지급</p></div></li>
+                                <li class="process-item"><div class="process-num" style="background:#1565c0;">3</div><div class="process-text"><h5>회사 → 고용보험 확인서 제출</h5><p>경영관리팀에서 별지 제107호의2서식 확인서 제출</p></div></li>
+                                <li class="process-item"><div class="process-num" style="background:#1565c0;">4</div><div class="process-text"><h5>본인 → 고용24에서 급여 신청</h5><p>www.work24.go.kr (휴가 종료 후 12개월 이내)</p></div></li>
+                                <li class="process-item"><div class="process-num" style="background:#1565c0;">5</div><div class="process-text"><h5>고용보험 → 급여 지급</h5><p>심사 후 회사에 환급 (상한 내)</p></div></li>
+                            </ul>
+                        </div>
+
+                        <div class="section" id="mat-sp-s6">
+                            <div class="section-title" style="border-left-color:#1565c0; color:#1565c0;">6. 필요 서류</div>
+                            <ul class="doc-list">
+                                <li class="doc-item"><span class="name">출생증명서</span><span class="tag tag-required">필수</span></li>
+                                <li class="doc-item"><span class="name">가족관계증명서</span><span class="tag tag-required">필수</span></li>
+                                <li class="doc-item"><span class="name">배우자 재직증명서</span><span class="tag tag-optional">해당 시</span></li>
+                            </ul>
+                        </div>
+
+                        <div class="apply-btn-wrap">
+                            <button class="apply-btn" style="background:#1565c0;" onclick="showFormPage()">7. 신청서 작성하기</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== TAB 2: 육아휴직 - 임신 중 ===== -->
+        <div class="tab-content" id="tab-pregnant">
+            <div class="tab-content-wrapper">
+                <nav class="quick-nav" id="quickNav-pregnant">
+                    <h4>바로가기</h4>
+                    <ul class="quick-nav-list">
+                        <li><a class="quick-nav-item active-orange" data-section="preg-s1" onclick="scrollToSection('preg-s1')">1. 정의 및 안내</a></li>
+                        <li><a class="quick-nav-item" data-section="preg-s2" onclick="scrollToSection('preg-s2')">2. 주요 안내사항</a></li>
+                        <li><a class="quick-nav-item" data-section="preg-s3" onclick="scrollToSection('preg-s3')">3. 신청 자격 요건</a></li>
+                        <li><a class="quick-nav-item" data-section="preg-s4" onclick="scrollToSection('preg-s4')">4. 급여 관련 안내</a></li>
+                        <li><a class="quick-nav-item" data-section="preg-s5" onclick="scrollToSection('preg-s5')">5. 신청 절차</a></li>
+                        <li><a class="quick-nav-item" data-section="preg-s6" onclick="scrollToSection('preg-s6')">6. 필요 서류</a></li>
+                    </ul>
+                    <button class="quick-nav-btn orange" onclick="showFormPage()">신청서 작성하기 &rarr;</button>
+                </nav>
+                <div class="tab-main-content">
+                    <div class="section" id="preg-s1">
+                        <div class="section-title color-orange">1. 정의 및 안내</div>
+                        <div class="info-card">
+                            <p>임신 중 육아휴직은 임신 중인 여성 근로자가 태아의 건강과 안전한 임신 유지를 위해 사용할 수 있는 육아휴직입니다. 출산전후휴가와 별도로 사용 가능하며, 분할 횟수에 포함되지 않는 특례가 적용됩니다.</p>
+                            <p class="law-ref">근거법: 남녀고용평등법 제19조</p>
+                        </div>
+                    </div>
+
+                    <div class="section" id="preg-s2">
+                        <div class="section-title color-orange">2. 주요 안내사항</div>
+                        <div class="highlight-box orange">
+                            <h4>핵심 사항</h4>
+                            <div class="change-item"><span class="label">신청 시기</span><span class="value" style="color:#e65100;">임신 기간 중 언제든 가능</span></div>
+                            <div class="change-item"><span class="label">분할 사용</span><span class="value" style="color:#e65100;">횟수에 포함되지 않음</span></div>
+                            <div class="change-item"><span class="label">연속 사용</span><span class="value" style="color:#e65100;">출산전후휴가 전·후 가능</span></div>
+                            <div class="change-item"><span class="label">2025년 개정</span><span class="value" style="color:#e65100;">최대 1년 6개월 가능</span></div>
+                        </div>
+                    </div>
+
+                    <div class="section" id="preg-s3">
+                        <div class="section-title color-orange">3. 신청 자격 요건</div>
+                        <div class="info-card">
+                            <ul>
+                                <li>임신 중인 여성 근로자</li>
+                                <li>해당 사업장 계속 근로기간 <strong>6개월 이상</strong></li>
+                                <li>임신 사실을 증빙할 수 있는 서류 필요</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="section" id="preg-s4">
+                        <div class="section-title color-orange">4. 급여 관련 안내</div>
+                        <div class="highlight-box orange">
+                            <h4>넷폼알앤디 기준 — 육아휴직 급여는 이렇게 받습니다</h4>
+                            <div class="change-item"><span class="label">회사 급여</span><span class="value" style="color:#e65100;">없음 (무급 처리)</span></div>
+                            <div class="change-item"><span class="label">급여 지급</span><span class="value" style="color:#e65100;">고용보험이 본인 계좌로 직접 지급</span></div>
+                            <div class="change-item"><span class="label">사후지급금</span><span class="value" style="color:#e65100;">폐지 — 전액 즉시 지급</span></div>
+                        </div>
+                        <div class="info-card" style="padding:18px;">
+                            <h4 style="margin-bottom:14px;">💡 쉽게 알아보는 임신 중 육아휴직 급여</h4>
+                            <div style="background:#fff3e0; border-radius:10px; padding:16px; margin-bottom:14px;">
+                                <p style="font-size:14px; font-weight:600; color:#e65100; margin-bottom:8px;">한 줄 요약</p>
+                                <p style="font-size:15px; font-weight:700; color:#333;">회사가 아닌 <span style="color:#ff9800;">정부(고용보험)</span>가 내 통장으로 직접 입금합니다.</p>
+                                <p style="font-size:13px; color:#666; margin-top:4px;">회사 월급은 나오지 않지만, 고용보험에서 월 최대 250만원까지 지급</p>
+                            </div>
+                            <p style="font-size:14px; font-weight:600; color:#333; margin-bottom:10px;">월급별 실수령액은?</p>
+                            <div style="background:#f8f9fa; border-radius:8px; padding:14px; margin-bottom:10px; border-left:4px solid #ff9800;">
+                                <p style="font-size:13px; color:#555; margin-bottom:4px;">월급(통상임금) <strong>200만원</strong>인 경우</p>
+                                <p style="font-size:13px; color:#333; line-height:1.8;">
+                                    · 1~3개월: 월 <strong style="color:#e65100; font-size:16px;">200만원</strong> (통상임금 100%, 상한 이내)<br>
+                                    · 4~6개월: 월 <strong style="color:#e65100; font-size:16px;">200만원</strong> (통상임금 100%, 상한 이내)<br>
+                                    · 7개월~: 월 <strong style="color:#e65100; font-size:16px;">160만원</strong> (통상임금 80%)
+                                </p>
+                                <p style="font-size:12px; color:#888; margin-top:6px;">→ 12개월 사용 시 총 약 <strong>2,160만원</strong> 수령</p>
+                            </div>
+                            <div style="background:#f8f9fa; border-radius:8px; padding:14px; margin-bottom:10px; border-left:4px solid #ff9800;">
+                                <p style="font-size:13px; color:#555; margin-bottom:4px;">월급(통상임금) <strong>300만원</strong>인 경우</p>
+                                <p style="font-size:13px; color:#333; line-height:1.8;">
+                                    · 1~3개월: 월 <strong style="color:#e65100; font-size:16px;">250만원</strong> (상한 적용, 실제 300만원 중 250만원)<br>
+                                    · 4~6개월: 월 <strong style="color:#e65100; font-size:16px;">200만원</strong> (상한 적용)<br>
+                                    · 7개월~: 월 <strong style="color:#e65100; font-size:16px;">160만원</strong> (상한 적용)
+                                </p>
+                                <p style="font-size:12px; color:#888; margin-top:6px;">→ 12개월 사용 시 총 약 <strong>2,310만원</strong> 수령</p>
+                            </div>
+                            <div style="background:#fff8e1; border-radius:8px; padding:12px; font-size:13px; color:#795548; line-height:1.6;">
+                                <strong>핵심:</strong> 출산휴가와 다르게, 육아휴직은 <strong>회사가 급여를 주지 않습니다.</strong><br>
+                                대신 고용보험에서 내 통장으로 직접 입금됩니다. 매월 고용24에서 신청하면 됩니다.<br>
+                                <span style="font-size:12px; color:#999;">※ 월급이 상한액보다 높으면 차액은 받을 수 없음 (출산휴가와 다른 점)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section" id="preg-s5">
+                        <div class="section-title color-orange">5. 신청 절차</div>
+                        <div class="info-card" style="background:#fff3e0; border:1px solid #ffe0b2; margin-bottom:12px;">
+                            <h4 style="color:#e65100;">전체 흐름: 신청 → 승인 → 휴직 → 매월 급여 신청</h4>
+                        </div>
+                        <ul class="process-list">
+                            <li class="process-item"><div class="process-num orange">1</div><div class="process-text"><h5>임신 확인 후 신청서 + 증빙서류 제출</h5><p>경영관리팀에 제출 (휴직 개시 30일 전, 긴급 시 7일 전)</p></div></li>
+                            <li class="process-item"><div class="process-num orange">2</div><div class="process-text"><h5>경영관리팀 검토 및 승인</h5><p>14일 이내 허용 통지 (미통지 시 자동 허용)</p></div></li>
+                            <li class="process-item"><div class="process-num orange">3</div><div class="process-text"><h5>휴직 개시 (회사 급여 없음 = 무급)</h5><p>승인된 날부터 휴직 시작. 업무 인수인계</p></div></li>
+                            <li class="process-item"><div class="process-num orange">4</div><div class="process-text"><h5>회사 → 고용보험 확인서 제출</h5><p>경영관리팀에서 별지 제102호서식 확인서 발급</p></div></li>
+                            <li class="process-item"><div class="process-num orange">5</div><div class="process-text"><h5>본인 → 고용24에서 급여 신청 (매월)</h5><p>www.work24.go.kr — 휴직 시작 1개월 후부터 매월 신청</p></div></li>
+                            <li class="process-item"><div class="process-num orange">6</div><div class="process-text"><h5>고용보험 → 본인 계좌로 급여 입금</h5><p>심사 후 매월 직접 지급 (회사 경유 없음)</p></div></li>
+                        </ul>
+                    </div>
+
+                    <div class="section" id="preg-s6">
+                        <div class="section-title color-orange">6. 필요 서류</div>
+                        <ul class="doc-list">
+                            <li class="doc-item"><span class="name">육아휴직 신청서</span><span class="tag tag-required">필수</span></li>
+                            <li class="doc-item"><span class="name">임신확인서 또는 의사 진단서</span><span class="tag tag-required">필수</span></li>
+                            <li class="doc-item"><span class="name">배우자 육아휴직 증빙서류</span><span class="tag tag-optional">추가 6개월 신청 시</span></li>
+                        </ul>
+                    </div>
+
+                    <div class="apply-btn-wrap">
+                        <button class="apply-btn orange" onclick="showFormPage()">7. 신청서 작성하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== TAB 3: 육아휴직 - 자녀양육 ===== -->
+        <div class="tab-content" id="tab-childcare">
+            <div class="tab-content-wrapper">
+                <nav class="quick-nav" id="quickNav-childcare">
+                    <h4>바로가기</h4>
+                    <ul class="quick-nav-list">
+                        <li><a class="quick-nav-item active-blue" data-section="cc-s1" onclick="scrollToSection('cc-s1')">1. 정의 및 안내</a></li>
+                        <li><a class="quick-nav-item" data-section="cc-s2" onclick="scrollToSection('cc-s2')">2. 주요 안내사항</a></li>
+                        <li><a class="quick-nav-item" data-section="cc-s3" onclick="scrollToSection('cc-s3')">3. 신청 자격 요건</a></li>
+                        <li><a class="quick-nav-item" data-section="cc-s4" onclick="scrollToSection('cc-s4')">4. 급여 관련 안내</a></li>
+                        <li><a class="quick-nav-item" data-section="cc-s5" onclick="scrollToSection('cc-s5')">5. 신청 절차</a></li>
+                        <li><a class="quick-nav-item" data-section="cc-s6" onclick="scrollToSection('cc-s6')">6. 필요 서류</a></li>
+                    </ul>
+                    <button class="quick-nav-btn blue" onclick="showFormPage()">신청서 작성하기 &rarr;</button>
+                </nav>
+                <div class="tab-main-content">
+                    <div class="section" id="cc-s1">
+                        <div class="section-title color-blue">1. 정의 및 안내</div>
+                        <div class="info-card">
+                            <p>자녀양육 육아휴직은 만 8세 이하 또는 초등학교 2학년 이하의 자녀를 양육하기 위해 사용하는 법정 휴직입니다. 남녀 근로자 모두 신청 가능하며, 자녀 1명당 최대 1년(조건 충족 시 1년 6개월) 사용 가능합니다.</p>
+                            <p class="law-ref">근거법: 남녀고용평등법 제19조</p>
+                        </div>
+                    </div>
+
+                    <div class="section" id="cc-s2">
+                        <div class="section-title color-blue">2. 주요 안내사항 (2025년 개정 반영)</div>
+                        <div class="highlight-box blue">
+                            <h4>2025년 주요 변경사항</h4>
+                            <div class="change-item"><span class="label">휴직 기간</span><span class="value" style="color:#1565c0;">기본 1년 → 최대 1년 6개월</span></div>
+                            <div class="change-item"><span class="label">분할 사용</span><span class="value" style="color:#1565c0;">최대 3회 분할 (총 4회)</span></div>
+                            <div class="change-item"><span class="label">급여 상한 (1~3개월)</span><span class="value" style="color:#1565c0;">월 250만원</span></div>
+                            <div class="change-item"><span class="label">급여 상한 (4~6개월)</span><span class="value" style="color:#1565c0;">월 200만원</span></div>
+                            <div class="change-item"><span class="label">급여 상한 (7개월~)</span><span class="value" style="color:#1565c0;">월 160만원</span></div>
+                            <div class="change-item"><span class="label">사후지급금</span><span class="value" style="color:#1565c0;">폐지 (전액 즉시 지급)</span></div>
+                        </div>
+                        <div class="info-card">
+                            <h4>추가 6개월 조건 (2025.2.23 시행)</h4>
+                            <ul>
+                                <li>부모 모두 3개월 이상 육아휴직 사용 시 (각각 6개월 추가)</li>
+                                <li>한부모 (6개월 추가)</li>
+                                <li>중증 장애아동의 부모 (6개월 추가)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="section" id="cc-s3">
+                        <div class="section-title color-blue">3. 신청 자격 요건</div>
+                        <div class="info-card">
+                            <ul>
+                                <li>만 8세 이하 또는 초등학교 2학년 이하 자녀 (친자녀, 입양자녀 포함)</li>
+                                <li>해당 사업장 계속 근로기간 <strong>6개월 이상</strong></li>
+                                <li><strong>남녀 근로자 모두</strong> 가능</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="section" id="cc-s4">
+                        <div class="section-title color-blue">4. 급여 관련 안내 (2025년)</div>
+                        <div class="highlight-box blue">
+                            <h4>넷폼알앤디 기준 — 육아휴직 급여는 이렇게 받습니다</h4>
+                            <div class="change-item"><span class="label">회사 급여</span><span class="value" style="color:#1565c0;">없음 (무급 처리)</span></div>
+                            <div class="change-item"><span class="label">급여 지급</span><span class="value" style="color:#1565c0;">고용보험이 본인 계좌로 직접 지급</span></div>
+                            <div class="change-item"><span class="label">사후지급금</span><span class="value" style="color:#1565c0;">폐지 — 전액 즉시 지급</span></div>
+                        </div>
+                        <div class="info-card" style="padding:18px;">
+                            <h4 style="margin-bottom:14px;">💡 쉽게 알아보는 자녀양육 육아휴직 급여</h4>
+                            <div style="background:#e3f2fd; border-radius:10px; padding:16px; margin-bottom:14px;">
+                                <p style="font-size:14px; font-weight:600; color:#1565c0; margin-bottom:8px;">한 줄 요약</p>
+                                <p style="font-size:15px; font-weight:700; color:#333;">회사 월급 대신 <span style="color:#1976d2;">정부(고용보험)</span>가 내 통장으로 직접 입금합니다.</p>
+                                <p style="font-size:13px; color:#666; margin-top:4px;">기간에 따라 월 최대 250만원 → 200만원 → 160만원 단계적 지급</p>
+                            </div>
+                            <p style="font-size:14px; font-weight:600; color:#333; margin-bottom:10px;">월급별 실수령액은?</p>
+                            <div style="background:#f8f9fa; border-radius:8px; padding:14px; margin-bottom:10px; border-left:4px solid #1976d2;">
+                                <p style="font-size:13px; color:#555; margin-bottom:4px;">월급(통상임금) <strong>200만원</strong>인 경우</p>
+                                <p style="font-size:13px; color:#333; line-height:1.8;">
+                                    · 1~3개월: 월 <strong style="color:#1565c0; font-size:16px;">200만원</strong> (통상임금 100%, 상한 이내)<br>
+                                    · 4~6개월: 월 <strong style="color:#1565c0; font-size:16px;">200만원</strong> (통상임금 100%, 상한 이내)<br>
+                                    · 7~12개월: 월 <strong style="color:#1565c0; font-size:16px;">160만원</strong> (통상임금 80%)
+                                </p>
+                                <p style="font-size:12px; color:#888; margin-top:6px;">→ 12개월 사용 시 총 약 <strong>2,160만원</strong> 수령</p>
+                            </div>
+                            <div style="background:#f8f9fa; border-radius:8px; padding:14px; margin-bottom:10px; border-left:4px solid #1976d2;">
+                                <p style="font-size:13px; color:#555; margin-bottom:4px;">월급(통상임금) <strong>300만원</strong>인 경우</p>
+                                <p style="font-size:13px; color:#333; line-height:1.8;">
+                                    · 1~3개월: 월 <strong style="color:#1565c0; font-size:16px;">250만원</strong> (상한 적용)<br>
+                                    · 4~6개월: 월 <strong style="color:#1565c0; font-size:16px;">200만원</strong> (상한 적용)<br>
+                                    · 7~12개월: 월 <strong style="color:#1565c0; font-size:16px;">160만원</strong> (상한 적용)
+                                </p>
+                                <p style="font-size:12px; color:#888; margin-top:6px;">→ 12개월 사용 시 총 약 <strong>2,310만원</strong> 수령</p>
+                            </div>
+                            <div style="background:#f8f9fa; border-radius:8px; padding:14px; margin-bottom:10px; border-left:4px solid #1976d2;">
+                                <p style="font-size:13px; color:#555; margin-bottom:4px;">월급(통상임금) <strong>400만원</strong>인 경우</p>
+                                <p style="font-size:13px; color:#333; line-height:1.8;">
+                                    · 1~3개월: 월 <strong style="color:#1565c0; font-size:16px;">250만원</strong> (상한 적용, 실제 400만원 중 250만원)<br>
+                                    · 4~6개월: 월 <strong style="color:#1565c0; font-size:16px;">200만원</strong> (상한 적용)<br>
+                                    · 7~12개월: 월 <strong style="color:#1565c0; font-size:16px;">160만원</strong> (상한 적용)
+                                </p>
+                                <p style="font-size:12px; color:#888; margin-top:6px;">→ 12개월 사용 시 총 약 <strong>2,310만원</strong> 수령 (월급 높아도 상한은 동일)</p>
+                            </div>
+                            <div style="background:#fff8e1; border-radius:8px; padding:12px; font-size:13px; color:#795548; line-height:1.6;">
+                                <strong>출산휴가와 다른 점:</strong><br>
+                                · 출산휴가 = 회사가 월급 주고, 정부가 회사에 환급<br>
+                                · <strong>육아휴직 = 회사 월급 없음, 정부가 내 통장에 직접 입금</strong><br>
+                                · 월급이 상한보다 높아도 차액을 회사가 보전해주지 않음<br>
+                                <span style="font-size:12px; color:#999;">※ 통상임금 = 기본급 + 고정수당. 매월 고용24에서 직접 신청해야 입금됨</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section" id="cc-s5">
+                        <div class="section-title color-blue">5. 신청 절차</div>
+                        <div class="info-card" style="background:#e3f2fd; border:1px solid #90caf9; margin-bottom:12px;">
+                            <h4 style="color:#1565c0;">전체 흐름: 신청 → 승인 → 휴직 → 매월 급여 신청</h4>
+                        </div>
+                        <ul class="process-list">
+                            <li class="process-item"><div class="process-num blue">1</div><div class="process-text"><h5>신청서 + 가족관계증명서 제출</h5><p>경영관리팀에 제출 (휴직 개시 30일 전, 긴급 시 7일 전)</p></div></li>
+                            <li class="process-item"><div class="process-num blue">2</div><div class="process-text"><h5>경영관리팀 검토 및 승인</h5><p>14일 이내 허용 통지 (미통지 시 자동 허용)</p></div></li>
+                            <li class="process-item"><div class="process-num blue">3</div><div class="process-text"><h5>휴직 개시 (회사 급여 없음 = 무급)</h5><p>승인된 날부터 휴직 시작. 업무 인수인계</p></div></li>
+                            <li class="process-item"><div class="process-num blue">4</div><div class="process-text"><h5>회사 → 고용보험 확인서 제출</h5><p>경영관리팀에서 별지 제102호서식 확인서 발급</p></div></li>
+                            <li class="process-item"><div class="process-num blue">5</div><div class="process-text"><h5>본인 → 고용24에서 급여 신청 (매월)</h5><p>www.work24.go.kr — 휴직 시작 1개월 후부터 매월 신청</p></div></li>
+                            <li class="process-item"><div class="process-num blue">6</div><div class="process-text"><h5>고용보험 → 본인 계좌로 급여 입금</h5><p>심사 후 매월 직접 지급 (회사 경유 없음)</p></div></li>
+                            <li class="process-item"><div class="process-num blue">7</div><div class="process-text"><h5>복직</h5><p>원직복귀 원칙. 불이익 처우 금지 (법적 보호)</p></div></li>
+                        </ul>
+                    </div>
+
+                    <div class="section" id="cc-s6">
+                        <div class="section-title color-blue">6. 필요 서류</div>
+                        <ul class="doc-list">
+                            <li class="doc-item"><span class="name">육아휴직 신청서</span><span class="tag tag-required">필수</span></li>
+                            <li class="doc-item"><span class="name">가족관계증명서 (자녀 확인용)</span><span class="tag tag-required">필수</span></li>
+                            <li class="doc-item"><span class="name">배우자 육아휴직 증빙서류</span><span class="tag tag-optional">추가 6개월 신청 시</span></li>
+                            <li class="doc-item"><span class="name">한부모 증빙서류</span><span class="tag tag-optional">해당 시</span></li>
+                            <li class="doc-item"><span class="name">장애인 증명서</span><span class="tag tag-optional">해당 시</span></li>
+                        </ul>
+                    </div>
+
+                    <div class="apply-btn-wrap">
+                        <button class="apply-btn blue" onclick="showFormPage()">7. 신청서 작성하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== Common Sections - 2x2 Grid ===== -->
+        <div class="common-sections">
+            <div class="common-grid">
+                <div class="section" style="margin-bottom:0;">
+                    <div class="section-title">담당자 안내</div>
+                    <div class="contact-box">
+                        <h4>경영관리팀 주유진</h4>
+                        <div class="contact-row">070-4412-1775</div>
+                        <div class="contact-row">yoojin83@netformrnd.com</div>
+                        <div class="contact-row">상담 가능: 평일 8:30 ~ 15:30</div>
+                    </div>
+                </div>
+
+                <div class="section" style="margin-bottom:0;">
+                    <div class="section-title">육아휴직 중 4대보험 안내</div>
+                    <div class="insurance-card">
+                        <ul style="list-style:none;">
+                            <li>국민연금: 납부 의무 면제 (기간 인정)</li>
+                            <li>건강보험: 직장가입자 자격 유지 (보험료 면제)</li>
+                            <li>고용보험: 피보험자격 유지</li>
+                            <li>산재보험: 적용 제외</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="section" style="margin-bottom:0;">
+                    <div class="section-title">불이익 처우 금지</div>
+                    <div class="warning-box">
+                        <div class="title">법적 보호 사항</div>
+                        <p>출산휴가·육아휴직을 이유로 해고, 불리한 배치, 임금·승진 차별 등은 법으로 금지되어 있습니다.</p>
+                        <p class="penalty">※ 위반 시 500만원 이하 벌금</p>
+                    </div>
+                </div>
+
+                <div class="section" style="margin-bottom:0;">
+                    <div class="external-info">
+                        <h4>외부 문의처</h4>
+                        <ul>
+                            <li>고용노동부: <strong>국번없이 1350</strong></li>
+                            <li>고용보험: www.ei.go.kr</li>
+                            <li>고용24: www.work24.go.kr</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== FORM PAGE ==================== -->
+<div class="form-page" id="formPage">
+    <div class="form-top-bar no-print">
+        <button class="back-btn" onclick="showGuidePage()">&larr; 안내 페이지로 돌아가기</button>
+    </div>
+
+    <div class="progress-container no-print">
+        <div class="progress-header">
+            <span class="progress-title">작성 진행률</span>
+            <span class="progress-percent" id="progressPercent">0%</span>
+        </div>
+        <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressBar"></div></div>
+        <div class="progress-hint">입력 후 <strong>Enter</strong> 키를 누르면 다음 항목으로 이동합니다</div>
+    </div>
+
+    <div class="form-container">
+        <div class="form-header">
+            <h1 id="formTitle">출산휴가·육아휴직 신청서</h1>
+            <p>주식회사 넷폼알앤디</p>
+        </div>
+
+        <!-- Section 0: Leave Type -->
+        <div class="form-section">
+            <div class="form-section-title" id="section-0">신청 유형 선택</div>
+            <div class="radio-group" id="leaveTypeGroup">
+                <label class="radio-item" id="ri-maternity">
+                    <input type="radio" name="leaveType" value="maternity" onchange="onLeaveTypeChange()"> 출산전후휴가
+                </label>
+                <label class="radio-item" id="ri-spouse">
+                    <input type="radio" name="leaveType" value="spouse" onchange="onLeaveTypeChange()"> 배우자출산휴가
+                </label>
+                <label class="radio-item" id="ri-pregnant">
+                    <input type="radio" name="leaveType" value="pregnant" onchange="onLeaveTypeChange()"> 육아휴직(임신중)
+                </label>
+                <label class="radio-item" id="ri-childcare">
+                    <input type="radio" name="leaveType" value="childcare" onchange="onLeaveTypeChange()"> 육아휴직(자녀양육)
+                </label>
+            </div>
+        </div>
+
+        <!-- Section 1: Applicant Info - 2 column on PC -->
+        <div class="form-section">
+            <div class="form-section-title" id="section-1">1. 신청인 정보</div>
+            <div class="form-row-2col">
+                <div class="form-group">
+                    <label class="form-label required">성명</label>
+                    <input type="text" class="form-input" id="input-1" data-index="1" placeholder="성명을 입력하세요">
+                </div>
+                <div class="form-group">
+                    <label class="form-label required">생년월일</label>
+                    <input type="text" class="form-input short" id="input-2" data-index="2" placeholder="YYYYMMDD" maxlength="8">
+                    <label class="form-label">주민번호</label>
+                    <input type="text" class="form-input" id="ssn" placeholder="자동 입력" readonly>
+                </div>
+                <div class="form-group">
+                    <label class="form-label required">소속부서</label>
+                    <input type="text" class="form-input" id="input-3" data-index="3" placeholder="부서명">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">직위/직급</label>
+                    <input type="text" class="form-input" id="input-4" data-index="4" placeholder="직위/직급">
+                </div>
+                <div class="form-group">
+                    <label class="form-label required">입사일</label>
+                    <input type="text" class="form-input short" id="input-5" data-index="5" placeholder="YYYYMMDD" maxlength="10">
+                    <label class="form-label">근속기간</label>
+                    <input type="text" class="form-input" id="tenure" placeholder="자동 계산" readonly>
+                </div>
+                <div class="form-group">
+                    <label class="form-label required">연락처</label>
+                    <input type="text" class="form-input" id="input-6" data-index="6" placeholder="010-0000-0000">
+                </div>
+                <div class="form-group" style="grid-column: 1 / -1;">
+                    <label class="form-label">이메일</label>
+                    <input type="text" class="form-input" id="input-7" data-index="7" placeholder="email@example.com">
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 2: Type-specific Info -->
+        <!-- 2A: 출산전후휴가 -->
+        <div class="form-section hidden" id="sec-maternity">
+            <div class="form-section-title" id="section-2a">2. 출산전후휴가 정보</div>
+            <div class="form-row-2col">
+                <div class="form-group">
+                    <label class="form-label required">출산예정일</label>
+                    <input type="text" class="form-input short" id="mat-due" placeholder="YYYY-MM-DD" maxlength="10">
+                </div>
+                <div class="form-group">
+                    <label class="form-label required">휴가 시작일</label>
+                    <input type="text" class="form-input short" id="mat-start" placeholder="YYYY-MM-DD" maxlength="10">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">휴가 종료일</label>
+                    <input type="text" class="form-input short" id="mat-end" placeholder="자동 계산 (90일)" readonly>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">다태아 여부</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item"><input type="checkbox" id="mat-twins" onchange="calcMatEnd()"><label for="mat-twins">다태아 (120일)</label></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2B: 배우자출산휴가 -->
+        <div class="form-section hidden" id="sec-spouse">
+            <div class="form-section-title" id="section-2b">2. 배우자 출산휴가 정보</div>
+            <div class="form-row-2col">
+                <div class="form-group">
+                    <label class="form-label required">배우자 출산일</label>
+                    <input type="text" class="form-input short" id="sp-birth" placeholder="YYYY-MM-DD" maxlength="10">
+                </div>
+                <div class="form-group">
+                    <label class="form-label required">휴가 희망일</label>
+                    <input type="text" class="form-input short" id="sp-start" placeholder="YYYY-MM-DD" maxlength="10">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">기간</label>
+                    <input type="text" class="form-input short" value="20일 (유급)" readonly>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2C: 임신중 육아휴직 -->
+        <div class="form-section hidden" id="sec-pregnant">
+            <div class="form-section-title" id="section-2c">2. 임신 중 육아휴직 정보</div>
+            <div class="form-row-2col">
+                <div class="form-group">
+                    <label class="form-label required">임신 주수</label>
+                    <input type="text" class="form-input short" id="preg-week" placeholder="예: 16주">
+                </div>
+                <div class="form-group">
+                    <label class="form-label required">출산예정일</label>
+                    <input type="text" class="form-input short" id="preg-due" placeholder="YYYY-MM-DD" maxlength="10">
+                </div>
+                <div class="form-group">
+                    <label class="form-label required">휴직 시작일</label>
+                    <input type="text" class="form-input short" id="preg-start" placeholder="YYYY-MM-DD" maxlength="10">
+                </div>
+                <div class="form-group">
+                    <label class="form-label required">휴직 종료일</label>
+                    <input type="text" class="form-input short" id="preg-end" placeholder="YYYY-MM-DD" maxlength="10">
+                </div>
+            </div>
+        </div>
+
+        <!-- 2D: 자녀양육 육아휴직 -->
+        <div class="form-section hidden" id="sec-childcare">
+            <div class="form-section-title" id="section-2d">2. 자녀양육 육아휴직 정보</div>
+            <div class="form-row-2col">
+                <div class="form-group">
+                    <label class="form-label required">자녀 성명</label>
+                    <input type="text" class="form-input short" id="child-name" placeholder="자녀 성명">
+                </div>
+                <div class="form-group">
+                    <label class="form-label required">자녀 생년월일</label>
+                    <input type="text" class="form-input short" id="child-birth-date" placeholder="YYYYMMDD" maxlength="10">
+                    <label class="form-label">나이</label>
+                    <input type="text" class="form-input short" id="child-age" placeholder="자동 계산" readonly>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">학년</label>
+                    <input type="text" class="form-input short" id="child-grade" placeholder="미취학/초O">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">관계</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item"><input type="checkbox" id="rel-birth"><label for="rel-birth">친자녀</label></div>
+                        <div class="checkbox-item"><input type="checkbox" id="rel-adopt"><label for="rel-adopt">입양자녀</label></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label required">휴직 시작일</label>
+                    <input type="text" class="form-input short" id="cc-start" placeholder="YYYY-MM-DD" maxlength="10">
+                </div>
+                <div class="form-group">
+                    <label class="form-label required">휴직 종료일</label>
+                    <input type="text" class="form-input short" id="cc-end" placeholder="YYYY-MM-DD" maxlength="10">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">기간</label>
+                    <input type="text" class="form-input short" id="cc-duration" placeholder="자동 계산" readonly>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">분할 사용</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item"><input type="radio" name="splitUse" value="1" id="split-1"><label for="split-1">최초</label></div>
+                        <div class="checkbox-item"><input type="radio" name="splitUse" value="2" id="split-2"><label for="split-2">2회</label></div>
+                        <div class="checkbox-item"><input type="radio" name="splitUse" value="3" id="split-3"><label for="split-3">3회</label></div>
+                        <div class="checkbox-item"><input type="radio" name="splitUse" value="4" id="split-4"><label for="split-4">4회</label></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 3: Additional Info -->
+        <div class="form-section hidden" id="sec-additional">
+            <div class="form-section-title" id="section-3">3. 추가 정보</div>
+            <div class="form-row-2col">
+                <div class="form-group">
+                    <label class="form-label">배우자 육아휴직 사용</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item"><input type="checkbox" id="spouse-used-yes"><label for="spouse-used-yes">사용함 (3개월 이상)</label></div>
+                        <div class="checkbox-item"><input type="checkbox" id="spouse-used-no"><label for="spouse-used-no">사용 안 함</label></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">추가 6개월 신청</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item"><input type="checkbox" id="extend-yes"><label for="extend-yes">신청함</label></div>
+                        <div class="checkbox-item"><input type="checkbox" id="extend-no"><label for="extend-no">해당 없음</label></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">배우자 성명</label>
+                    <input type="text" class="form-input short" id="spouse-name" placeholder="배우자 성명">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">근무처</label>
+                    <input type="text" class="form-input" id="spouse-company" placeholder="회사명">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">한부모 여부</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item"><input type="checkbox" id="single-yes"><label for="single-yes">해당</label></div>
+                        <div class="checkbox-item"><input type="checkbox" id="single-no"><label for="single-no">비해당</label></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">장애아동 부모</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item"><input type="checkbox" id="disabled-yes"><label for="disabled-yes">중증 장애아동 부모</label></div>
+                        <div class="checkbox-item"><input type="checkbox" id="disabled-no"><label for="disabled-no">비해당</label></div>
+                    </div>
+                </div>
+                <div class="form-group" style="grid-column: 1 / -1;">
+                    <label class="form-label">전 직장 휴직 사용</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item"><input type="checkbox" id="prev-yes"><label for="prev-yes">있음</label></div>
+                        <div class="checkbox-item"><input type="checkbox" id="prev-no"><label for="prev-no">없음</label></div>
+                    </div>
+                </div>
+            </div>
+            <div style="font-size:12px;color:#888;margin-top:-4px;margin-bottom:14px;">※ 전 직장에서 동일 자녀에 대한 사용 이력이 있는 경우 확인이 필요합니다.</div>
+        </div>
+
+        <!-- Section 4: File Upload -->
+        <div class="form-section">
+            <div class="form-section-title" id="section-4">4. 첨부 서류</div>
+            <table class="file-table" id="fileTable">
+                <thead><tr><th style="width:36px;">선택</th><th id="fileDocHeader">서류명</th><th style="width:200px;">파일</th></tr></thead>
+                <tbody id="fileTableBody">
+                    <tr><td style="text-align:center;"><input type="checkbox" id="doc-chk-1"></td><td id="doc-label-1">서류 1</td><td><div class="file-upload-wrapper"><input type="file" id="file-1" class="file-input no-print" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"><label for="file-1" class="file-btn no-print">선택</label><span id="filename-1" class="filename"></span><button class="file-remove no-print" id="remove-1" type="button">&#10005;</button></div></td></tr>
+                    <tr><td style="text-align:center;"><input type="checkbox" id="doc-chk-2"></td><td id="doc-label-2">서류 2</td><td><div class="file-upload-wrapper"><input type="file" id="file-2" class="file-input no-print" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"><label for="file-2" class="file-btn no-print">선택</label><span id="filename-2" class="filename"></span><button class="file-remove no-print" id="remove-2" type="button">&#10005;</button></div></td></tr>
+                    <tr><td style="text-align:center;"><input type="checkbox" id="doc-chk-3"></td><td id="doc-label-3">서류 3</td><td><div class="file-upload-wrapper"><input type="file" id="file-3" class="file-input no-print" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"><label for="file-3" class="file-btn no-print">선택</label><span id="filename-3" class="filename"></span><button class="file-remove no-print" id="remove-3" type="button">&#10005;</button></div></td></tr>
+                    <tr><td style="text-align:center;"><input type="checkbox" id="doc-chk-4"></td><td id="doc-label-4">서류 4</td><td><div class="file-upload-wrapper"><input type="file" id="file-4" class="file-input no-print" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"><label for="file-4" class="file-btn no-print">선택</label><span id="filename-4" class="filename"></span><button class="file-remove no-print" id="remove-4" type="button">&#10005;</button></div></td></tr>
+                    <tr><td style="text-align:center;"><input type="checkbox" id="doc-chk-5"></td><td id="doc-label-5">서류 5</td><td><div class="file-upload-wrapper"><input type="file" id="file-5" class="file-input no-print" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"><label for="file-5" class="file-btn no-print">선택</label><span id="filename-5" class="filename"></span><button class="file-remove no-print" id="remove-5" type="button">&#10005;</button></div></td></tr>
+                </tbody>
+            </table>
+            <div class="form-info" style="margin-top:10px;">
+                <div class="title">첨부 가능 파일 형식</div>
+                PDF, JPG, JPEG, PNG, DOC, DOCX (최대 10MB)
+            </div>
+        </div>
+
+        <!-- Section 5: Reason -->
+        <div class="form-section">
+            <div class="form-section-title" id="section-5">5. 신청 사유</div>
+            <textarea class="form-textarea" id="leave-reason" placeholder="출산휴가/육아휴직 신청 사유를 입력해주세요."></textarea>
+        </div>
+
+        <!-- Section 6: Oath -->
+        <div class="form-section">
+            <div class="form-section-title" id="section-6">6. 서약</div>
+            <div class="oath-box">
+                본인은 위 내용이 사실임을 확인하며, 출산휴가/육아휴직 신청에 필요한 모든 정보를 정확하게 기재하였음을 서약합니다.
+            </div>
+        </div>
+
+        <!-- Signature -->
+        <div class="signature-area">
+            <p style="font-size:15px;margin-bottom:10px;">위와 같이 출산휴가/육아휴직을 신청합니다.</p>
+            <div class="signature-date"><span id="currentYear">2025</span>년 <span id="currentMonth">1</span>월 <span id="currentDay">1</span>일</div>
+            <div class="signature-box">
+                <div class="signature-line">신청인: <input type="text" id="input-sig" placeholder="성명"> (인)</div>
+                <div class="signature-section">
+                    <div class="signature-label">서명</div>
+                    <div class="signature-tabs no-print">
+                        <button type="button" class="sig-tab active" onclick="showSignatureTab('draw')">직접 서명</button>
+                        <button type="button" class="sig-tab" onclick="showSignatureTab('upload')">이미지 업로드</button>
+                    </div>
+                    <div id="sig-draw-tab" class="sig-tab-content active">
+                        <div class="canvas-container"><canvas id="signatureCanvas" width="300" height="120"></canvas></div>
+                        <div class="canvas-buttons no-print">
+                            <button type="button" class="canvas-btn" onclick="clearSignature()">지우기</button>
+                            <button type="button" class="canvas-btn primary" onclick="saveSignature()">서명 저장</button>
+                        </div>
+                        <p class="canvas-hint no-print">마우스 또는 터치로 서명해주세요</p>
+                    </div>
+                    <div id="sig-upload-tab" class="sig-tab-content">
+                        <div class="sig-upload-area no-print">
+                            <input type="file" id="signatureFile" accept="image/*" class="file-input">
+                            <label for="signatureFile" class="sig-upload-label">
+                                <span style="font-size:32px;">&#128193;</span>
+                                <span>클릭하여 서명 이미지 선택</span>
+                                <span class="upload-hint">PNG, JPG 파일 (투명 배경 권장)</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div id="signaturePreview" class="signature-preview" style="display:none;">
+                        <div class="preview-header">
+                            <span>저장된 서명</span>
+                            <button type="button" class="remove-sig-btn no-print" onclick="removeSignature()">&#10005; 삭제</button>
+                        </div>
+                        <img id="signatureImage" src="" alt="서명">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="company-line">주식회사 넷폼알앤디 귀중</div>
+
+        <div class="notice-section">
+            <h4>유의사항</h4>
+            <ul>
+                <li>출산전후휴가 및 육아휴직 신청은 <strong>개시 예정일 30일 전까지</strong> 제출하여야 합니다.</li>
+                <li>긴급한 사유가 있는 경우 <strong>7일 전까지</strong> 신청 가능합니다.</li>
+                <li>사업주는 신청일로부터 <strong>14일 이내</strong>에 허용 여부를 통지해야 하며, 통지하지 않으면 자동 허용으로 간주됩니다.</li>
+                <li>육아휴직 기간 중 급여는 고용보험에서 지급되며, 별도로 급여 신청이 필요합니다.</li>
+                <li>근속기간이 <strong>6개월 미만</strong>인 경우 육아휴직을 사용할 수 없습니다 (출산전후휴가는 무관).</li>
+                <li>육아휴직 기간은 근속기간에 포함되며, 연차휴가 산정 시에도 포함됩니다.</li>
+            </ul>
+        </div>
+
+        <div class="btn-group no-print">
+            <button class="btn btn-primary" onclick="window.print()">인쇄하기</button>
+            <button class="btn btn-success" id="submitBtn" onclick="submitForm()">제출하기</button>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== MODALS ==================== -->
+<div class="modal" id="confirmModal">
+    <div class="modal-box" style="max-width:450px;text-align:left;">
+        <div style="text-align:center;margin-bottom:16px;">
+            <div class="modal-icon">&#128233;</div>
+            <div class="modal-title">신청서 전송</div>
+        </div>
+        <div class="modal-submit-info">
+            <div class="info-row"><span class="info-label">수신:</span><span class="info-value">경영관리팀 (주유진)</span></div>
+            <div class="info-row"><span class="info-label">이메일:</span><span class="info-value">yoojin83@netformrnd.com</span></div>
+            <div class="info-row"><span class="info-label">유형:</span><span class="info-value" id="modal-type">-</span></div>
+            <div class="info-row"><span class="info-label">신청인:</span><span class="info-value" id="modal-applicant">-</span></div>
+            <div class="info-row"><span class="info-label">신청일:</span><span class="info-value" id="modal-date">-</span></div>
+        </div>
+        <div style="margin-bottom:16px;">
+            <div style="font-weight:600;margin-bottom:8px;font-size:13px;">첨부 서류</div>
+            <div id="modal-attach-list"></div>
+        </div>
+        <div style="background:#fff3cd;border:1px solid #ffc107;border-radius:5px;padding:12px;font-size:12px;margin-bottom:16px;">
+            <strong style="color:#856404;">전송 전 확인사항</strong>
+            <ul style="margin:6px 0 0;padding-left:16px;">
+                <li>모든 필수 항목이 작성되었는지 확인하세요.</li>
+                <li>서명이 완료되었는지 확인하세요.</li>
+                <li>필요한 첨부서류가 모두 첨부되었는지 확인하세요.</li>
+            </ul>
+        </div>
+        <div style="display:flex;gap:10px;justify-content:center;">
+            <button class="modal-btn" style="background:#95a5a6;" onclick="closeConfirmModal()">취소</button>
+            <button class="modal-btn" style="background:#27ae60;" onclick="sendEmail()">전송하기</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="loadingModal">
+    <div class="modal-box">
+        <div class="modal-icon">&#9203;</div>
+        <div class="modal-title">전송 중...</div>
+        <div class="modal-text">잠시만 기다려주세요.</div>
+    </div>
+</div>
+
+<div class="modal" id="successModal">
+    <div class="modal-box">
+        <div class="modal-icon">&#10004;</div>
+        <div class="modal-title">제출 완료!</div>
+        <div class="modal-text">경영관리팀(yoojin83@netformrnd.com)으로<br>신청서가 전송되었습니다.<br><br>검토 후 연락드리겠습니다.</div>
+        <button class="modal-btn" onclick="closeModal()">확인</button>
+    </div>
+</div>
+
+<div class="modal" id="errorModal">
+    <div class="modal-box">
+        <div class="modal-icon" style="color:#e74c3c;">&#10008;</div>
+        <div class="modal-title">전송 실패</div>
+        <div class="modal-text">이메일 전송에 실패했습니다.<br>다시 시도하시거나 직접 담당자에게 연락해주세요.<br><br>070-4412-1775</div>
+        <button class="modal-btn" onclick="closeErrorModal()">확인</button>
+    </div>
+</div>
+
+<script>
+// ========== Google Apps Script ==========
+var GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbziWMvKzud2ImVpe_jKs215bH6a2Mo141hBmkXXjmbGPtlQK-h8D3gwArRSAGAOi-ss/exec';
+
+// ========== Tab switching ==========
+function switchTab(tabName) {
+    document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+    document.querySelectorAll('.tab-content').forEach(function(c) { c.classList.remove('active'); });
+    var btn = document.querySelector('.tab-btn[data-tab="' + tabName + '"]');
+    if (btn) btn.classList.add('active');
+    var content = document.getElementById('tab-' + tabName);
+    if (content) content.classList.add('active');
+    updateTabIndicator();
+}
+
+function updateTabIndicator() {
+    var activeBtn = document.querySelector('.tab-btn.active');
+    var indicator = document.getElementById('tabIndicator');
+    if (activeBtn && indicator) {
+        var nav = document.getElementById('tabNav');
+        var navRect = nav.getBoundingClientRect();
+        var btnRect = activeBtn.getBoundingClientRect();
+        indicator.style.width = btnRect.width + 'px';
+        indicator.style.left = (btnRect.left - navRect.left + nav.scrollLeft) + 'px';
+        var tabName = activeBtn.getAttribute('data-tab');
+        var colors = { maternity: '#e91e63', pregnant: '#ff9800', childcare: '#1976d2' };
+        indicator.style.background = colors[tabName] || '#2c3e50';
+    }
+}
+
+// ========== Sidebar scroll navigation ==========
+function scrollToSection(sectionId) {
+    var el = document.getElementById(sectionId);
+    if (el) { el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+}
+
+// ========== Page switching ==========
+function showFormPage() {
+    document.getElementById('guidePage').classList.add('hidden');
+    document.getElementById('formPage').classList.add('active');
+    window.scrollTo(0, 0);
+    setTimeout(function() {
+        var firstInput = document.getElementById('input-1');
+        if (firstInput) { firstInput.focus(); }
+        resizeCanvas();
+    }, 100);
+}
+
+function showGuidePage() {
+    document.getElementById('guidePage').classList.remove('hidden');
+    document.getElementById('formPage').classList.remove('active');
+    window.scrollTo(0, 0);
+    setTimeout(updateTabIndicator, 50);
+}
+
+// ========== Leave type change ==========
+function getLeaveType() {
+    var checked = document.querySelector('input[name="leaveType"]:checked');
+    return checked ? checked.value : '';
+}
+
+var FILE_LABELS = {
+    maternity: ['출산(예정)일 증빙서류 (의사진단서/출생증명서)','다태아 증빙서류 (해당 시)','유·사산 진단서 (해당 시)','가족관계증명서','기타 서류'],
+    spouse: ['출생증명서','가족관계증명서','배우자 재직증명서 (해당 시)','기타 서류 1','기타 서류 2'],
+    pregnant: ['임신확인서 또는 의사 진단서','배우자 육아휴직 증빙서류 (추가 6개월 시)','한부모 증빙서류 (해당 시)','장애인 증명서 (해당 시)','기타 서류'],
+    childcare: ['가족관계증명서 (자녀 확인용)','배우자 육아휴직 증빙서류 (추가 6개월 시)','한부모 증빙서류 (해당 시)','장애인 증명서 (해당 시)','기타 서류']
+};
+
+function onLeaveTypeChange() {
+    var type = getLeaveType();
+    document.querySelectorAll('.radio-item').forEach(function(r) { r.classList.remove('selected'); });
+    var selectedRadio = document.querySelector('input[name="leaveType"]:checked');
+    if (selectedRadio) selectedRadio.closest('.radio-item').classList.add('selected');
+
+    var secs = ['sec-maternity','sec-spouse','sec-pregnant','sec-childcare','sec-additional'];
+    secs.forEach(function(id) { document.getElementById(id).classList.add('hidden'); });
+
+    if (type === 'maternity') {
+        document.getElementById('sec-maternity').classList.remove('hidden');
+    } else if (type === 'spouse') {
+        document.getElementById('sec-spouse').classList.remove('hidden');
+    } else if (type === 'pregnant') {
+        document.getElementById('sec-pregnant').classList.remove('hidden');
+        document.getElementById('sec-additional').classList.remove('hidden');
+    } else if (type === 'childcare') {
+        document.getElementById('sec-childcare').classList.remove('hidden');
+        document.getElementById('sec-additional').classList.remove('hidden');
+    }
+
+    var labels = FILE_LABELS[type] || ['서류 1','서류 2','서류 3','서류 4','서류 5'];
+    for (var i = 1; i <= 5; i++) {
+        document.getElementById('doc-label-' + i).textContent = labels[i-1];
+    }
+
+    var titles = { maternity:'출산전후휴가 신청서', spouse:'배우자 출산휴가 신청서', pregnant:'육아휴직 신청서 (임신 중)', childcare:'육아휴직 신청서 (자녀양육)' };
+    document.getElementById('formTitle').textContent = titles[type] || '출산휴가·육아휴직 신청서';
+
+    updateProgress();
+}
+
+// ========== Date formatting ==========
+function formatDateInput(input) {
+    var v = input.value.replace(/[^0-9]/g, '');
+    if (v.length > 8) v = v.substring(0, 8);
+    if (v.length > 6) input.value = v.substring(0,4)+'-'+v.substring(4,6)+'-'+v.substring(6);
+    else if (v.length > 4) input.value = v.substring(0,4)+'-'+v.substring(4);
+    else input.value = v;
+}
+
+function addDateFormatting(id) {
+    var el = document.getElementById(id);
+    if (el) {
+        el.addEventListener('input', function(e) { formatDateInput(e.target); });
+    }
+}
+
+['mat-due','mat-start','sp-birth','sp-start','preg-due','preg-start','preg-end','cc-start','cc-end'].forEach(addDateFormatting);
+
+// Birth date -> SSN
+document.getElementById('input-2').addEventListener('input', function(e) {
+    var v = e.target.value.replace(/[^0-9]/g, '');
+    if (v.length > 8) v = v.substring(0, 8);
+    e.target.value = v;
+    if (v.length === 8) document.getElementById('ssn').value = v.substring(2,8) + '-*******';
+    else document.getElementById('ssn').value = '';
+});
+
+// Hire date -> tenure
+document.getElementById('input-5').addEventListener('input', function(e) { formatDateInput(e.target); });
+document.getElementById('input-5').addEventListener('blur', function(e) {
+    if (e.target.value.length === 10) {
+        var d = new Date(e.target.value), t = new Date();
+        if (!isNaN(d.getTime())) {
+            var y = t.getFullYear()-d.getFullYear(), m = t.getMonth()-d.getMonth();
+            if (t.getDate() < d.getDate()) m--;
+            if (m < 0) { y--; m += 12; }
+            document.getElementById('tenure').value = y+'년 '+m+'개월';
+        }
+    }
+});
+
+// Maternity leave end auto-calc
+function calcMatEnd() {
+    var startEl = document.getElementById('mat-start');
+    if (startEl.value.length === 10) {
+        var s = new Date(startEl.value);
+        if (!isNaN(s.getTime())) {
+            var days = document.getElementById('mat-twins').checked ? 120 : 90;
+            var end = new Date(s.getTime() + (days - 1) * 86400000);
+            document.getElementById('mat-end').value = end.getFullYear()+'-'+String(end.getMonth()+1).padStart(2,'0')+'-'+String(end.getDate()).padStart(2,'0');
+        }
+    }
+}
+document.getElementById('mat-start').addEventListener('blur', calcMatEnd);
+
+// Child birth date -> age
+document.getElementById('child-birth-date').addEventListener('input', function(e) { formatDateInput(e.target); });
+document.getElementById('child-birth-date').addEventListener('blur', function(e) {
+    if (e.target.value.length === 10) {
+        var d = new Date(e.target.value), t = new Date();
+        if (!isNaN(d.getTime())) {
+            var age = t.getFullYear()-d.getFullYear();
+            if (t.getMonth() < d.getMonth() || (t.getMonth()===d.getMonth() && t.getDate()<d.getDate())) age--;
+            document.getElementById('child-age').value = '만 '+age+'세';
+        }
+    }
+});
+
+// Childcare leave duration
+['cc-start','cc-end'].forEach(function(id) {
+    document.getElementById(id).addEventListener('blur', function() {
+        var s = new Date(document.getElementById('cc-start').value);
+        var e = new Date(document.getElementById('cc-end').value);
+        if (!isNaN(s.getTime()) && !isNaN(e.getTime()) && e >= s) {
+            var days = Math.ceil((e-s)/(86400000))+1;
+            var m = (e.getFullYear()-s.getFullYear())*12 + e.getMonth()-s.getMonth();
+            if (e.getDate() >= s.getDate()) m++;
+            document.getElementById('cc-duration').value = m+'개월 / '+days+'일';
+        }
+    });
+});
+
+// ========== Progress bar ==========
+function updateProgress() {
+    var fields = document.querySelectorAll('.form-page .form-input:not([readonly]):not([type="hidden"]), .form-page .form-textarea, .form-page input[type="radio"]:checked, .form-page input[type="checkbox"]:checked');
+    var total = 0, filled = 0;
+    document.querySelectorAll('.form-section:not(.hidden) .form-input:not([readonly])').forEach(function(el) {
+        if (el.offsetParent !== null) { total++; if (el.value.trim()) filled++; }
+    });
+    var ta = document.getElementById('leave-reason');
+    if (ta) { total++; if (ta.value.trim()) filled++; }
+    var sigName = document.getElementById('input-sig');
+    if (sigName) { total++; if (sigName.value.trim()) filled++; }
+    var percent = total > 0 ? Math.round((filled / total) * 100) : 0;
+    if (percent > 100) percent = 100;
+    document.getElementById('progressBar').style.width = percent + '%';
+    document.getElementById('progressPercent').textContent = percent + '%';
+}
+
+document.addEventListener('input', function(e) {
+    if (e.target.closest('.form-page')) updateProgress();
+});
+document.addEventListener('change', function(e) {
+    if (e.target.closest('.form-page')) updateProgress();
+});
+
+// ========== Enter key navigation ==========
+var allInputIds = ['input-1','input-2','input-3','input-4','input-5','input-6','input-7'];
+allInputIds.forEach(function(id, idx) {
+    var el = document.getElementById(id);
+    if (el) {
+        el.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                var nextId = allInputIds[idx + 1];
+                if (nextId) {
+                    var next = document.getElementById(nextId);
+                    if (next) { next.focus(); next.select(); next.scrollIntoView({behavior:'smooth',block:'center'}); }
+                }
+            }
+        });
+    }
+});
+
+// ========== File upload ==========
+for (var fi = 1; fi <= 5; fi++) {
+    (function(idx) {
+        var f = document.getElementById('file-'+idx);
+        var n = document.getElementById('filename-'+idx);
+        var r = document.getElementById('remove-'+idx);
+        var chk = document.getElementById('doc-chk-'+idx);
+        if (f) {
+            f.addEventListener('change', function() {
+                if (this.files[0]) {
+                    if (this.files[0].size > 10*1024*1024) {
+                        alert('파일 크기는 10MB를 초과할 수 없습니다.');
+                        this.value = ''; return;
+                    }
+                    n.textContent = this.files[0].name;
+                    r.style.display = 'inline-block';
+                    if (chk) chk.checked = true;
+                }
+            });
+        }
+        if (r) {
+            r.addEventListener('click', function() {
+                f.value = ''; n.textContent = ''; this.style.display = 'none';
+                if (chk) chk.checked = false;
+            });
+        }
+    })(fi);
+}
+
+// ========== Signature ==========
+var canvas = document.getElementById('signatureCanvas');
+var ctx = canvas.getContext('2d');
+var isDrawing = false, lastX = 0, lastY = 0;
+
+function resizeCanvas() {
+    var container = canvas.parentElement;
+    if (container) {
+        var rect = container.getBoundingClientRect();
+        canvas.width = rect.width || 300;
+        canvas.height = 120;
+        ctx.strokeStyle = '#000';
+        ctx.lineWidth = 2;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+    }
+}
+window.addEventListener('resize', resizeCanvas);
+
+function getMousePos(e) { var r = canvas.getBoundingClientRect(); return {x:e.clientX-r.left, y:e.clientY-r.top}; }
+function getTouchPos(e) { var r = canvas.getBoundingClientRect(); var t = e.touches[0]; return {x:t.clientX-r.left, y:t.clientY-r.top}; }
+
+canvas.addEventListener('mousedown', function(e) { isDrawing=true; var p=getMousePos(e); lastX=p.x; lastY=p.y; });
+canvas.addEventListener('mousemove', function(e) { if(!isDrawing)return; var p=getMousePos(e); ctx.beginPath(); ctx.moveTo(lastX,lastY); ctx.lineTo(p.x,p.y); ctx.stroke(); lastX=p.x; lastY=p.y; });
+canvas.addEventListener('mouseup', function() { isDrawing=false; });
+canvas.addEventListener('mouseout', function() { isDrawing=false; });
+canvas.addEventListener('touchstart', function(e) { e.preventDefault(); isDrawing=true; var p=getTouchPos(e); lastX=p.x; lastY=p.y; });
+canvas.addEventListener('touchmove', function(e) { if(!isDrawing)return; e.preventDefault(); var p=getTouchPos(e); ctx.beginPath(); ctx.moveTo(lastX,lastY); ctx.lineTo(p.x,p.y); ctx.stroke(); lastX=p.x; lastY=p.y; });
+canvas.addEventListener('touchend', function() { isDrawing=false; });
+
+function clearSignature() { ctx.clearRect(0, 0, canvas.width, canvas.height); }
+
+function saveSignature() {
+    var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    var hasContent = false;
+    for (var i = 3; i < imageData.data.length; i += 4) { if (imageData.data[i] > 0) { hasContent = true; break; } }
+    if (!hasContent) { alert('서명을 입력해주세요.'); return; }
+    showSignaturePreview(canvas.toDataURL('image/png'));
+}
+
+function showSignatureTab(tab) {
+    document.querySelectorAll('.sig-tab').forEach(function(t) { t.classList.remove('active'); });
+    document.querySelectorAll('.sig-tab-content').forEach(function(c) { c.classList.remove('active'); });
+    if (tab === 'draw') {
+        document.querySelector('.sig-tab:nth-child(1)').classList.add('active');
+        document.getElementById('sig-draw-tab').classList.add('active');
+    } else {
+        document.querySelector('.sig-tab:nth-child(2)').classList.add('active');
+        document.getElementById('sig-upload-tab').classList.add('active');
+    }
+}
+
+document.getElementById('signatureFile').addEventListener('change', function(e) {
+    var file = e.target.files[0]; if (!file) return;
+    if (!file.type.startsWith('image/')) { alert('이미지 파일만 업로드 가능합니다.'); return; }
+    var reader = new FileReader();
+    reader.onload = function(event) { showSignaturePreview(event.target.result); };
+    reader.readAsDataURL(file);
+});
+
+function showSignaturePreview(dataURL) {
+    document.getElementById('signatureImage').src = dataURL;
+    document.getElementById('signaturePreview').style.display = 'block';
+    document.getElementById('sig-draw-tab').style.display = 'none';
+    document.getElementById('sig-upload-tab').style.display = 'none';
+    document.querySelector('.signature-tabs').style.display = 'none';
+}
+
+function removeSignature() {
+    document.getElementById('signatureImage').src = '';
+    document.getElementById('signaturePreview').style.display = 'none';
+    document.getElementById('sig-draw-tab').style.display = '';
+    document.getElementById('sig-upload-tab').style.display = '';
+    document.querySelector('.signature-tabs').style.display = '';
+    clearSignature();
+}
+
+// ========== Modal management ==========
+function closeModal() { document.getElementById('successModal').classList.remove('show'); }
+function closeConfirmModal() { document.getElementById('confirmModal').classList.remove('show'); }
+function closeErrorModal() { document.getElementById('errorModal').classList.remove('show'); }
+
+// ========== Current date ==========
+var today = new Date();
+document.getElementById('currentYear').textContent = today.getFullYear();
+document.getElementById('currentMonth').textContent = today.getMonth() + 1;
+document.getElementById('currentDay').textContent = today.getDate();
+
+// ========== Submit ==========
+function getLeaveTypeLabel() {
+    var map = { maternity:'출산전후휴가', spouse:'배우자출산휴가', pregnant:'육아휴직(임신중)', childcare:'육아휴직(자녀양육)' };
+    return map[getLeaveType()] || '';
+}
+
+function submitForm() {
+    var name = document.getElementById('input-1').value;
+    if (!name) { alert('신청인 성명을 입력해주세요.'); document.getElementById('input-1').focus(); return; }
+    if (!getLeaveType()) { alert('신청 유형을 선택해주세요.'); return; }
+
+    var dateStr = document.getElementById('currentYear').textContent+'년 '+document.getElementById('currentMonth').textContent+'월 '+document.getElementById('currentDay').textContent+'일';
+    document.getElementById('modal-applicant').textContent = name;
+    document.getElementById('modal-date').textContent = dateStr;
+    document.getElementById('modal-type').textContent = getLeaveTypeLabel();
+
+    var attachHtml = '';
+    var hasAttach = false;
+    var labels = FILE_LABELS[getLeaveType()] || [];
+    for (var i = 1; i <= 5; i++) {
+        var fileInput = document.getElementById('file-' + i);
+        if (fileInput.files && fileInput.files[0]) {
+            hasAttach = true;
+            attachHtml += '<div class="modal-attach-item">' + (labels[i-1]||'서류'+i) + ': ' + fileInput.files[0].name + '</div>';
+        }
+    }
+    if (!hasAttach) attachHtml = '<div class="modal-no-attach">첨부된 서류가 없습니다.</div>';
+    document.getElementById('modal-attach-list').innerHTML = attachHtml;
+    document.getElementById('confirmModal').classList.add('show');
+}
+
+// ========== File to Base64 ==========
+function fileToBase64(file) {
+    return new Promise(function(resolve, reject) {
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function() { resolve(reader.result.split(',')[1]); };
+        reader.onerror = function(error) { reject(error); };
+    });
+}
+
+// ========== Summary Image Generation ==========
+function generateSummaryImage(formFields, signatureDataUrl) {
+    return new Promise(function(resolve) {
+        var cvs = document.createElement('canvas');
+        var c = cvs.getContext('2d');
+        var w = 600, h = 950;
+        cvs.width = w; cvs.height = h;
+        c.fillStyle = '#ffffff'; c.fillRect(0,0,w,h);
+        c.fillStyle = '#2c3e50'; c.fillRect(0,0,w,60);
+        c.fillStyle = '#ffffff'; c.font = 'bold 20px "Malgun Gothic", sans-serif'; c.textAlign = 'center';
+        c.fillText('NetformR&D ' + (formFields['신청유형'] || '신청서') + ' 정보', w/2, 40);
+
+        var y = 85, lm = 30;
+        function roundRect(cx,x,y2,ww,hh,r,fill,stroke) {
+            cx.beginPath(); cx.moveTo(x+r,y2); cx.lineTo(x+ww-r,y2); cx.quadraticCurveTo(x+ww,y2,x+ww,y2+r);
+            cx.lineTo(x+ww,y2+hh-r); cx.quadraticCurveTo(x+ww,y2+hh,x+ww-r,y2+hh); cx.lineTo(x+r,y2+hh);
+            cx.quadraticCurveTo(x,y2+hh,x,y2+hh-r); cx.lineTo(x,y2+r); cx.quadraticCurveTo(x,y2,x+r,y2);
+            cx.closePath(); if(fill)cx.fill(); if(stroke)cx.stroke();
+        }
+        function drawSection(title, items, bg) {
+            var sh = 30 + items.length * 26;
+            c.fillStyle = bg||'#f8f9fa'; c.strokeStyle='#e0e0e0'; c.lineWidth=1;
+            roundRect(c, lm-10, y-5, w-2*lm+20, sh, 8, true, true);
+            c.fillStyle='#2c3e50'; c.font='bold 14px "Malgun Gothic", sans-serif'; c.textAlign='left';
+            c.fillText(title, lm, y+16); y+=32;
+            c.font='13px "Malgun Gothic", sans-serif';
+            items.forEach(function(it) {
+                c.fillStyle='#666'; c.fillText(it.label+':', lm+10, y);
+                c.fillStyle='#333'; c.font='bold 13px "Malgun Gothic", sans-serif';
+                var val = (it.value||'-').substring(0,40);
+                c.fillText(val, lm+130, y);
+                c.font='13px "Malgun Gothic", sans-serif'; y+=24;
+            });
+            y += 15;
+        }
+
+        drawSection('1. 신청인 정보', [
+            {label:'성명',value:formFields['성명']},{label:'소속부서',value:formFields['소속부서']},
+            {label:'직위',value:formFields['직위']},{label:'연락처',value:formFields['연락처']},
+            {label:'이메일',value:formFields['이메일']}
+        ], '#f8f9fa');
+
+        drawSection('2. 신청 유형 정보', [
+            {label:'유형',value:formFields['신청유형']},
+            {label:'기간',value:formFields['휴가기간']},
+            {label:'비고',value:formFields['비고']}
+        ], '#e8f5e9');
+
+        c.fillStyle='#fff'; c.strokeStyle='#2c3e50'; c.lineWidth=2;
+        roundRect(c, lm-10, y-5, w-2*lm+20, 120, 8, true, true);
+        c.fillStyle='#2c3e50'; c.font='bold 14px "Malgun Gothic", sans-serif'; c.textAlign='left';
+        c.fillText('3. 신청인 서명', lm, y+18);
+
+        if (signatureDataUrl && signatureDataUrl !== '서명 없음' && !signatureDataUrl.endsWith('#')) {
+            var sigImage = new Image();
+            sigImage.onload = function() {
+                c.drawImage(sigImage, (w-200)/2, y+30, 200, 70);
+                c.fillStyle='#666'; c.font='12px "Malgun Gothic", sans-serif'; c.textAlign='center';
+                c.fillText('서명일: '+formFields['신청일'], w/2, y+110); c.textAlign='left';
+                resolve(cvs.toDataURL('image/png').split(',')[1]);
+            };
+            sigImage.onerror = function() {
+                c.fillStyle='#999'; c.font='14px "Malgun Gothic", sans-serif'; c.textAlign='center';
+                c.fillText('(서명 이미지 로드 실패)', w/2, y+70);
+                c.fillText('서명일: '+formFields['신청일'], w/2, y+110); c.textAlign='left';
+                resolve(cvs.toDataURL('image/png').split(',')[1]);
+            };
+            sigImage.src = signatureDataUrl;
+        } else {
+            c.fillStyle='#999'; c.font='14px "Malgun Gothic", sans-serif'; c.textAlign='center';
+            c.fillText('(서명 없음)', w/2, y+70);
+            c.fillText('서명일: '+formFields['신청일'], w/2, y+110); c.textAlign='left';
+            resolve(cvs.toDataURL('image/png').split(',')[1]);
+        }
+    });
+}
+
+// ========== Send Email ==========
+async function sendEmail() {
+    document.getElementById('confirmModal').classList.remove('show');
+    document.getElementById('loadingModal').classList.add('show');
+
+    var type = getLeaveType();
+    var dateStr = document.getElementById('currentYear').textContent+'년 '+document.getElementById('currentMonth').textContent+'월 '+document.getElementById('currentDay').textContent+'일';
+    var period = '';
+    if (type==='maternity') period = (document.getElementById('mat-start').value||'')+'~'+(document.getElementById('mat-end').value||'');
+    else if (type==='spouse') period = (document.getElementById('sp-start').value||'')+' (20일)';
+    else if (type==='pregnant') period = (document.getElementById('preg-start').value||'')+'~'+(document.getElementById('preg-end').value||'');
+    else if (type==='childcare') period = (document.getElementById('cc-start').value||'')+'~'+(document.getElementById('cc-end').value||'');
+
+    var splitVal = '';
+    var splitRadio = document.querySelector('input[name="splitUse"]:checked');
+    if (splitRadio) { var m = {1:'최초',2:'2회차',3:'3회차',4:'4회차'}; splitVal = m[splitRadio.value]||''; }
+
+    var formFields = {
+        '성명': document.getElementById('input-1').value||'',
+        '생년월일': document.getElementById('input-2').value||'',
+        '주민등록번호': document.getElementById('ssn').value||'',
+        '소속부서': document.getElementById('input-3').value||'',
+        '직위': document.getElementById('input-4').value||'',
+        '입사일': document.getElementById('input-5').value||'',
+        '근속기간': document.getElementById('tenure').value||'',
+        '연락처': document.getElementById('input-6').value||'',
+        '이메일': document.getElementById('input-7').value||'',
+        '신청유형': getLeaveTypeLabel(),
+        '휴가기간': period,
+        '비고': '',
+        '신청일': dateStr,
+        '서명자': document.getElementById('input-sig').value||''
+    };
+
+    if (type==='maternity') {
+        formFields['출산예정일'] = document.getElementById('mat-due').value||'';
+        formFields['다태아'] = document.getElementById('mat-twins').checked?'예':'아니오';
+        formFields['비고'] = document.getElementById('mat-twins').checked?'다태아 120일':'일반 90일';
+    } else if (type==='spouse') {
+        formFields['배우자출산일'] = document.getElementById('sp-birth').value||'';
+    } else if (type==='pregnant') {
+        formFields['임신주수'] = document.getElementById('preg-week').value||'';
+        formFields['출산예정일'] = document.getElementById('preg-due').value||'';
+    } else if (type==='childcare') {
+        formFields['자녀성명'] = document.getElementById('child-name').value||'';
+        formFields['자녀생년월일'] = document.getElementById('child-birth-date').value||'';
+        formFields['자녀나이'] = document.getElementById('child-age').value||'';
+        formFields['자녀관계'] = document.getElementById('rel-birth').checked?'친자녀':(document.getElementById('rel-adopt').checked?'입양자녀':'');
+        formFields['분할사용'] = splitVal;
+        formFields['비고'] = splitVal ? '분할사용 '+splitVal : '';
+    }
+
+    if (type==='pregnant'||type==='childcare') {
+        formFields['배우자휴직사용'] = document.getElementById('spouse-used-yes').checked?'사용함':(document.getElementById('spouse-used-no').checked?'미사용':'');
+        formFields['배우자성명'] = document.getElementById('spouse-name').value||'';
+        formFields['배우자근무처'] = document.getElementById('spouse-company').value||'';
+        formFields['추가6개월'] = document.getElementById('extend-yes').checked?'신청함':(document.getElementById('extend-no').checked?'해당없음':'');
+        formFields['한부모'] = document.getElementById('single-yes').checked?'해당':(document.getElementById('single-no').checked?'비해당':'');
+        formFields['장애아동부모'] = document.getElementById('disabled-yes').checked?'해당':(document.getElementById('disabled-no').checked?'비해당':'');
+        formFields['전직장휴직'] = document.getElementById('prev-yes').checked?'있음':(document.getElementById('prev-no').checked?'없음':'');
+    }
+    formFields['신청사유'] = document.getElementById('leave-reason').value||'';
+
+    // localStorage save for confirmation generator
+    var pStart = '', pEnd = '';
+    if (type==='maternity') { pStart=document.getElementById('mat-start').value||''; pEnd=document.getElementById('mat-end').value||''; }
+    else if (type==='pregnant') { pStart=document.getElementById('preg-start').value||''; pEnd=document.getElementById('preg-end').value||''; }
+    else if (type==='childcare') { pStart=document.getElementById('cc-start').value||''; pEnd=document.getElementById('cc-end').value||''; }
+    else if (type==='spouse') { pStart=document.getElementById('sp-start').value||''; }
+
+    var extraReason = '';
+    if (formFields['추가6개월']==='신청함') {
+        if (formFields['한부모']==='해당') extraReason='single_parent';
+        else if (formFields['장애아동부모']==='해당') extraReason='disabled_child';
+        else extraReason='both_parents';
+    }
+
+    var confirmData = {
+        leaveType: type,
+        workerName: formFields['성명'],
+        workerBirth: formFields['생년월일'],
+        childName: formFields['자녀성명']||'',
+        childBirth: formFields['자녀생년월일']||'',
+        periodStart: pStart,
+        periodEnd: pEnd,
+        extraLeave: formFields['추가6개월']==='신청함',
+        extraReason: extraReason,
+        pregnancyWeek: formFields['임신주수']||'',
+        dueDate: formFields['출산예정일']||'',
+        department: formFields['소속부서'],
+        position: formFields['직위'],
+        phone: formFields['연락처'],
+        email: formFields['이메일'],
+        submitTime: new Date().toISOString()
+    };
+    try { localStorage.setItem('netformLeaveData', JSON.stringify(confirmData)); } catch(e) { console.error('localStorage error:', e); }
+
+    var signatureImage = '서명 없음';
+    var sigImg = document.getElementById('signatureImage').src;
+    if (sigImg && sigImg !== '' && !sigImg.endsWith('#')) signatureImage = sigImg;
+
+    var fileDataArray = [];
+    var attachmentNames = [];
+    var labels = FILE_LABELS[type] || [];
+    for (var i = 1; i <= 5; i++) {
+        var fileInput = document.getElementById('file-' + i);
+        if (fileInput.files && fileInput.files[0]) {
+            var file = fileInput.files[0];
+            try {
+                var base64 = await fileToBase64(file);
+                fileDataArray.push({ fileName:file.name, fileType:file.type, fileData:base64, description:labels[i-1]||'서류'+i });
+                attachmentNames.push((labels[i-1]||'서류'+i)+': '+file.name);
+            } catch(err) { console.error('파일 변환 오류:', err); }
+        }
+    }
+    formFields['첨부서류목록'] = attachmentNames.length > 0 ? attachmentNames.join(' / ') : '없음';
+
+    try {
+        var summaryBase64 = await generateSummaryImage(formFields, signatureImage);
+        fileDataArray.push({ fileName:'신청_정보_요약_및_서명.png', fileType:'image/png', fileData:summaryBase64, description:'신청 정보 요약 및 서명' });
+    } catch(err) { console.error('요약 이미지 생성 오류:', err); }
+
+    var recipientEmails = ['yoojin83@netformrnd.com'];
+
+    try {
+        for (var j = 0; j < recipientEmails.length; j++) {
+            var emailData = {
+                type: 'email',
+                recipientEmail: recipientEmails[j],
+                formFields: formFields,
+                signatureImage: signatureImage,
+                files: fileDataArray,
+                submitTime: new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' })
+            };
+            await fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST', mode: 'no-cors',
+                headers: { 'Content-Type': 'text/plain' },
+                body: JSON.stringify(emailData)
+            });
+        }
+        document.getElementById('loadingModal').classList.remove('show');
+        document.getElementById('successModal').classList.add('show');
+    } catch (error) {
+        console.error('이메일 전송 오류:', error);
+        document.getElementById('loadingModal').classList.remove('show');
+        document.getElementById('errorModal').classList.add('show');
+    }
+}
+
+// ========== Sub-tab switching (출산휴가 본인/배우자) ==========
+function switchSubTab(tab) {
+    document.getElementById('sub-self').style.display = tab==='self' ? 'block' : 'none';
+    document.getElementById('sub-spouse').style.display = tab==='spouse' ? 'block' : 'none';
+    var btns = document.querySelectorAll('.sub-tab');
+    btns.forEach(function(b) {
+        if (b.dataset.sub === 'self') {
+            b.style.background = tab==='self' ? '#e91e63' : 'white';
+            b.style.color = tab==='self' ? 'white' : '#e91e63';
+        } else {
+            b.style.background = tab==='spouse' ? '#1565c0' : 'white';
+            b.style.color = tab==='spouse' ? 'white' : '#1565c0';
+        }
+    });
+}
+
+// ========== Init ==========
+window.addEventListener('load', function() {
+    setTimeout(updateTabIndicator, 100);
+});
+window.addEventListener('resize', function() {
+    updateTabIndicator();
+});
+</script>
+
+</body>
+</html>
