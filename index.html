@@ -2116,7 +2116,14 @@ async function sendEmail() {
         email: formFields['이메일'],
         submitTime: new Date().toISOString()
     };
-    try { localStorage.setItem('netformLeaveData', JSON.stringify(confirmData)); } catch(e) { console.error('localStorage error:', e); }
+    try {
+        localStorage.setItem('netformLeaveData', JSON.stringify(confirmData));
+        console.log('✅ localStorage 저장 성공!');
+        console.log('저장된 confirmData:', JSON.stringify(confirmData, null, 2));
+        // 저장 확인
+        var saved = localStorage.getItem('netformLeaveData');
+        console.log('저장 확인 (읽기):', saved ? '데이터 있음 (' + saved.length + '자)' : '❌ 데이터 없음!');
+    } catch(e) { console.error('❌ localStorage 저장 실패:', e); }
 
     var signatureImage = '서명 없음';
     var sigImg = document.getElementById('signatureImage').src;
