@@ -1991,7 +1991,15 @@ async function sendEmail() {
     var splitRadio = document.querySelector('input[name="splitUse"]:checked');
     if (splitRadio) { var m = {1:'최초',2:'2회차',3:'3회차',4:'4회차'}; splitVal = m[splitRadio.value]||''; }
 
+    // GAS가 기대하는 필드명(언더스코어 포함)과 요약 이미지용 키 모두 저장
+    var pStartVal='', pEndVal='';
+    if (type==='maternity') { pStartVal=document.getElementById('mat-start').value||''; pEndVal=document.getElementById('mat-end').value||''; }
+    else if (type==='pregnant') { pStartVal=document.getElementById('preg-start').value||''; pEndVal=document.getElementById('preg-end').value||''; }
+    else if (type==='childcare') { pStartVal=document.getElementById('cc-start').value||''; pEndVal=document.getElementById('cc-end').value||''; }
+    else if (type==='spouse') { pStartVal=document.getElementById('sp-start').value||''; }
+
     var formFields = {
+        '신청인_성명': document.getElementById('input-1').value||'',
         '성명': document.getElementById('input-1').value||'',
         '생년월일': document.getElementById('input-2').value||'',
         '주민등록번호': document.getElementById('ssn').value||'',
@@ -2003,6 +2011,9 @@ async function sendEmail() {
         '이메일': document.getElementById('input-7').value||'',
         '신청유형': getLeaveTypeLabel(),
         '휴가기간': period,
+        '휴직_시작일': pStartVal,
+        '휴직_종료일': pEndVal,
+        '휴직_기간': document.getElementById('cc-duration')?.value||'',
         '비고': '',
         '신청일': dateStr,
         '서명자': document.getElementById('input-sig').value||''
@@ -2010,32 +2021,62 @@ async function sendEmail() {
 
     if (type==='maternity') {
         formFields['출산예정일'] = document.getElementById('mat-due').value||'';
-        formFields['다태아'] = document.getElementById('mat-twins').checked?'예':'아니오';
-        formFields['비고'] = document.getElementById('mat-twins').checked?'다태아 120일':'일반 90일';
+        formFields['다태아'] = document.getElementById('mat-twins')?.checked?'예':'아니오';
+        formFields['비고'] = document.getElementById('mat-twins')?.checked?'다태아 120일':'일반 90일';
     } else if (type==='spouse') {
         formFields['배우자출산일'] = document.getElementById('sp-birth').value||'';
     } else if (type==='pregnant') {
         formFields['임신주수'] = document.getElementById('preg-week').value||'';
         formFields['출산예정일'] = document.getElementById('preg-due').value||'';
     } else if (type==='childcare') {
-        formFields['자녀성명'] = document.getElementById('child-name').value||'';
-        formFields['자녀생년월일'] = document.getElementById('child-birth-date').value||'';
-        formFields['자녀나이'] = document.getElementById('child-age').value||'';
-        formFields['자녀관계'] = document.getElementById('rel-birth').checked?'친자녀':(document.getElementById('rel-adopt').checked?'입양자녀':'');
+        var childName = document.getElementById('child-name').value||'';
+        var childBirth = document.getElementById('child-birth-date').value||'';
+        var childAge = document.getElementById('child-age').value||'';
+        var childRel = document.getElementById('rel-birth').checked?'친자녀':(document.getElementById('rel-adopt').checked?'입양자녀':'');
+        // GAS 호환 키 (언더스코어)
+        formFields['자녀_성명'] = childName;
+        formFields['자녀_생년월일'] = childBirth;
+        formFields['자녀_나이'] = childAge;
+        formFields['자녀_학년'] = '';
+        formFields['자녀_관계'] = childRel;
+        formFields['분할_사용'] = splitVal;
+        // 요약 이미지 호환 키
+        formFields['자녀성명'] = childName;
+        formFields['자녀생년월일'] = childBirth;
+        formFields['자녀나이'] = childAge;
+        formFields['자녀관계'] = childRel;
         formFields['분할사용'] = splitVal;
         formFields['비고'] = splitVal ? '분할사용 '+splitVal : '';
     }
 
     if (type==='pregnant'||type==='childcare') {
-        formFields['배우자휴직사용'] = document.getElementById('spouse-used-yes').checked?'사용함':(document.getElementById('spouse-used-no').checked?'미사용':'');
-        formFields['배우자성명'] = document.getElementById('spouse-name').value||'';
-        formFields['배우자근무처'] = document.getElementById('spouse-company').value||'';
-        formFields['추가6개월'] = document.getElementById('extend-yes').checked?'신청함':(document.getElementById('extend-no').checked?'해당없음':'');
-        formFields['한부모'] = document.getElementById('single-yes').checked?'해당':(document.getElementById('single-no').checked?'비해당':'');
-        formFields['장애아동부모'] = document.getElementById('disabled-yes').checked?'해당':(document.getElementById('disabled-no').checked?'비해당':'');
-        formFields['전직장휴직'] = document.getElementById('prev-yes').checked?'있음':(document.getElementById('prev-no').checked?'없음':'');
+        var spUse = document.getElementById('spouse-used-yes').checked?'사용함 (3개월 이상)':(document.getElementById('spouse-used-no').checked?'사용 안 함':'');
+        var spName = document.getElementById('spouse-name').value||'';
+        var spComp = document.getElementById('spouse-company').value||'';
+        var ext6 = document.getElementById('extend-yes').checked?'신청함':(document.getElementById('extend-no').checked?'해당없음':'');
+        var prevUse = document.getElementById('prev-yes').checked?'있음':(document.getElementById('prev-no').checked?'없음':'');
+        var singleP = document.getElementById('single-yes').checked?'해당':(document.getElementById('single-no').checked?'비해당':'');
+        var disabledP = document.getElementById('disabled-yes').checked?'해당':(document.getElementById('disabled-no').checked?'비해당':'');
+        // GAS 호환 키
+        formFields['배우자_휴직사용'] = spUse;
+        formFields['배우자_성명'] = spName;
+        formFields['배우자_근무처'] = spComp;
+        formFields['추가6개월_신청'] = ext6;
+        formFields['전직장_휴직사용'] = prevUse;
+        formFields['한부모_여부'] = singleP;
+        formFields['장애아동_부모'] = disabledP;
+        // 요약 이미지 호환 키
+        formFields['배우자휴직사용'] = spUse;
+        formFields['배우자성명'] = spName;
+        formFields['배우자근무처'] = spComp;
+        formFields['추가6개월'] = ext6;
+        formFields['전직장휴직'] = prevUse;
+        formFields['한부모'] = singleP;
+        formFields['장애아동부모'] = disabledP;
     }
-    formFields['신청사유'] = document.getElementById('leave-reason').value||'';
+    formFields['신청_사유'] = document.getElementById('leave-reason').value||'';
+    formFields['신청사유'] = formFields['신청_사유'];
+    formFields['첨부_서류목록'] = '';
 
     console.log('전체 formFields:', JSON.stringify(formFields, null, 2));
     console.log('주요 필드 확인:');
@@ -2048,12 +2089,7 @@ async function sendEmail() {
     console.log('  신청사유:', formFields['신청사유']);
     console.log('========================================');
 
-    // localStorage save for confirmation generator
-    var pStart = '', pEnd = '';
-    if (type==='maternity') { pStart=document.getElementById('mat-start').value||''; pEnd=document.getElementById('mat-end').value||''; }
-    else if (type==='pregnant') { pStart=document.getElementById('preg-start').value||''; pEnd=document.getElementById('preg-end').value||''; }
-    else if (type==='childcare') { pStart=document.getElementById('cc-start').value||''; pEnd=document.getElementById('cc-end').value||''; }
-    else if (type==='spouse') { pStart=document.getElementById('sp-start').value||''; }
+    // localStorage save for confirmation generator (pStartVal/pEndVal은 위에서 이미 계산됨)
 
     var extraReason = '';
     if (formFields['추가6개월']==='신청함') {
@@ -2064,12 +2100,12 @@ async function sendEmail() {
 
     var confirmData = {
         leaveType: type,
-        workerName: formFields['성명'],
+        workerName: formFields['신청인_성명'],
         workerBirth: formFields['생년월일'],
-        childName: formFields['자녀성명']||'',
-        childBirth: formFields['자녀생년월일']||'',
-        periodStart: pStart,
-        periodEnd: pEnd,
+        childName: formFields['자녀_성명']||formFields['자녀성명']||'',
+        childBirth: formFields['자녀_생년월일']||formFields['자녀생년월일']||'',
+        periodStart: pStartVal,
+        periodEnd: pEndVal,
         extraLeave: formFields['추가6개월']==='신청함',
         extraReason: extraReason,
         pregnancyWeek: formFields['임신주수']||'',
