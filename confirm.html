@@ -1,0 +1,2399 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>출산휴가·육아휴직 확인서 생성기</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f1f3f4;
+            min-height: 100vh;
+            padding: 40px 20px;
+            color: #202124;
+        }
+        .container {
+            max-width: 760px;
+            margin: 0 auto;
+        }
+        .header-card {
+            background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
+            border-radius: 12px 12px 0 0;
+            padding: 32px 40px;
+            color: white;
+        }
+        .header-card h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .header-card p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        .form-card {
+            background: #fff;
+            border-radius: 0 0 12px 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 4px 20px rgba(0,0,0,0.08);
+            padding: 32px 40px 40px;
+        }
+        .section {
+            margin-bottom: 28px;
+            padding-bottom: 28px;
+            border-bottom: 1px solid #e8eaed;
+        }
+        .section:last-of-type {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .section-icon {
+            width: 36px;
+            height: 36px;
+            background: #ede9fe;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #202124;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+        .form-row:last-child { margin-bottom: 0; }
+        .form-row.cols-3 { grid-template-columns: repeat(3, 1fr); }
+        .form-row.cols-1 { grid-template-columns: 1fr; }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        .form-group label {
+            font-size: 13px;
+            font-weight: 500;
+            color: #5f6368;
+            margin-bottom: 8px;
+        }
+        .form-group label .required {
+            color: #d93025;
+            margin-left: 2px;
+        }
+        .form-group label .fixed-badge {
+            display: inline-block;
+            background: #e8f0fe;
+            color: #1a73e8;
+            font-size: 10px;
+            font-weight: 600;
+            padding: 1px 6px;
+            border-radius: 4px;
+            margin-left: 6px;
+        }
+        .form-group input, .form-group select, .form-group textarea {
+            padding: 12px 14px;
+            border: 1px solid #dadce0;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: #202124;
+            transition: all 0.2s ease;
+            background: #fff;
+        }
+        .form-group input:hover, .form-group select:hover {
+            border-color: #bdc1c6;
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #7c3aed;
+            box-shadow: 0 0 0 2px rgba(124,58,237,0.2);
+        }
+        .form-group input::placeholder {
+            color: #9aa0a6;
+        }
+        .form-group input:read-only {
+            background: #f8f9fa;
+            color: #5f6368;
+            cursor: default;
+        }
+        .form-group input:read-only:hover {
+            border-color: #dadce0;
+        }
+        .form-group input:read-only:focus {
+            border-color: #dadce0;
+            box-shadow: none;
+        }
+
+        /* 타입 선택 탭 - 2x2 그리드 */
+        .type-tabs {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .type-tab {
+            padding: 14px 16px;
+            border: 2px solid #dadce0;
+            border-radius: 10px;
+            background: #fff;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+        }
+        .type-tab:hover {
+            border-color: #bdc1c6;
+            background: #f8f9fa;
+        }
+        .type-tab.active {
+            border-color: #7c3aed;
+            background: #f5f3ff;
+        }
+        .type-tab .tab-icon {
+            font-size: 24px;
+            margin-bottom: 6px;
+        }
+        .type-tab .tab-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #202124;
+        }
+        .type-tab .tab-desc {
+            font-size: 12px;
+            color: #5f6368;
+            margin-top: 2px;
+        }
+        .type-tab.active .tab-label {
+            color: #7c3aed;
+        }
+
+        /* 조건부 섹션 */
+        .conditional-section {
+            display: none;
+        }
+        .conditional-section.show {
+            display: block;
+        }
+
+        /* 라디오/체크 그룹 */
+        .radio-group {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .radio-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            border: 1px solid #dadce0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+        .radio-item:hover {
+            border-color: #bdc1c6;
+            background: #f8f9fa;
+        }
+        .radio-item input[type="radio"],
+        .radio-item input[type="checkbox"] {
+            accent-color: #7c3aed;
+            width: 16px;
+            height: 16px;
+        }
+        .radio-item.selected {
+            border-color: #7c3aed;
+            background: #f5f3ff;
+        }
+
+        .check-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .check-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 12px 16px;
+            border: 1px solid #dadce0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+        .check-item:hover {
+            border-color: #bdc1c6;
+            background: #f8f9fa;
+        }
+        .check-item input[type="radio"] {
+            accent-color: #7c3aed;
+            width: 16px;
+            height: 16px;
+            margin-top: 2px;
+            flex-shrink: 0;
+        }
+        .check-item.selected {
+            border-color: #7c3aed;
+            background: #f5f3ff;
+        }
+
+        /* 임금 정보 박스 */
+        .wage-info-box {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 16px;
+        }
+        .wage-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+        .wage-item {
+            text-align: center;
+            padding: 14px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e8eaed;
+        }
+        .wage-item .label {
+            font-size: 12px;
+            color: #5f6368;
+            margin-bottom: 4px;
+        }
+        .wage-item .value {
+            font-size: 16px;
+            font-weight: 700;
+            color: #202124;
+        }
+        .wage-item.highlight {
+            background: #ede9fe;
+            border-color: #7c3aed;
+        }
+        .wage-item.highlight .value {
+            color: #7c3aed;
+        }
+
+        /* 요약 정보 박스 */
+        .summary-box {
+            background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+            border: 1px solid #d8b4fe;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 16px;
+        }
+        .summary-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #7c3aed;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        .summary-item {
+            background: white;
+            border-radius: 8px;
+            padding: 12px 14px;
+            border: 1px solid #e8e0f0;
+        }
+        .summary-item .s-label {
+            font-size: 11px;
+            color: #7c3aed;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .summary-item .s-value {
+            font-size: 14px;
+            font-weight: 700;
+            color: #202124;
+        }
+        .summary-item.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .btn-container {
+            margin-top: 32px;
+        }
+        .btn {
+            width: 100%;
+            padding: 16px 24px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .btn-primary {
+            background: #7c3aed;
+            color: #fff;
+        }
+        .btn-primary:hover {
+            background: #6d28d9;
+            box-shadow: 0 2px 8px rgba(124,58,237,0.3);
+        }
+        .btn-primary:disabled {
+            background: #9aa0a6;
+            cursor: not-allowed;
+        }
+        .btn-secondary {
+            background: #f5f3ff;
+            color: #7c3aed;
+            border: 2px solid #7c3aed;
+            margin-top: 12px;
+        }
+        .btn-secondary:hover {
+            background: #ede9fe;
+        }
+        .notice {
+            margin-top: 16px;
+            padding: 14px 16px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #5f6368;
+            text-align: center;
+            border: 1px solid #e8eaed;
+        }
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+        .loading-overlay.show {
+            display: flex;
+        }
+        .loading-box {
+            background: white;
+            padding: 30px 50px;
+            border-radius: 12px;
+            text-align: center;
+        }
+        .loading-spinner {
+            width: 40px; height: 40px;
+            border: 4px solid #e8eaed;
+            border-top-color: #7c3aed;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        @media (max-width: 600px) {
+            body { padding: 16px; }
+            .header-card, .form-card { padding: 24px; }
+            .form-row, .form-row.cols-3 { grid-template-columns: 1fr; }
+            .type-tabs { grid-template-columns: 1fr; }
+            .wage-grid { grid-template-columns: 1fr; }
+            .summary-grid { grid-template-columns: 1fr; }
+        }
+
+        /* 프린트/PDF 스타일 */
+        @media print {
+            @page { size: A4; margin: 12mm 18mm; }
+            body { background: white; padding: 0; margin: 0; }
+            .container, .header-card, .form-card, .loading-overlay { display: none !important; }
+            #print-area { display: block !important; }
+            #print-area .page { padding: 0; min-height: auto; }
+        }
+        /* 신청서 연동 알림 배너 */
+        .sync-banner {
+            display: none;
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            border: 2px solid #66bb6a;
+            border-radius: 12px;
+            padding: 20px 24px;
+            margin-bottom: 16px;
+            animation: slideDown 0.4s ease;
+        }
+        .sync-banner.show { display: block; }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        .sync-banner .sync-header {
+            display: flex; align-items: center; gap: 10px; margin-bottom: 12px;
+            font-size: 15px; font-weight: 700; color: #2e7d32;
+        }
+        .sync-banner .sync-fields {
+            display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;
+        }
+        .sync-banner .sync-tag {
+            background: white; border: 1px solid #a5d6a7; border-radius: 6px;
+            padding: 4px 12px; font-size: 12px; color: #2e7d32; font-weight: 500;
+        }
+        .sync-banner .sync-note {
+            font-size: 12px; color: #558b2f; line-height: 1.5;
+            padding-top: 10px; border-top: 1px solid #a5d6a7;
+        }
+        .sync-banner .sync-note strong { color: #e65100; }
+        .sync-banner .sync-actions {
+            display: flex; gap: 8px; margin-top: 12px;
+        }
+        .sync-banner .sync-btn {
+            padding: 8px 16px; border-radius: 6px; font-size: 13px; font-weight: 600;
+            cursor: pointer; border: none; font-family: 'Pretendard', sans-serif; transition: all 0.2s;
+        }
+        .sync-btn-clear { background: #ffcdd2; color: #c62828; }
+        .sync-btn-clear:hover { background: #ef9a9a; }
+
+        #print-area {
+            display: none;
+            font-family: '맑은 고딕', 'Malgun Gothic', sans-serif;
+            font-size: 10pt;
+            line-height: 1.4;
+            color: #000;
+        }
+        #print-area .page {
+            width: 210mm;
+            min-height: 297mm;
+            padding: 12mm 18mm;
+            background: white;
+            margin: 0 auto;
+        }
+        #print-area .doc-header {
+            font-size: 8pt;
+            color: #333;
+            margin-bottom: 4px;
+        }
+        #print-area .doc-title-area {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 8px 0 6px;
+            gap: 0;
+        }
+        #print-area .doc-title-left {
+            font-size: 12pt;
+            font-weight: bold;
+            line-height: 1.6;
+            text-align: left;
+        }
+        #print-area .doc-title-right {
+            font-size: 24pt;
+            font-weight: bold;
+            letter-spacing: 16px;
+            margin-left: 50px;
+        }
+        #print-area .doc-subtitle {
+            text-align: right;
+            font-size: 7.5pt;
+            color: #555;
+            margin-bottom: 10px;
+        }
+        #print-area table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        #print-area th, #print-area td {
+            border: 1px solid #000;
+            padding: 5px 8px;
+            font-size: 9pt;
+            vertical-align: middle;
+        }
+        #print-area th {
+            background: #f0f0f0;
+            font-weight: 600;
+            text-align: center;
+            font-size: 8.5pt;
+        }
+        #print-area td {
+            text-align: left;
+        }
+        #print-area .vertical-header {
+            writing-mode: vertical-rl;
+            text-orientation: upright;
+            text-align: center;
+            font-weight: 700;
+            font-size: 11pt;
+            letter-spacing: 6px;
+            background: #f0f0f0;
+            padding: 10px 4px;
+            width: 30px;
+        }
+        #print-area .section-header-cell {
+            background: #e8e8e8;
+            font-size: 9pt;
+            font-weight: 700;
+            text-align: center;
+            padding: 6px;
+        }
+        #print-area .cb {
+            display: inline-block;
+            width: 13px;
+            height: 13px;
+            border: 1.5px solid #000;
+            margin-right: 3px;
+            vertical-align: middle;
+            text-align: center;
+            line-height: 13px;
+            font-size: 10px;
+        }
+        #print-area .cb.checked::after {
+            content: '\2713';
+            font-weight: bold;
+        }
+        #print-area .numbered-row th {
+            font-size: 8.5pt;
+            padding: 5px 6px;
+            background: #f0f0f0;
+        }
+        #print-area .numbered-row td {
+            font-size: 8.5pt;
+            line-height: 1.6;
+            padding: 6px 8px;
+        }
+        #print-area .confirm-text {
+            margin-top: 12px;
+            font-size: 9pt;
+            line-height: 1.8;
+            border: 1px solid #000;
+            border-top: none;
+            padding: 12px 14px;
+        }
+        #print-area .sign-area {
+            margin-top: 24px;
+            text-align: center;
+        }
+        #print-area .sign-date {
+            font-size: 12pt;
+            letter-spacing: 4px;
+        }
+        #print-area .sign-name {
+            text-align: right;
+            margin-top: 24px;
+            padding-right: 30px;
+            font-size: 11pt;
+        }
+        #print-area .recipient {
+            margin-top: 30px;
+            text-align: center;
+            padding-top: 14px;
+            border-top: 1px solid #999;
+            font-size: 10pt;
+        }
+        #print-area .note-box {
+            border: 1px solid #000;
+            padding: 8px 10px;
+            margin-top: 12px;
+            font-size: 7.5pt;
+            line-height: 1.6;
+        }
+        #print-area .note-title {
+            font-weight: 700;
+            font-size: 8pt;
+            margin-bottom: 4px;
+        }
+        #print-area .paper-size {
+            text-align: right;
+            margin-top: 8px;
+            font-size: 7pt;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-overlay" id="loading">
+        <div class="loading-box">
+            <div class="loading-spinner"></div>
+            <div>확인서 생성 중...</div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="header-card">
+            <h1>출산휴가 · 육아휴직 확인서 생성기</h1>
+            <p>고용보험법 시행규칙 별지 서식 — 정보 입력 후 확인서를 생성합니다</p>
+        </div>
+
+        <!-- 신청서 연동 알림 배너 -->
+        <div class="sync-banner" id="syncBanner">
+            <div class="sync-header">
+                <span>✅</span> 신청서 데이터가 자동 연동되었습니다
+            </div>
+            <div class="sync-fields" id="syncFields"></div>
+            <div class="sync-note">
+                <strong>⚠️ 추가 입력 필요:</strong> 주민등록번호 뒷자리, 자녀 주민등록번호, 통상임금은 담당자가 직접 입력해 주세요.
+            </div>
+            <div class="sync-actions">
+                <button class="sync-btn sync-btn-clear" onclick="clearSyncData()">연동 데이터 초기화</button>
+            </div>
+        </div>
+
+        <div class="form-card">
+            <!-- 신청 유형 선택 -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-icon">📋</div>
+                    <div class="section-title">신청 유형</div>
+                </div>
+                <div class="type-tabs">
+                    <div class="type-tab active" onclick="selectType('leave')" id="tab-leave">
+                        <div class="tab-icon">🍼</div>
+                        <div class="tab-label">육아휴직</div>
+                        <div class="tab-desc">별지 제102호서식</div>
+                    </div>
+                    <div class="type-tab" onclick="selectType('reduced')" id="tab-reduced">
+                        <div class="tab-icon">⏰</div>
+                        <div class="tab-label">육아기 근로시간 단축</div>
+                        <div class="tab-desc">별지 제102호서식</div>
+                    </div>
+                    <div class="type-tab" onclick="selectType('maternity')" id="tab-maternity">
+                        <div class="tab-icon">🤰</div>
+                        <div class="tab-label">출산전후휴가</div>
+                        <div class="tab-desc">별지 제107호서식</div>
+                    </div>
+                    <div class="type-tab" onclick="selectType('spouse')" id="tab-spouse">
+                        <div class="tab-icon">👨‍👩‍👧</div>
+                        <div class="tab-label">배우자 출산휴가</div>
+                        <div class="tab-desc">별지 제107호의2서식</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 사업장 정보 (고정) -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-icon">🏢</div>
+                    <div class="section-title">사업장 정보 <span style="font-size:12px; color:#1a73e8; background:#e8f0fe; padding:2px 8px; border-radius:4px; margin-left:8px;">고정값</span></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>사업장관리번호 <span class="fixed-badge">고정</span></label>
+                        <input type="text" id="biz_number" value="403-81-84528" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>사업장명 <span class="fixed-badge">고정</span></label>
+                        <input type="text" id="biz_name" value="넷폼알앤디" readonly>
+                    </div>
+                </div>
+                <div class="form-row cols-1">
+                    <div class="form-group">
+                        <label>사업장 소재지 <span class="fixed-badge">고정</span></label>
+                        <input type="text" id="biz_address" value="경기도 오산시 서동로 77, 3층" readonly>
+                    </div>
+                </div>
+                <div class="form-row cols-3">
+                    <div class="form-group">
+                        <label>담당자 <span class="fixed-badge">고정</span></label>
+                        <input type="text" id="manager_name" value="주유진" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>연락처 (전화번호) <span class="fixed-badge">고정</span></label>
+                        <input type="text" id="manager_phone" value="070-4412-1775" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>이메일 <span class="fixed-badge">고정</span></label>
+                        <input type="text" id="manager_email" value="yoojin83@netformrnd.com" readonly>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 근로자 정보 -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-icon">👤</div>
+                    <div class="section-title">근로자 정보</div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>근로자 성명<span class="required">*</span></label>
+                        <input type="text" id="worker_name" placeholder="홍길동">
+                    </div>
+                    <div class="form-group">
+                        <label>근로자 주민등록번호<span class="required">*</span></label>
+                        <input type="text" id="worker_ssn" placeholder="900115-1234567" maxlength="14" oninput="formatResidentId(this)">
+                    </div>
+                </div>
+            </div>
+
+            <!-- 대상 자녀 정보 (육아휴직/육아기근로시간단축 전용) -->
+            <div class="section conditional-section show" id="child-info-section">
+                <div class="section-header">
+                    <div class="section-icon">👶</div>
+                    <div class="section-title">대상 자녀 정보</div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>자녀 성명<span class="required">*</span></label>
+                        <input type="text" id="child_name" placeholder="홍길순">
+                    </div>
+                    <div class="form-group">
+                        <label>자녀 주민등록번호 (또는 출산 예정일)<span class="required">*</span></label>
+                        <input type="text" id="child_ssn" placeholder="240301-4123456 또는 2026-05-01" maxlength="14" oninput="formatChildSsn(this)">
+                    </div>
+                </div>
+            </div>
+
+            <!-- 출산전후휴가 전용 정보 -->
+            <div class="section conditional-section" id="maternity-info-section">
+                <div class="section-header">
+                    <div class="section-icon">🤰</div>
+                    <div class="section-title">출산 정보</div>
+                </div>
+                <div class="form-row cols-1">
+                    <div class="form-group">
+                        <label>우선지원대상기업 여부</label>
+                        <div class="radio-group">
+                            <label class="radio-item selected" onclick="selectRadioItem(this)">
+                                <input type="radio" name="maternity_priority" value="해당" checked> 해당
+                            </label>
+                            <label class="radio-item" onclick="selectRadioItem(this)">
+                                <input type="radio" name="maternity_priority" value="비해당"> 비해당
+                            </label>
+                        </div>
+                        <span style="font-size:11px; color:#888; margin-top:4px;">(넷폼알앤디는 우선지원대상기업에 해당합니다)</span>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>출산(예정)일<span class="required">*</span></label>
+                        <input type="date" id="maternity_due_date">
+                    </div>
+                    <div class="form-group">
+                        <label>분할사용 여부</label>
+                        <div class="radio-group">
+                            <label class="radio-item" onclick="selectRadioItem(this)">
+                                <input type="radio" name="maternity_split" value="yes"> 예
+                            </label>
+                            <label class="radio-item selected" onclick="selectRadioItem(this)">
+                                <input type="radio" name="maternity_split" value="no" checked> 아니오
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>다태아 여부</label>
+                        <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+                            <div class="radio-group">
+                                <label class="radio-item" onclick="selectRadioItem(this); toggleMultipleBirthCount(true)">
+                                    <input type="radio" name="multiple_birth" value="yes"> 예
+                                </label>
+                                <label class="radio-item selected" onclick="selectRadioItem(this); toggleMultipleBirthCount(false)">
+                                    <input type="radio" name="multiple_birth" value="no" checked> 아니오
+                                </label>
+                            </div>
+                            <div id="multiple-birth-count-section" style="display:none;">
+                                <input type="number" id="multiple_birth_count" min="2" max="9" value="2" style="width:60px; padding:8px; border:1px solid #dadce0; border-radius:6px; text-align:center;"> 명
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>미숙아 여부</label>
+                        <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+                            <div class="radio-group">
+                                <label class="radio-item" onclick="selectRadioItem(this); togglePrematureCount(true)">
+                                    <input type="radio" name="premature_birth" value="yes"> 예
+                                </label>
+                                <label class="radio-item selected" onclick="selectRadioItem(this); togglePrematureCount(false)">
+                                    <input type="radio" name="premature_birth" value="no" checked> 아니오
+                                </label>
+                            </div>
+                            <div id="premature-birth-count-section" style="display:none;">
+                                <input type="number" id="premature_birth_count" min="1" max="9" value="1" style="width:60px; padding:8px; border:1px solid #dadce0; border-radius:6px; text-align:center;"> 명
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>유산·사산 여부</label>
+                        <div class="radio-group">
+                            <label class="radio-item" onclick="toggleMiscarriage(true)">
+                                <input type="radio" name="miscarriage" value="yes"> 해당
+                            </label>
+                            <label class="radio-item selected" onclick="toggleMiscarriage(false)">
+                                <input type="radio" name="miscarriage" value="no" checked> 비해당
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group conditional-section" id="miscarriage-date-section">
+                        <label>유산·사산일</label>
+                        <input type="date" id="miscarriage_date">
+                    </div>
+                </div>
+                <div class="form-row cols-1 conditional-section" id="pregnancy-week-section">
+                    <div class="form-group">
+                        <label>임신기간 (유산·사산휴가인 경우에만 작성)</label>
+                        <div class="radio-group" style="flex-wrap:wrap;">
+                            <label class="radio-item" onclick="selectRadioItem(this)">
+                                <input type="radio" name="pregnancy_week" value="11"> 11주 이내
+                            </label>
+                            <label class="radio-item" onclick="selectRadioItem(this)">
+                                <input type="radio" name="pregnancy_week" value="12_15"> 12주~15주
+                            </label>
+                            <label class="radio-item" onclick="selectRadioItem(this)">
+                                <input type="radio" name="pregnancy_week" value="16_21"> 16주~21주
+                            </label>
+                            <label class="radio-item" onclick="selectRadioItem(this)">
+                                <input type="radio" name="pregnancy_week" value="22_27"> 22주~27주
+                            </label>
+                            <label class="radio-item" onclick="selectRadioItem(this)">
+                                <input type="radio" name="pregnancy_week" value="28"> 28주 이상
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 배우자 출산휴가 전용 정보 -->
+            <div class="section conditional-section" id="spouse-info-section">
+                <div class="section-header">
+                    <div class="section-icon">👨‍👩‍👧</div>
+                    <div class="section-title">배우자 출산 정보</div>
+                </div>
+                <div class="form-row cols-1">
+                    <div class="form-group">
+                        <label>우선지원대상기업 여부</label>
+                        <div class="radio-group">
+                            <label class="radio-item selected" onclick="selectRadioItem(this)">
+                                <input type="radio" name="spouse_priority" value="해당" checked> 해당
+                            </label>
+                            <label class="radio-item" onclick="selectRadioItem(this)">
+                                <input type="radio" name="spouse_priority" value="비해당"> 비해당
+                            </label>
+                        </div>
+                        <span style="font-size:11px; color:#888; margin-top:4px;">(넷폼알앤디는 우선지원대상기업에 해당합니다)</span>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>배우자 출산일<span class="required">*</span></label>
+                        <input type="date" id="spouse_birth_date">
+                    </div>
+                    <div class="form-group">
+                        <label>배우자 성명</label>
+                        <input type="text" id="spouse_name" placeholder="배우자 성명">
+                    </div>
+                </div>
+                <div class="form-row cols-1">
+                    <div class="form-group">
+                        <label>분할사용 여부</label>
+                        <div class="radio-group">
+                            <label class="radio-item" onclick="selectRadioItem(this)">
+                                <input type="radio" name="spouse_split" value="yes"> 예
+                            </label>
+                            <label class="radio-item selected" onclick="selectRadioItem(this)">
+                                <input type="radio" name="spouse_split" value="no" checked> 아니오
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 휴직/단축/휴가 기간 -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-icon">📅</div>
+                    <div class="section-title" id="period-title">육아휴직 기간</div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>시작일<span class="required">*</span></label>
+                        <input type="date" id="period_start" onchange="updateSummary()">
+                    </div>
+                    <div class="form-group">
+                        <label>종료일<span class="required">*</span></label>
+                        <input type="date" id="period_end" onchange="updateSummary()">
+                    </div>
+                </div>
+
+                <!-- 요약 정보 박스 -->
+                <div class="summary-box" id="summary-box" style="display:none;">
+                    <div class="summary-title">📊 요약 정보</div>
+                    <div class="summary-grid">
+                        <div class="summary-item full-width">
+                            <div class="s-label">기간</div>
+                            <div class="s-value" id="summary-period">-</div>
+                        </div>
+                        <div class="summary-item">
+                            <div class="s-label">총 기간</div>
+                            <div class="s-value" id="summary-duration">-</div>
+                        </div>
+                        <div class="summary-item">
+                            <div class="s-label">총 일수</div>
+                            <div class="s-value" id="summary-days">-</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 육아휴직 추가 부여 관련 -->
+                <div id="extra-leave-section" class="conditional-section show" style="margin-top: 20px;">
+                    <div class="form-group" style="margin-bottom: 16px;">
+                        <label style="font-size:14px; font-weight:600; color:#202124;">육아휴직 추가 부여기간(6개월) 포함 여부</label>
+                        <p style="font-size:12px; color:#5f6368; margin-bottom:12px;">남녀고용평등과 일·가정 양립 지원에 관한 법률 제19조제2항 단서에 따른 추가 부여기간이 포함되어 있습니까?</p>
+                        <div class="radio-group">
+                            <label class="radio-item" onclick="toggleExtra(true)">
+                                <input type="radio" name="extra_leave" value="yes"> 예
+                            </label>
+                            <label class="radio-item selected" onclick="toggleExtra(false)">
+                                <input type="radio" name="extra_leave" value="no" checked> 아니오
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- 추가 부여 사유 -->
+                    <div id="extra-reason-section" class="conditional-section" style="margin-top:16px;">
+                        <div class="form-group">
+                            <label style="font-size:14px; font-weight:600; color:#202124;">추가 부여기간 포함 사유</label>
+                            <div class="check-group" style="margin-top:8px;">
+                                <label class="check-item" onclick="selectReason(this, 'both_parents')">
+                                    <input type="radio" name="extra_reason" value="both_parents">
+                                    같은 자녀를 대상으로 부모가 모두 육아휴직을 각각 3개월 이상 사용한 경우의 부 또는 모
+                                </label>
+                                <label class="check-item" onclick="selectReason(this, 'single_parent')">
+                                    <input type="radio" name="extra_reason" value="single_parent">
+                                    「한부모가족지원법」 제4조제1호의 부 또는 모
+                                </label>
+                                <label class="check-item" onclick="selectReason(this, 'disabled_child')">
+                                    <input type="radio" name="extra_reason" value="disabled_child">
+                                    「장애인복지법 시행규칙」 별표 1에 따른 장애의 정도가 심한 장애아동의 부 또는 모
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 근로시간 단축 정보 (조건부) -->
+            <div class="section conditional-section" id="reduced-hours-section">
+                <div class="section-header">
+                    <div class="section-icon">⏱️</div>
+                    <div class="section-title">근로시간 변동 정보</div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>단축 전 소정근로시간 (주)<span class="required">*</span></label>
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <input type="number" id="hours_before" placeholder="40" style="flex:1;">
+                            <span style="font-size:14px; color:#5f6368;">시간</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>단축 후 소정근로시간 (주)<span class="required">*</span></label>
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <input type="number" id="hours_after" placeholder="25" style="flex:1;">
+                            <span style="font-size:14px; color:#5f6368;">시간</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 통상임금 정보 -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-icon">💰</div>
+                    <div class="section-title">통상임금 정보</div>
+                </div>
+                <p style="font-size:12px; color:#5f6368; margin-bottom:16px;" id="wage-desc">육아휴직 또는 육아기 근로시간 단축 시작일 기준</p>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>산정기준<span class="required">*</span></label>
+                        <select id="wage_basis">
+                            <option value="월급">월급</option>
+                            <option value="시급">시급</option>
+                            <option value="일급">일급</option>
+                            <option value="주급">주급</option>
+                            <option value="기타">기타</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>통상임금 (원)<span class="required">*</span></label>
+                        <input type="text" id="wage_amount" placeholder="3,000,000" oninput="formatCurrencyInput(this); updateWageCalc();">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>산정기준 단위기간 소정근로시간</label>
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <input type="number" id="wage_hours" placeholder="209" style="flex:1;" onchange="updateWageCalc()">
+                            <span style="font-size:14px; color:#5f6368;">시간</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>시간급 통상임금 - 자동계산</label>
+                        <input type="text" id="hourly_wage" readonly placeholder="자동 계산됩니다">
+                    </div>
+                </div>
+
+                <div class="wage-info-box" id="wage-info-box" style="display:none;">
+                    <div class="wage-grid">
+                        <div class="wage-item highlight">
+                            <div class="label">통상임금</div>
+                            <div class="value" id="wage-display">₩0</div>
+                        </div>
+                        <div class="wage-item">
+                            <div class="label">시간급 통상임금</div>
+                            <div class="value" id="hourly-display">₩0</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 확인일자 -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-icon">✍️</div>
+                    <div class="section-title">확인 날짜</div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>확인일자</label>
+                        <input type="date" id="confirm_date">
+                    </div>
+                    <div class="form-group">
+                        <label>사업주 (대표자) 성명 <span class="fixed-badge">고정</span></label>
+                        <input type="text" id="employer_name" value="이 승 우" readonly>
+                    </div>
+                </div>
+            </div>
+
+            <div class="btn-container">
+                <button class="btn btn-primary" id="download-btn" onclick="generatePrintPreview()">
+                    <span>📄</span> 확인서 미리보기 및 인쇄
+                </button>
+                <button class="btn btn-secondary" onclick="downloadAsHTML()">
+                    <span>💾</span> HTML 파일로 저장
+                </button>
+                <div class="notice" id="notice-text">
+                    고용보험법 시행규칙 [별지 제102호서식] 육아휴직(육아기 근로시간 단축) 확인서가 생성됩니다
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 인쇄용 영역 -->
+    <div id="print-area"></div>
+
+    <script>
+        let currentType = 'leave'; // 'leave', 'reduced', 'maternity', 'spouse'
+
+        // ===== 사업장 고정 정보 =====
+        const COMPANY_INFO = {
+            biz_number: '403-81-84528',
+            biz_name: '넷폼알앤디',
+            biz_address: '경기도 오산시 서동로 77, 3층',
+            manager_name: '주유진',
+            manager_phone: '070-4412-1775',
+            manager_email: 'yoojin83@netformrnd.com'
+        };
+
+        // 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('confirm_date').value = today;
+            // 신청서 데이터 자동 불러오기
+            loadFromApplication();
+        });
+
+        // ========== 신청서 localStorage 연동 ==========
+        function loadFromApplication() {
+            try {
+                var raw = localStorage.getItem('netformLeaveData');
+                if (!raw) return;
+                var data = JSON.parse(raw);
+
+                // 24시간 이내 데이터만 유효
+                var submitTime = new Date(data.submitTime);
+                var now = new Date();
+                if (now - submitTime > 24 * 60 * 60 * 1000) {
+                    localStorage.removeItem('netformLeaveData');
+                    return;
+                }
+
+                var filledFields = [];
+
+                // leaveType에 따라 탭 자동 선택
+                if (data.leaveType === 'maternity') {
+                    selectType('maternity');
+                    filledFields.push('유형: 출산전후휴가');
+                } else if (data.leaveType === 'spouse') {
+                    selectType('spouse');
+                    filledFields.push('유형: 배우자출산휴가');
+                } else if (data.leaveType === 'pregnant' || data.leaveType === 'childcare') {
+                    selectType('leave');
+                    filledFields.push('유형: 육아휴직');
+                }
+
+                // 근로자 성명
+                if (data.workerName) {
+                    document.getElementById('worker_name').value = data.workerName;
+                    filledFields.push('근로자 성명');
+                }
+
+                // 근로자 주민번호 앞자리 (생년월일 기반)
+                if (data.workerBirth) {
+                    var birth = data.workerBirth.replace(/[^0-9]/g, '');
+                    if (birth.length >= 8) {
+                        var ssnFront = birth.substring(2, 8);
+                        document.getElementById('worker_ssn').value = ssnFront + '-';
+                        document.getElementById('worker_ssn').placeholder = ssnFront + '-뒷자리 입력';
+                        filledFields.push('주민번호(앞자리)');
+                    }
+                }
+
+                // 자녀 성명 (육아휴직/육아기근로시간단축용)
+                if (data.childName && (currentType === 'leave' || currentType === 'reduced')) {
+                    document.getElementById('child_name').value = data.childName;
+                    filledFields.push('자녀 성명');
+                }
+
+                // 자녀 생년월일 → 주민번호 앞자리
+                if (data.childBirth && (currentType === 'leave' || currentType === 'reduced')) {
+                    var childB = data.childBirth.replace(/[^0-9]/g, '');
+                    if (childB.length >= 8) {
+                        var childSsnFront = childB.substring(2, 8);
+                        document.getElementById('child_ssn').value = childSsnFront + '-';
+                        document.getElementById('child_ssn').placeholder = childSsnFront + '-뒷자리 입력';
+                        filledFields.push('자녀 주민번호(앞자리)');
+                    }
+                }
+
+                // 출산전후휴가: 출산예정일
+                if (data.dueDate && currentType === 'maternity') {
+                    var dd = data.dueDate.replace(/[^0-9-]/g, '');
+                    if (dd.length === 10) {
+                        document.getElementById('maternity_due_date').value = dd;
+                        filledFields.push('출산(예정)일');
+                    }
+                }
+
+                // 배우자출산휴가: 배우자출산일 (dueDate 활용)
+                if (data.dueDate && currentType === 'spouse') {
+                    var sd = data.dueDate.replace(/[^0-9-]/g, '');
+                    if (sd.length === 10) {
+                        document.getElementById('spouse_birth_date').value = sd;
+                        filledFields.push('배우자 출산일');
+                    }
+                }
+
+                // 휴직 기간
+                if (data.periodStart) {
+                    var ps = data.periodStart.replace(/[^0-9-]/g, '');
+                    if (ps.length === 10) {
+                        document.getElementById('period_start').value = ps;
+                        filledFields.push('시작일');
+                    }
+                }
+                if (data.periodEnd) {
+                    var pe = data.periodEnd.replace(/[^0-9-]/g, '');
+                    if (pe.length === 10) {
+                        document.getElementById('period_end').value = pe;
+                        filledFields.push('종료일');
+                    }
+                }
+
+                // 추가 6개월 부여 (육아휴직 전용)
+                if (data.extraLeave && currentType === 'leave') {
+                    var yesRadio = document.querySelector('input[name="extra_leave"][value="yes"]');
+                    if (yesRadio) {
+                        yesRadio.checked = true;
+                        toggleExtra(true);
+                        filledFields.push('추가 6개월');
+                    }
+                    // 추가 부여 사유
+                    if (data.extraReason) {
+                        var reasonRadio = document.querySelector('input[name="extra_reason"][value="' + data.extraReason + '"]');
+                        if (reasonRadio) {
+                            reasonRadio.checked = true;
+                            var parentItem = reasonRadio.closest('.check-item');
+                            if (parentItem) selectReason(parentItem, data.extraReason);
+                            filledFields.push('추가 사유');
+                        }
+                    }
+                }
+
+                // 요약 업데이트
+                updateSummary();
+
+                // 알림 배너 표시
+                if (filledFields.length > 0) {
+                    var banner = document.getElementById('syncBanner');
+                    var fieldsDiv = document.getElementById('syncFields');
+                    fieldsDiv.innerHTML = filledFields.map(function(f) {
+                        return '<span class="sync-tag">' + f + '</span>';
+                    }).join('');
+                    banner.classList.add('show');
+                    console.log('✅ 신청서 데이터 연동 완료: ' + filledFields.join(', '));
+                }
+
+            } catch(e) {
+                console.error('신청서 데이터 불러오기 오류:', e);
+            }
+        }
+
+        // 연동 데이터 초기화
+        function clearSyncData() {
+            localStorage.removeItem('netformLeaveData');
+            document.getElementById('syncBanner').classList.remove('show');
+            // 입력 필드 초기화
+            document.getElementById('worker_name').value = '';
+            document.getElementById('worker_ssn').value = '';
+            document.getElementById('worker_ssn').placeholder = '900115-1234567';
+            document.getElementById('child_name').value = '';
+            document.getElementById('child_ssn').value = '';
+            document.getElementById('child_ssn').placeholder = '240301-4123456 또는 2026-05-01';
+            document.getElementById('period_start').value = '';
+            document.getElementById('period_end').value = '';
+            document.getElementById('maternity_due_date').value = '';
+            document.getElementById('miscarriage_date').value = '';
+            document.getElementById('spouse_birth_date').value = '';
+            document.getElementById('spouse_name').value = '';
+            document.getElementById('summary-box').style.display = 'none';
+            var noRadio = document.querySelector('input[name="extra_leave"][value="no"]');
+            if (noRadio) { noRadio.checked = true; toggleExtra(false); }
+            alert('연동 데이터가 초기화되었습니다.');
+        }
+
+        // 유형 선택
+        function selectType(type) {
+            currentType = type;
+            document.getElementById('tab-leave').classList.toggle('active', type === 'leave');
+            document.getElementById('tab-reduced').classList.toggle('active', type === 'reduced');
+            document.getElementById('tab-maternity').classList.toggle('active', type === 'maternity');
+            document.getElementById('tab-spouse').classList.toggle('active', type === 'spouse');
+
+            // 기간 제목 변경
+            var periodTitleMap = {
+                'leave': '육아휴직 기간',
+                'reduced': '육아기 근로시간 단축 기간',
+                'maternity': '출산전후휴가 기간',
+                'spouse': '배우자 출산휴가 기간'
+            };
+            document.getElementById('period-title').textContent = periodTitleMap[type] || '기간';
+
+            // 조건부 섹션 표시/숨김
+            document.getElementById('child-info-section').classList.toggle('show', type === 'leave' || type === 'reduced');
+            document.getElementById('extra-leave-section').classList.toggle('show', type === 'leave');
+            document.getElementById('reduced-hours-section').classList.toggle('show', type === 'reduced');
+            document.getElementById('maternity-info-section').classList.toggle('show', type === 'maternity');
+            document.getElementById('spouse-info-section').classList.toggle('show', type === 'spouse');
+
+            // 임금 설명문 변경
+            var wageDescMap = {
+                'leave': '육아휴직 또는 육아기 근로시간 단축 시작일 기준',
+                'reduced': '육아휴직 또는 육아기 근로시간 단축 시작일 기준',
+                'maternity': '출산전후휴가 시작일 기준',
+                'spouse': '배우자 출산휴가 시작일 기준'
+            };
+            document.getElementById('wage-desc').textContent = wageDescMap[type] || '';
+
+            // 하단 안내문 변경
+            var noticeMap = {
+                'leave': '고용보험법 시행규칙 [별지 제102호서식] 육아휴직(육아기 근로시간 단축) 확인서가 생성됩니다',
+                'reduced': '고용보험법 시행규칙 [별지 제102호서식] 육아휴직(육아기 근로시간 단축) 확인서가 생성됩니다',
+                'maternity': '고용보험법 시행규칙 [별지 제107호서식] 출산전후휴가(유산·사산 휴가) 확인서가 생성됩니다',
+                'spouse': '고용보험법 시행규칙 [별지 제107호의2서식] 배우자 출산휴가(난임치료 휴가) 확인서가 생성됩니다'
+            };
+            document.getElementById('notice-text').textContent = noticeMap[type] || '';
+
+            updateSummary();
+        }
+
+        // 추가 부여 토글
+        function toggleExtra(isYes) {
+            document.getElementById('extra-reason-section').classList.toggle('show', isYes);
+            document.querySelectorAll('#extra-leave-section > .form-group .radio-item').forEach(el => {
+                el.classList.remove('selected');
+            });
+            if (isYes) {
+                document.querySelectorAll('#extra-leave-section > .form-group .radio-item')[0].classList.add('selected');
+            } else {
+                document.querySelectorAll('#extra-leave-section > .form-group .radio-item')[1].classList.add('selected');
+            }
+        }
+
+        function selectReason(el, value) {
+            document.querySelectorAll('.check-item').forEach(item => item.classList.remove('selected'));
+            el.classList.add('selected');
+        }
+
+        // 라디오 아이템 공용 선택 함수
+        function selectRadioItem(el) {
+            var group = el.closest('.radio-group');
+            if (group) {
+                group.querySelectorAll('.radio-item').forEach(item => item.classList.remove('selected'));
+            }
+            el.classList.add('selected');
+        }
+
+        // 유산사산 토글
+        function toggleMiscarriage(isYes) {
+            document.getElementById('miscarriage-date-section').classList.toggle('show', isYes);
+            document.getElementById('pregnancy-week-section').classList.toggle('show', isYes);
+            var group = document.querySelector('input[name="miscarriage"]').closest('.radio-group');
+            if (group) {
+                group.querySelectorAll('.radio-item').forEach(item => item.classList.remove('selected'));
+            }
+            if (isYes) {
+                document.querySelectorAll('input[name="miscarriage"]')[0].closest('.radio-item').classList.add('selected');
+            } else {
+                document.querySelectorAll('input[name="miscarriage"]')[1].closest('.radio-item').classList.add('selected');
+            }
+        }
+
+        // 다태아 수 토글
+        function toggleMultipleBirthCount(isYes) {
+            document.getElementById('multiple-birth-count-section').style.display = isYes ? 'inline-flex' : 'none';
+        }
+
+        // 미숙아 수 토글
+        function togglePrematureCount(isYes) {
+            document.getElementById('premature-birth-count-section').style.display = isYes ? 'inline-flex' : 'none';
+        }
+
+        // ===== 요약 정보 업데이트 =====
+        function updateSummary() {
+            const startStr = getValue('period_start');
+            const endStr = getValue('period_end');
+
+            if (!startStr || !endStr) {
+                document.getElementById('summary-box').style.display = 'none';
+                return;
+            }
+
+            const start = new Date(startStr);
+            const end = new Date(endStr);
+
+            if (end <= start) {
+                document.getElementById('summary-box').style.display = 'none';
+                return;
+            }
+
+            document.getElementById('summary-box').style.display = 'block';
+
+            // 타입별 라벨
+            var typeLabelMap = {
+                'leave': '육아휴직',
+                'reduced': '육아기 근로시간 단축',
+                'maternity': '출산전후휴가',
+                'spouse': '배우자 출산휴가'
+            };
+            const typeLabel = typeLabelMap[currentType] || '';
+
+            document.getElementById('summary-period').textContent =
+                `${formatDateKorean(startStr)} ~ ${formatDateKorean(endStr)}`;
+
+            // 총 일수 계산
+            const diffTime = end.getTime() - start.getTime();
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+
+            // 개월/일 계산
+            let months = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
+            let tempDate = new Date(start);
+            tempDate.setMonth(tempDate.getMonth() + months);
+            if (tempDate > end) {
+                months--;
+                tempDate = new Date(start);
+                tempDate.setMonth(tempDate.getMonth() + months);
+            }
+            const remainDays = Math.ceil((end.getTime() - tempDate.getTime()) / (1000 * 60 * 60 * 24));
+
+            let durationText = '';
+            if (months > 0 && remainDays > 0) {
+                durationText = `약 ${months}개월 ${remainDays}일`;
+            } else if (months > 0) {
+                durationText = `${months}개월`;
+            } else {
+                durationText = `${remainDays}일`;
+            }
+
+            document.getElementById('summary-duration').textContent = durationText;
+            document.getElementById('summary-days').textContent = `${diffDays}일`;
+
+            // 요약 제목 업데이트
+            document.querySelector('.summary-title').innerHTML = `📊 ${typeLabel} 요약 정보`;
+        }
+
+        // 포맷팅 함수들
+        function formatResidentId(input) {
+            let value = input.value.replace(/[^0-9]/g, '');
+            if (value.length > 6) {
+                value = value.slice(0, 6) + '-' + value.slice(6, 13);
+            }
+            input.value = value;
+        }
+
+        function formatChildSsn(input) {
+            let value = input.value;
+            let numOnly = value.replace(/[^0-9]/g, '');
+            if (numOnly.length > 6 && numOnly.length <= 13) {
+                value = numOnly.slice(0, 6) + '-' + numOnly.slice(6, 13);
+                input.value = value;
+            }
+        }
+
+        function formatCurrencyInput(input) {
+            let value = input.value.replace(/[^0-9]/g, '');
+            if (value) {
+                value = parseInt(value).toLocaleString('ko-KR');
+            }
+            input.value = value;
+        }
+
+        function formatCurrency(num) {
+            return parseInt(num || 0).toLocaleString('ko-KR');
+        }
+
+        function getNumber(id) {
+            const val = document.getElementById(id).value;
+            return parseInt(val.replace(/,/g, '')) || 0;
+        }
+
+        function getValue(id) {
+            return document.getElementById(id).value;
+        }
+
+        function formatDateKorean(dateStr) {
+            if (!dateStr) return '    년     월     일';
+            const d = new Date(dateStr);
+            return `${d.getFullYear()}년 ${String(d.getMonth()+1).padStart(2,'0')}월 ${String(d.getDate()).padStart(2,'0')}일`;
+        }
+
+        function formatDateDot(dateStr) {
+            if (!dateStr) return '';
+            const d = new Date(dateStr);
+            return `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`;
+        }
+
+        function splitDate(dateStr) {
+            if (!dateStr) return { y: '    ', m: '  ', d: '  ' };
+            const d = new Date(dateStr);
+            return {
+                y: d.getFullYear(),
+                m: String(d.getMonth()+1).padStart(2,'0'),
+                d: String(d.getDate()).padStart(2,'0')
+            };
+        }
+
+        // 임금 계산
+        function updateWageCalc() {
+            const wageAmount = getNumber('wage_amount');
+            const wageHours = parseInt(document.getElementById('wage_hours').value) || 209;
+
+            if (wageAmount > 0) {
+                const hourly = Math.round(wageAmount / wageHours);
+                document.getElementById('hourly_wage').value = formatCurrency(hourly) + '원';
+                document.getElementById('wage-display').textContent = '₩' + formatCurrency(wageAmount);
+                document.getElementById('hourly-display').textContent = '₩' + formatCurrency(hourly);
+                document.getElementById('wage-info-box').style.display = 'block';
+            } else {
+                document.getElementById('wage-info-box').style.display = 'none';
+            }
+        }
+
+        // 체크박스 인쇄용
+        function cb(checked) {
+            return checked
+                ? '<span class="cb checked">\u2713</span>'
+                : '<span class="cb"></span>';
+        }
+
+        // ===== 미리보기 / 인쇄 - 별지 제102호서식 (육아휴직/육아기근로시간단축) =====
+        function generatePrintPreview102() {
+            const workerName = getValue('worker_name');
+            const workerSsn = getValue('worker_ssn');
+            const isLeave = currentType === 'leave';
+            const extraLeave = document.querySelector('input[name="extra_leave"]:checked')?.value === 'yes';
+            const extraReason = document.querySelector('input[name="extra_reason"]:checked')?.value || '';
+
+            const periodStart = getValue('period_start');
+            const periodEnd = getValue('period_end');
+            const confirmDate = getValue('confirm_date');
+
+            const ps = splitDate(periodStart);
+            const pe = splitDate(periodEnd);
+            const cd = splitDate(confirmDate);
+
+            const wageAmount = getNumber('wage_amount');
+            const wageBasis = getValue('wage_basis');
+            const wageHours = parseInt(document.getElementById('wage_hours').value) || 209;
+            const hourlyWage = wageAmount > 0 ? Math.round(wageAmount / wageHours) : 0;
+
+            return `
+            <div class="page">
+                <div class="doc-header">
+                    ■ 고용보험법 시행규칙 [별지 제102호서식] &lt;개정 2025. 2. 21.&gt;
+                </div>
+
+                <div class="doc-title-area">
+                    <div class="doc-title-left">
+                        [${isLeave ? '<b>V</b>' : '&nbsp;'}] 육아휴직<br>
+                        [${!isLeave ? '<b>V</b>' : '&nbsp;'}] 육아기 근로시간 단축
+                    </div>
+                    <div class="doc-title-right">확 인 서</div>
+                </div>
+
+                <div class="doc-subtitle">
+                    ※ 뒤쪽의 작성방법을 읽고 작성하시기 바라며, [ ]에는 해당하는 곳에 "V" 표시를 합니다. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(앞쪽)
+                </div>
+
+                <!-- 기본사항 메인 테이블 -->
+                <table>
+                    <colgroup>
+                        <col style="width:30px">
+                        <col style="width:15%">
+                        <col style="width:30%">
+                        <col style="width:15%">
+                        <col style="width:auto">
+                    </colgroup>
+                    <tr>
+                        <td rowspan="7" class="vertical-header">기 본 사 항</td>
+                        <th>① 사업장관리번호</th>
+                        <td>${COMPANY_INFO.biz_number}</td>
+                        <th>② 사업장명</th>
+                        <td>${COMPANY_INFO.biz_name}</td>
+                    </tr>
+                    <tr>
+                        <th>③ 사업장소재지<br>&nbsp;&nbsp;&nbsp;및 담당자</th>
+                        <td colspan="3" style="font-size:8.5pt; line-height:1.8; padding:6px 10px;">
+                            소재지: ${COMPANY_INFO.biz_address}<br>
+                            담당자: ${COMPANY_INFO.manager_name} &nbsp;&nbsp; 연락처(전화번호: ${COMPANY_INFO.manager_phone} &nbsp; 전자우편: ${COMPANY_INFO.manager_email})
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>④ 근로자 성명</th>
+                        <td>${workerName}</td>
+                        <th>⑤ 주민등록번호</th>
+                        <td>${workerSsn}</td>
+                    </tr>
+                    <tr>
+                        <th rowspan="2">⑥ 대상 자녀의<br>&nbsp;&nbsp;&nbsp;성명</th>
+                        <td style="font-size:8.5pt; padding:4px 8px;">육아휴직 &nbsp;&nbsp; ${isLeave ? getValue('child_name') : ''}</td>
+                        <th rowspan="2">⑦ 대상 자녀의<br>&nbsp;&nbsp;&nbsp;주민등록번호<br>&nbsp;&nbsp;&nbsp;(출산 예정일)</th>
+                        <td style="font-size:8.5pt; padding:4px 8px;">육아휴직 &nbsp;&nbsp; ${isLeave ? getValue('child_ssn') : ''}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-size:8.5pt; padding:4px 8px;">육아기 근로시간 단축 &nbsp;&nbsp; ${!isLeave ? getValue('child_name') : ''}</td>
+                        <td style="font-size:8.5pt; padding:4px 8px;">육아기 근로시간 단축 &nbsp;&nbsp; ${!isLeave ? getValue('child_ssn') : ''}</td>
+                    </tr>
+                    <tr>
+                        <th>⑧ 육아휴직 또는<br>&nbsp;&nbsp;&nbsp;육아기 근로시간<br>&nbsp;&nbsp;&nbsp;단축 기간</th>
+                        <td colspan="3" style="text-align:center; font-size:10pt; padding:8px;">
+                            ${ps.y}년 &nbsp; ${ps.m}월 &nbsp; ${ps.d}일 &nbsp;&nbsp; ~ &nbsp;&nbsp; ${pe.y}년 &nbsp; ${pe.m}월 &nbsp; ${pe.d}일
+                        </td>
+                    </tr>
+                </table>
+
+                <!-- ⑧-1, ⑧-2 육아휴직 추가부여기간 -->
+                ${isLeave ? `
+                <table style="margin-top:-1px;">
+                    <colgroup>
+                        <col style="width:30px">
+                        <col style="width:auto">
+                    </colgroup>
+                    <tr class="numbered-row">
+                        <th style="text-align:center;">⑧-1</th>
+                        <td style="line-height:1.8; padding:8px 12px; font-size:8.5pt;">
+                            위 육아휴직 기간에 「남녀고용평등과 일 &#183; 가정 양립 지원에 관한 법률」 제19조제2항 단서에 따른 육아휴직
+                            추가 부여기간(6개월)이 포함되어 있습니까?
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            [ ${extraLeave ? '<b>V</b>' : '&nbsp;'} ] 예
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            [ ${!extraLeave ? '<b>V</b>' : '&nbsp;'} ] 아니오
+                        </td>
+                    </tr>
+                    <tr class="numbered-row">
+                        <th style="text-align:center;">⑧-2</th>
+                        <td style="line-height:1.8; padding:8px 12px; font-size:8.5pt;">
+                            (⑧-1란을 "예"로 선택한 경우) 육아휴직 추가 부여기간(6개월)이 포함된 경우 그 사유는 무엇입니까?<br>
+                            [ ${extraReason==='both_parents' ? '<b>V</b>' : '&nbsp;'} ] 같은 자녀를 대상으로 부모가 모두 육아휴직을 각각 3개월 이상 사용한 경우의 부 또는 모<br>
+                            [ ${extraReason==='single_parent' ? '<b>V</b>' : '&nbsp;'} ] 「한부모가족지원법」 제4조제1호의 부 또는 모<br>
+                            [ ${extraReason==='disabled_child' ? '<b>V</b>' : '&nbsp;'} ] 「장애인복지법 시행규칙」 별표 1에 따른 장애의 정도가 심한 장애아동의 부 또는 모
+                        </td>
+                    </tr>
+                </table>
+                ` : ''}
+
+                <!-- ② 육아기 근로시간 단축에 따른 근로시간 변동 -->
+                <table style="margin-top:-1px;">
+                    <colgroup>
+                        <col style="width:30px">
+                        <col style="width:30%">
+                        <col style="width:35%">
+                        <col style="width:auto">
+                    </colgroup>
+                    <tr class="numbered-row">
+                        <th rowspan="2" style="text-align:center;">②</th>
+                        <th>육아기 근로시간 단축에<br>따른 근로시간 변동</th>
+                        <td style="text-align:center; font-size:8.5pt;">근로시간 단축 전 소정근로시간 &nbsp; 주 &nbsp; ${!isLeave ? (getValue('hours_before') || '&nbsp;&nbsp;&nbsp;&nbsp;') : '&nbsp;&nbsp;&nbsp;&nbsp;'} &nbsp; 시간</td>
+                        <td style="text-align:center; font-size:8.5pt;">육아기 근로시간 단축</td>
+                    </tr>
+                    <tr class="numbered-row">
+                        <td colspan="2" style="text-align:center; font-size:8.5pt;">근로시간 단축 후 소정근로시간 &nbsp; 주 &nbsp; ${!isLeave ? (getValue('hours_after') || '&nbsp;&nbsp;&nbsp;&nbsp;') : '&nbsp;&nbsp;&nbsp;&nbsp;'} &nbsp; 시간</td>
+                        <td></td>
+                    </tr>
+                </table>
+
+                <!-- ③④ 통상임금 -->
+                <table style="margin-top:-1px;">
+                    <colgroup>
+                        <col style="width:30px">
+                        <col style="width:12%">
+                        <col style="width:33%">
+                        <col style="width:12%">
+                        <col style="width:auto">
+                    </colgroup>
+                    <tr class="numbered-row">
+                        <th rowspan="2" style="text-align:center;">③</th>
+                        <th>산정기준</th>
+                        <td style="font-size:8pt; padding:6px 8px; line-height:1.6;">
+                            산정기준 : 시급, 일급, 주급, 월급, 기타<br>
+                            (육아휴직 또는 육아기 근로시간 단축 시작일 기준)
+                        </td>
+                        <th>통상임금</th>
+                        <td style="text-align:right; padding-right:12px;">
+                            ${wageAmount > 0 ? formatCurrency(wageAmount) + ' 원' : ''}
+                        </td>
+                    </tr>
+                    <tr class="numbered-row">
+                        <th>④ 산정기준<br>&nbsp;&nbsp;단위기간<br>&nbsp;&nbsp;소정근로시간</th>
+                        <td style="font-size:8pt; padding:6px 8px; line-height:1.6;">
+                            (육아휴직 또는 육아기 근로시간 단축 시작일 기준)<br>
+                            ${wageHours} 시간
+                        </td>
+                        <th>시간급<br>통상임금</th>
+                        <td style="text-align:right; padding-right:12px;">
+                            ${hourlyWage > 0 ? formatCurrency(hourlyWage) + ' 원' : ''}
+                        </td>
+                    </tr>
+                </table>
+
+                <!-- ⑤ 통상임금 산정기준 체크 -->
+                <table style="margin-top:-1px;">
+                    <colgroup>
+                        <col style="width:30px">
+                        <col style="width:auto">
+                    </colgroup>
+                    <tr class="numbered-row">
+                        <th style="text-align:center;">⑤</th>
+                        <td style="padding:8px 12px; font-size:8.5pt; line-height:1.8;">
+                            통상임금 산정기준 : &nbsp;
+                            [ ${wageBasis==='시급' ? '<b>V</b>' : '&nbsp;'} ] 시급 &nbsp;&nbsp;
+                            [ ${wageBasis==='일급' ? '<b>V</b>' : '&nbsp;'} ] 일급 &nbsp;&nbsp;
+                            [ ${wageBasis==='주급' ? '<b>V</b>' : '&nbsp;'} ] 주급 &nbsp;&nbsp;
+                            [ ${wageBasis==='월급' ? '<b>V</b>' : '&nbsp;'} ] 월급 &nbsp;&nbsp;
+                            [ ${wageBasis==='기타' ? '<b>V</b>' : '&nbsp;'} ] 기타
+                        </td>
+                    </tr>
+                </table>
+
+                <!-- ⑥ 육아휴직 또는 육아기 근로시간 단축기간 중 급여 내역 -->
+                <table style="margin-top:-1px;">
+                    <colgroup>
+                        <col style="width:30px">
+                        <col style="width:32%">
+                        <col style="width:17%">
+                        <col style="width:17%">
+                        <col style="width:17%">
+                        <col style="width:auto">
+                    </colgroup>
+                    <tr class="numbered-row">
+                        <th rowspan="6" style="text-align:center;">⑥</th>
+                        <td colspan="5" style="font-size:8.5pt; padding:5px 8px;">
+                            육아휴직 또는 육아기 근로시간 단축기간 중 급여지급 내역
+                        </td>
+                    </tr>
+                    <tr class="numbered-row">
+                        <td style="height:24px;"></td>
+                        <td style="text-align:center; font-size:7.5pt; background:#f0f0f0;">월</td>
+                        <td style="text-align:center; font-size:7.5pt; background:#f0f0f0;">일</td>
+                        <td style="text-align:center; font-size:7.5pt; background:#f0f0f0;">금액(원)</td>
+                        <td style="text-align:center; font-size:7.5pt; background:#f0f0f0;">비고</td>
+                    </tr>
+                    <tr class="numbered-row"><td style="height:24px;"></td><td></td><td></td><td></td><td></td></tr>
+                    <tr class="numbered-row"><td style="height:24px;"></td><td></td><td></td><td></td><td></td></tr>
+                    <tr class="numbered-row"><td style="height:24px;"></td><td></td><td></td><td></td><td></td></tr>
+                    <tr class="numbered-row"><td style="height:24px;"></td><td></td><td></td><td></td><td></td></tr>
+                </table>
+
+                <!-- 확인문구 -->
+                <div class="confirm-text">
+                    &nbsp;&nbsp;「고용보험법」 제71조 &#183; 제74조제2항 및 같은 법 시행규칙 제118조에 따라 위와 같이 육아휴직(육아기 근로시간 단축) 사실을 확인합니다.
+                </div>
+
+                <div class="sign-area">
+                    <p class="sign-date">${cd.y}년 &nbsp;&nbsp;&nbsp; ${cd.m}월 &nbsp;&nbsp;&nbsp; ${cd.d}일</p>
+                </div>
+
+                <div style="text-align:right; margin-top:20px; padding-right:40px; font-size:10pt;">
+                    확인자 &nbsp; 사업장명
+                </div>
+                <div style="text-align:right; margin-top:16px; padding-right:40px; font-size:11pt;">
+                    대표자 &nbsp;&nbsp;&nbsp; <span style="font-weight:bold; letter-spacing:8px;">${getValue('employer_name')}</span> &nbsp;&nbsp;&nbsp;&nbsp; (서명 또는 인)
+                </div>
+
+                <div class="recipient">
+                    ○○지방고용노동청(지청)장 귀하
+                </div>
+
+                <div class="paper-size">
+                    210mm&times;297mm[백상지(80g/㎡) 또는 중질지(80g/㎡)]
+                </div>
+            </div>
+            `;
+        }
+
+        // ===== 별지 제107호서식 (출산전후휴가/유산·사산 휴가) =====
+        function generatePrintPreview107() {
+            const workerName = getValue('worker_name');
+            const workerSsn = getValue('worker_ssn');
+            const confirmDate = getValue('confirm_date');
+            const periodStart = getValue('period_start');
+            const periodEnd = getValue('period_end');
+
+            const ps = splitDate(periodStart);
+            const pe = splitDate(periodEnd);
+            const cd = splitDate(confirmDate);
+
+            const dueDateVal = getValue('maternity_due_date');
+            const dd = splitDate(dueDateVal);
+
+            const isMiscarriage = document.querySelector('input[name="miscarriage"]:checked')?.value === 'yes';
+            const miscarriageDateVal = getValue('miscarriage_date');
+            const md = splitDate(miscarriageDateVal);
+
+            const isMultipleBirth = document.querySelector('input[name="multiple_birth"]:checked')?.value === 'yes';
+            const multipleBirthCount = document.getElementById('multiple_birth_count')?.value || '';
+            const isPremature = document.querySelector('input[name="premature_birth"]:checked')?.value === 'yes';
+            const prematureCount = document.getElementById('premature_birth_count')?.value || '';
+            const isSplit = document.querySelector('input[name="maternity_split"]:checked')?.value === 'yes';
+            const isPriority = document.querySelector('input[name="maternity_priority"]:checked')?.value === '해당';
+            const pregnancyWeek = document.querySelector('input[name="pregnancy_week"]:checked')?.value || '';
+
+            const wageAmount = getNumber('wage_amount');
+            const wageBasis = getValue('wage_basis');
+            const wageHours = parseInt(document.getElementById('wage_hours').value) || 209;
+            const hourlyWage = wageAmount > 0 ? Math.round(wageAmount / wageHours) : 0;
+
+            // 출산전후휴가 기간을 30일 단위로 분할 계산
+            let period1 = { start: splitDate(''), end: splitDate(''), days: '' };
+            let period2 = { start: splitDate(''), end: splitDate(''), days: '' };
+            let period3 = { start: splitDate(''), end: splitDate(''), days: '' };
+            if (periodStart && periodEnd) {
+                const s = new Date(periodStart);
+                const e = new Date(periodEnd);
+                const totalDays = Math.ceil((e - s) / (1000*60*60*24)) + 1;
+                const e1 = new Date(s); e1.setDate(e1.getDate() + 29);
+                const end1 = e1 > e ? e : e1;
+                period1 = { start: ps, end: splitDate(end1.toISOString().split('T')[0]), days: Math.min(30, totalDays) };
+                if (totalDays > 30) {
+                    const s2 = new Date(end1); s2.setDate(s2.getDate() + 1);
+                    const e2 = new Date(s2); e2.setDate(e2.getDate() + 29);
+                    const end2 = e2 > e ? e : e2;
+                    const days2 = Math.ceil((end2 - s2) / (1000*60*60*24)) + 1;
+                    period2 = { start: splitDate(s2.toISOString().split('T')[0]), end: splitDate(end2.toISOString().split('T')[0]), days: days2 };
+                    if (totalDays > 60) {
+                        const s3 = new Date(end2); s3.setDate(s3.getDate() + 1);
+                        const days3 = Math.ceil((e - s3) / (1000*60*60*24)) + 1;
+                        period3 = { start: splitDate(s3.toISOString().split('T')[0]), end: pe, days: days3 };
+                    }
+                }
+            }
+
+            // 기간 포맷 헬퍼
+            function periodStr(p) {
+                if (!p.days) return '&nbsp;&nbsp;년 &nbsp;&nbsp;월 &nbsp;&nbsp;일 ~ &nbsp;&nbsp;년 &nbsp;&nbsp;월 &nbsp;&nbsp;일 (&nbsp;&nbsp;일)';
+                return p.start.y+'년 '+p.start.m+'월 '+p.start.d+'일 ~ '+p.end.y+'년 '+p.end.m+'월 '+p.end.d+'일 ('+p.days+'일)';
+            }
+
+            return `
+            <div class="page">
+                <div class="doc-header">
+                    ■ 고용보험법 시행규칙 [별지 제107호서식] &lt;개정 2025. 2. 21.&gt;
+                </div>
+
+                <div class="doc-title-area">
+                    <div class="doc-title-left">
+                        [${!isMiscarriage ? '<b>V</b>' : '&nbsp;'}] 출산전후휴가<br>
+                        [${isMiscarriage ? '<b>V</b>' : '&nbsp;'}] 유산 &#183; 사산 휴가
+                    </div>
+                    <div class="doc-title-right">확 인 서</div>
+                </div>
+
+                <div class="doc-subtitle">
+                    ※ 뒤쪽의 작성방법을 읽고 작성하시기 바라며, [ ]에는 해당하는 곳에 "V" 표시를 합니다. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(앞쪽)
+                </div>
+
+                <!-- 기본사항 테이블 -->
+                <table>
+                    <colgroup>
+                        <col style="width:30px">
+                        <col style="width:15%">
+                        <col style="width:30%">
+                        <col style="width:15%">
+                        <col style="width:auto">
+                    </colgroup>
+                    <tr>
+                        <td rowspan="7" class="vertical-header">기 본 사 항</td>
+                        <th>① 사업장관리번호</th>
+                        <td>${COMPANY_INFO.biz_number}</td>
+                        <th>② 우선지원<br>&nbsp;&nbsp;&nbsp;대상기업</th>
+                        <td style="font-size:8.5pt; line-height:1.6;">
+                            ${cb(isPriority)} 해당 &nbsp;&nbsp; ${cb(!isPriority)} 비해당<br>
+                            <span style="font-size:7pt; color:#555;">(고용보험법 시행령 제12조에 따름)</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>③ 사업장명</th>
+                        <td colspan="3">${COMPANY_INFO.biz_name}</td>
+                    </tr>
+                    <tr>
+                        <th>④ 사업장소재지<br>&nbsp;&nbsp;&nbsp;및 담당자</th>
+                        <td colspan="3" style="font-size:8.5pt; line-height:1.8; padding:6px 10px;">
+                            소재지: ${COMPANY_INFO.biz_address}<br>
+                            담당자: ${COMPANY_INFO.manager_name} &nbsp;&nbsp; 연락처(전화번호: ${COMPANY_INFO.manager_phone} &nbsp; 전자우편: ${COMPANY_INFO.manager_email})
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>⑤ 근로자 성명</th>
+                        <td>${workerName}</td>
+                        <th>⑥ 주민등록번호</th>
+                        <td>${workerSsn}</td>
+                    </tr>
+                    <tr>
+                        <th>⑦ 임신기간</th>
+                        <td colspan="3" style="font-size:8pt; line-height:1.8; padding:5px 10px;">
+                            (유산 &#183; 사산휴가인 경우에만 작성)<br>
+                            ${cb(pregnancyWeek==='11')} 11주 이내 &nbsp;&nbsp;
+                            ${cb(pregnancyWeek==='12_15')} 12주~15주 &nbsp;&nbsp;
+                            ${cb(pregnancyWeek==='16_21')} 16주~21주 &nbsp;&nbsp;
+                            ${cb(pregnancyWeek==='22_27')} 22주~27주 &nbsp;&nbsp;
+                            ${cb(pregnancyWeek==='28')} 28주 이상
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>⑧ 출산(예정)일</th>
+                        <td style="font-size:9pt; padding:5px 10px;">
+                            ${dd.y}년 &nbsp; ${dd.m}월 &nbsp; ${dd.d}일
+                        </td>
+                        <th>⑨ 분할사용 여부</th>
+                        <td style="text-align:center;">
+                            ${cb(isSplit)} 예 &nbsp;&nbsp; ${cb(!isSplit)} 아니오
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>⑩ 다태아(${isMultipleBirth ? multipleBirthCount : '&nbsp;&nbsp;'}) 여부</th>
+                        <td style="text-align:center;">
+                            ${cb(isMultipleBirth)} 예 &nbsp;&nbsp; ${cb(!isMultipleBirth)} 아니오
+                        </td>
+                        <th>⑪ 미숙아(${isPremature ? prematureCount : '&nbsp;&nbsp;'}) 여부</th>
+                        <td style="text-align:center;">
+                            ${cb(isPremature)} 예 &nbsp;&nbsp; ${cb(!isPremature)} 아니오
+                        </td>
+                    </tr>
+                </table>
+
+                <!-- ⑫ 출산전후/유산사산 휴가기간 - 별도 테이블 -->
+                <table style="margin-top:-1px;">
+                    <colgroup>
+                        <col style="width:30px">
+                        <col style="width:15%">
+                        <col style="width:auto">
+                        <col style="width:20%">
+                    </colgroup>
+                    <tr>
+                        <th rowspan="4" style="text-align:center; font-size:8pt; line-height:1.4;">⑫ 출산전후<br>또는 유산 &#183;<br>사산 휴가<br>기간</th>
+                        <th style="background:#f0f0f0; font-size:8pt;">구분</th>
+                        <th style="background:#f0f0f0; text-align:center; font-size:8pt;">기간</th>
+                        <th style="background:#f0f0f0; text-align:center; font-size:8pt;">통상임금지급액</th>
+                    </tr>
+                    <tr>
+                        <td style="text-align:center; font-size:8pt; padding:5px;">첫번째 30일</td>
+                        <td style="text-align:center; font-size:8pt; padding:5px;">${periodStr(period1)}</td>
+                        <td style="text-align:center; font-size:8pt; padding:5px;">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:center; font-size:8pt; padding:5px;">두번째 30일</td>
+                        <td style="text-align:center; font-size:8pt; padding:5px;">${periodStr(period2)}</td>
+                        <td style="text-align:center; font-size:8pt; padding:5px;">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:center; font-size:8pt; padding:5px;">세번째 30일</td>
+                        <td style="text-align:center; font-size:8pt; padding:5px;">${periodStr(period3)}</td>
+                        <td style="text-align:center; font-size:8pt; padding:5px;">&nbsp;</td>
+                    </tr>
+                </table>
+
+                <!-- ⑬⑭ 통상임금 -->
+                <table style="margin-top:-1px;">
+                    <colgroup>
+                        <col style="width:30px">
+                        <col style="width:12%">
+                        <col style="width:33%">
+                        <col style="width:12%">
+                        <col style="width:auto">
+                    </colgroup>
+                    <tr class="numbered-row">
+                        <th rowspan="2" style="text-align:center;">⑬</th>
+                        <th>산정기준</th>
+                        <td style="font-size:8pt; padding:6px 8px; line-height:1.6;">
+                            산정기준 : 시급, 일급, 주급, 월급, 기타<br>
+                            (출산전후휴가 또는 유산 &#183; 사산 휴가 시작일 기준)
+                        </td>
+                        <th>통상임금</th>
+                        <td style="text-align:right; padding-right:12px;">
+                            ${wageAmount > 0 ? formatCurrency(wageAmount) + ' 원' : ''}
+                        </td>
+                    </tr>
+                    <tr class="numbered-row">
+                        <th>⑭ 소정근로시간</th>
+                        <td style="font-size:8pt; padding:6px 8px; line-height:1.6;">
+                            (산정기준 단위기간 소정근로시간)<br>
+                            ${wageHours} 시간
+                        </td>
+                        <th>시간급<br>통상임금</th>
+                        <td style="text-align:right; padding-right:12px;">
+                            ${hourlyWage > 0 ? formatCurrency(hourlyWage) + ' 원' : ''}
+                        </td>
+                    </tr>
+                </table>
+
+                <!-- ⑮ 통상임금 산정기준 체크 -->
+                <table style="margin-top:-1px;">
+                    <colgroup>
+                        <col style="width:30px">
+                        <col style="width:auto">
+                    </colgroup>
+                    <tr class="numbered-row">
+                        <th style="text-align:center;">⑮</th>
+                        <td style="padding:8px 12px; font-size:8.5pt; line-height:1.8;">
+                            통상임금 산정기준 : &nbsp;
+                            ${cb(wageBasis==='시급')} 시급 &nbsp;&nbsp;
+                            ${cb(wageBasis==='일급')} 일급 &nbsp;&nbsp;
+                            ${cb(wageBasis==='주급')} 주급 &nbsp;&nbsp;
+                            ${cb(wageBasis==='월급')} 월급 &nbsp;&nbsp;
+                            ${cb(wageBasis==='기타')} 기타
+                        </td>
+                    </tr>
+                </table>
+
+                <!-- ⑯ 출산전후 또는 유산·사산 휴가기간 중 급여지급 내역 -->
+                <table style="margin-top:-1px;">
+                    <colgroup>
+                        <col style="width:30px">
+                        <col style="width:32%">
+                        <col style="width:17%">
+                        <col style="width:17%">
+                        <col style="width:17%">
+                        <col style="width:auto">
+                    </colgroup>
+                    <tr class="numbered-row">
+                        <th rowspan="6" style="text-align:center;">⑯</th>
+                        <td colspan="5" style="font-size:8.5pt; padding:5px 8px;">
+                            출산전후 또는 유산 &#183; 사산 휴가기간 중 급여지급 내역
+                        </td>
+                    </tr>
+                    <tr class="numbered-row">
+                        <td style="height:24px;"></td>
+                        <td style="text-align:center; font-size:7.5pt; background:#f0f0f0;">월</td>
+                        <td style="text-align:center; font-size:7.5pt; background:#f0f0f0;">일</td>
+                        <td style="text-align:center; font-size:7.5pt; background:#f0f0f0;">금액(원)</td>
+                        <td style="text-align:center; font-size:7.5pt; background:#f0f0f0;">비고</td>
+                    </tr>
+                    <tr class="numbered-row"><td style="height:24px;"></td><td></td><td></td><td></td><td></td></tr>
+                    <tr class="numbered-row"><td style="height:24px;"></td><td></td><td></td><td></td><td></td></tr>
+                    <tr class="numbered-row"><td style="height:24px;"></td><td></td><td></td><td></td><td></td></tr>
+                    <tr class="numbered-row"><td style="height:24px;"></td><td></td><td></td><td></td><td></td></tr>
+                </table>
+
+                <!-- 확인문구 -->
+                <div class="confirm-text">
+                    &nbsp;&nbsp;「고용보험법」 제77조 및 같은 법 시행규칙 제123조에 따라 위와 같이 출산전후(유산 &#183; 사산) 휴가 사실을 확인합니다.
+                </div>
+
+                <div class="sign-area">
+                    <p class="sign-date">${cd.y}년 &nbsp;&nbsp;&nbsp; ${cd.m}월 &nbsp;&nbsp;&nbsp; ${cd.d}일</p>
+                </div>
+
+                <div style="text-align:right; margin-top:20px; padding-right:40px; font-size:10pt;">
+                    확인자 &nbsp; 사업장명
+                </div>
+                <div style="text-align:right; margin-top:16px; padding-right:40px; font-size:11pt;">
+                    대표자 &nbsp;&nbsp;&nbsp; <span style="font-weight:bold; letter-spacing:8px;">${getValue('employer_name')}</span> &nbsp;&nbsp;&nbsp;&nbsp; (서명 또는 인)
+                </div>
+
+                <div class="recipient">
+                    ○○지방고용노동청(지청)장 귀하
+                </div>
+
+                <div class="paper-size">
+                    210mm&times;297mm[백상지(80g/㎡) 또는 중질지(80g/㎡)]
+                </div>
+            </div>
+            `;
+        }
+
+        // ===== 별지 제107호의2서식 (배우자 출산휴가/난임치료 휴가) =====
+        function generatePrintPreview107_2() {
+            const workerName = getValue('worker_name');
+            const workerSsn = getValue('worker_ssn');
+            const confirmDate = getValue('confirm_date');
+            const periodStart = getValue('period_start');
+            const periodEnd = getValue('period_end');
+
+            const ps = splitDate(periodStart);
+            const pe = splitDate(periodEnd);
+            const cd = splitDate(confirmDate);
+
+            const spouseBirthDateVal = getValue('spouse_birth_date');
+            const sbd = splitDate(spouseBirthDateVal);
+
+            const isPriority = document.querySelector('input[name="spouse_priority"]:checked')?.value === '해당';
+            const isSplit = document.querySelector('input[name="spouse_split"]:checked')?.value === 'yes';
+
+            const wageAmount = getNumber('wage_amount');
+            const wageBasis = getValue('wage_basis');
+            const wageHours = parseInt(document.getElementById('wage_hours').value) || 209;
+            const hourlyWage = wageAmount > 0 ? Math.round(wageAmount / wageHours) : 0;
+
+            return `
+            <div class="page">
+                <div class="doc-header">
+                    ■ 고용보험법 시행규칙 [별지 제107호의2서식] &lt;개정 2025. 2. 21.&gt;
+                </div>
+
+                <div class="doc-title-area">
+                    <div class="doc-title-left">
+                        [<b>V</b>] 배우자 출산휴가<br>
+                        [&nbsp;] 난임치료 휴가
+                    </div>
+                    <div class="doc-title-right">확 인 서</div>
+                </div>
+
+                <div class="doc-subtitle">
+                    ※ 뒤쪽의 작성방법을 읽고 작성하시기 바라며, [ ]에는 해당하는 곳에 "V" 표시를 합니다. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(앞쪽)
+                </div>
+
+                <!-- 기본사항 테이블: ①~⑤는 전체 너비 행, ⑥⑦만 4컬럼 분할 -->
+                <table>
+                    <colgroup>
+                        <col style="width:30px">
+                        <col style="width:15%">
+                        <col style="width:30%">
+                        <col style="width:15%">
+                        <col style="width:auto">
+                    </colgroup>
+                    <tr>
+                        <td rowspan="8" class="vertical-header">기 본 사 항</td>
+                        <th>① 사업장관리번호</th>
+                        <td colspan="3">${COMPANY_INFO.biz_number}</td>
+                    </tr>
+                    <tr>
+                        <th>② 우선지원<br>&nbsp;&nbsp;&nbsp;대상기업</th>
+                        <td colspan="3" style="font-size:8.5pt; line-height:1.6;">
+                            ${cb(isPriority)} 해당 &nbsp;&nbsp; ${cb(!isPriority)} 비해당
+                            &nbsp;&nbsp;&nbsp;<span style="font-size:7pt; color:#555;">(고용보험법 시행령 제12조에 따름)</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>③ 사업장명</th>
+                        <td colspan="3">${COMPANY_INFO.biz_name}</td>
+                    </tr>
+                    <tr>
+                        <th>④ 사업장소재지</th>
+                        <td colspan="3" style="font-size:8.5pt; padding:6px 10px;">
+                            ${COMPANY_INFO.biz_address}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>⑤ 담당자</th>
+                        <td colspan="3" style="font-size:8.5pt; line-height:1.8; padding:6px 10px;">
+                            성명: ${COMPANY_INFO.manager_name} &nbsp;&nbsp; 전화번호: ${COMPANY_INFO.manager_phone} &nbsp;&nbsp; (전자우편 주소: ${COMPANY_INFO.manager_email})
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>⑥ 근로자 성명</th>
+                        <td>${workerName}</td>
+                        <th>⑦ 근로자<br>&nbsp;&nbsp;&nbsp;주민등록번호</th>
+                        <td>${workerSsn}</td>
+                    </tr>
+                    <tr>
+                        <th>⑧ 배우자 출산일</th>
+                        <td colspan="3" style="font-size:8.5pt; padding:6px 10px;">
+                            (배우자 출산휴가의 경우에만 작성) &nbsp;&nbsp;&nbsp; ${sbd.y}년 &nbsp; ${sbd.m}월 &nbsp; ${sbd.d}일
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>⑨ 분할사용 여부</th>
+                        <td colspan="3" style="padding-left:20px;">
+                            ${cb(isSplit)} 예 &nbsp;&nbsp;&nbsp; ${cb(!isSplit)} 아니오
+                        </td>
+                    </tr>
+                </table>
+
+                <!-- 배우자 출산휴가 또는 난임치료휴가 부여기간 (기본사항 밖) -->
+                <table style="margin-top:-1px;">
+                    <colgroup>
+                        <col style="width:30px">
+                        <col style="width:auto">
+                    </colgroup>
+                    <tr>
+                        <td style="border:1px solid #000; background:#f0f0f0; text-align:center; font-weight:600; font-size:8.5pt; padding:10px 4px; line-height:1.5;">
+                            배우자 출산휴가<br>또는 난임치료<br>휴가 부여기간
+                        </td>
+                        <td style="border:1px solid #000; text-align:center; font-size:10pt; padding:10px;">
+                            ${ps.y}년 &nbsp; ${ps.m}월 &nbsp; ${ps.d}일 &nbsp;&nbsp; ~ &nbsp;&nbsp; ${pe.y}년 &nbsp; ${pe.m}월 &nbsp; ${pe.d}일
+                        </td>
+                    </tr>
+                </table>
+
+                <!-- ⑩ 휴가부여기간 중 통상임금지급액 -->
+                <table style="margin-top:-1px;">
+                    <colgroup>
+                        <col style="width:30px">
+                        <col style="width:auto">
+                    </colgroup>
+                    <tr class="numbered-row">
+                        <th style="text-align:center;">⑩</th>
+                        <td style="padding:8px 12px; font-size:8.5pt; line-height:1.8;">
+                            휴가부여기간 중 통상임금지급액 (급여지급액이 없으면 "없음"으로 기재)<br>
+                            <span style="margin-left:20px;">&nbsp;</span>
+                        </td>
+                    </tr>
+                </table>
+
+                <!-- ⑪ 통상임금 (휴가시작일 기준) -->
+                <table style="margin-top:-1px;">
+                    <colgroup>
+                        <col style="width:30px">
+                        <col style="width:12%">
+                        <col style="width:33%">
+                        <col style="width:12%">
+                        <col style="width:auto">
+                    </colgroup>
+                    <tr class="numbered-row">
+                        <th rowspan="2" style="text-align:center;">⑪</th>
+                        <th>산정기준</th>
+                        <td style="font-size:8pt; padding:6px 8px; line-height:1.6;">
+                            산정기준 : 시급, 일급, 주급, 월급, (기타)<br>
+                            (휴가시작일 기준)
+                        </td>
+                        <th>통상임금</th>
+                        <td style="text-align:right; padding-right:12px;">
+                            ${wageAmount > 0 ? formatCurrency(wageAmount) + ' 원' : ''}
+                        </td>
+                    </tr>
+                    <tr class="numbered-row">
+                        <th>⑫ 산정기준 기간<br>&nbsp;&nbsp;소정근로시간</th>
+                        <td style="font-size:8pt; padding:6px 8px; line-height:1.6;">
+                            (휴가시작일 기준)<br>
+                            ${wageHours} 시간
+                        </td>
+                        <th>시간급<br>통상임금</th>
+                        <td style="text-align:right; padding-right:12px;">
+                            ${hourlyWage > 0 ? formatCurrency(hourlyWage) + ' 원' : ''}
+                        </td>
+                    </tr>
+                </table>
+
+                <!-- ⑬ 급여지급 내역 -->
+                <table style="margin-top:-1px;">
+                    <colgroup>
+                        <col style="width:30px">
+                        <col style="width:32%">
+                        <col style="width:17%">
+                        <col style="width:17%">
+                        <col style="width:17%">
+                        <col style="width:auto">
+                    </colgroup>
+                    <tr class="numbered-row">
+                        <th rowspan="6" style="text-align:center;">⑬</th>
+                        <td colspan="5" style="font-size:8.5pt; padding:5px 8px;">
+                            급여지급 내역
+                        </td>
+                    </tr>
+                    <tr class="numbered-row">
+                        <td style="height:24px;"></td>
+                        <td style="text-align:center; font-size:7.5pt; background:#f0f0f0;">월</td>
+                        <td style="text-align:center; font-size:7.5pt; background:#f0f0f0;">일</td>
+                        <td style="text-align:center; font-size:7.5pt; background:#f0f0f0;">금액(원)</td>
+                        <td style="text-align:center; font-size:7.5pt; background:#f0f0f0;">비고</td>
+                    </tr>
+                    <tr class="numbered-row"><td style="height:24px;"></td><td></td><td></td><td></td><td></td></tr>
+                    <tr class="numbered-row"><td style="height:24px;"></td><td></td><td></td><td></td><td></td></tr>
+                    <tr class="numbered-row"><td style="height:24px;"></td><td></td><td></td><td></td><td></td></tr>
+                    <tr class="numbered-row"><td style="height:24px;"></td><td></td><td></td><td></td><td></td></tr>
+                </table>
+
+                <!-- 확인문구 -->
+                <div class="confirm-text">
+                    &nbsp;&nbsp;「고용보험법」 제71조 &#183; 제77조 및 같은 법 시행규칙 제123조에 따라 위와 같이 배우자 출산휴가(또는 난임치료휴가) 사실을 확인합니다.
+                </div>
+
+                <div class="sign-area">
+                    <p class="sign-date">${cd.y}년 &nbsp;&nbsp;&nbsp; ${cd.m}월 &nbsp;&nbsp;&nbsp; ${cd.d}일</p>
+                </div>
+
+                <div style="text-align:right; margin-top:20px; padding-right:40px; font-size:10pt;">
+                    확인자 &nbsp; 사업장명
+                </div>
+                <div style="text-align:right; margin-top:16px; padding-right:40px; font-size:11pt;">
+                    대표자 &nbsp;&nbsp;&nbsp; <span style="font-weight:bold; letter-spacing:8px;">${getValue('employer_name')}</span> &nbsp;&nbsp;&nbsp;&nbsp; (서명 또는 인)
+                </div>
+
+                <div class="recipient">
+                    ○○지방고용노동청(지청)장 귀하
+                </div>
+
+                <div class="paper-size">
+                    210mm&times;297mm[백상지(80g/㎡) 또는 중질지(80g/㎡)]
+                </div>
+            </div>
+            `;
+        }
+
+        // ===== 미리보기 / 인쇄 - 타입별 분기 =====
+        function generatePrintPreview() {
+            const workerName = getValue('worker_name');
+            const workerSsn = getValue('worker_ssn');
+
+            if (!workerName || !workerSsn) {
+                alert('근로자 성명과 주민등록번호는 필수 입력 항목입니다.');
+                return;
+            }
+
+            let html = '';
+            if (currentType === 'leave' || currentType === 'reduced') {
+                html = generatePrintPreview102();
+            } else if (currentType === 'maternity') {
+                html = generatePrintPreview107();
+            } else if (currentType === 'spouse') {
+                html = generatePrintPreview107_2();
+            }
+
+            document.getElementById('print-area').innerHTML = html;
+            document.getElementById('print-area').style.display = 'block';
+
+            document.getElementById('print-area').scrollIntoView({ behavior: 'smooth' });
+
+            setTimeout(() => {
+                window.print();
+            }, 500);
+        }
+
+        // ===== 공통 인쇄 스타일 (HTML 다운로드용) =====
+        function getCommonPrintStyles() {
+            return `
+        @page { size: A4; margin: 12mm 18mm; }
+        body {
+            font-family: '맑은 고딕', 'Malgun Gothic', sans-serif;
+            font-size: 10pt;
+            line-height: 1.4;
+            color: #000;
+            margin: 0;
+            padding: 12mm 18mm;
+        }
+        .page { max-width: 210mm; margin: 0 auto; }
+        .doc-header { font-size: 8pt; color: #333; margin-bottom: 4px; }
+        .doc-title-area { display: flex; align-items: center; justify-content: center; margin: 8px 0 6px; }
+        .doc-title-left { font-size: 12pt; font-weight: bold; line-height: 1.6; text-align: left; }
+        .doc-title-right { font-size: 24pt; font-weight: bold; letter-spacing: 16px; margin-left: 50px; }
+        .doc-subtitle { text-align: right; font-size: 7.5pt; color: #555; margin-bottom: 10px; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #000; padding: 5px 8px; font-size: 9pt; vertical-align: middle; }
+        th { background: #f0f0f0; font-weight: 600; text-align: center; font-size: 8.5pt; }
+        td { text-align: left; }
+        .vertical-header {
+            writing-mode: vertical-rl; text-orientation: upright; text-align: center;
+            font-weight: 700; font-size: 11pt; letter-spacing: 6px; background: #f0f0f0;
+            padding: 10px 4px; width: 30px;
+        }
+        .section-header-cell { background: #e8e8e8; font-size: 9pt; font-weight: 700; text-align: center; padding: 6px; }
+        .cb {
+            display: inline-block; width: 13px; height: 13px; border: 1.5px solid #000;
+            margin-right: 3px; vertical-align: middle; text-align: center; line-height: 13px; font-size: 10px;
+        }
+        .cb.checked::after { content: '\\2713'; font-weight: bold; }
+        .numbered-row th { font-size: 8.5pt; padding: 5px 6px; background: #f0f0f0; }
+        .numbered-row td { font-size: 8.5pt; line-height: 1.6; padding: 6px 8px; }
+        .confirm-text { margin-top: 12px; font-size: 9pt; line-height: 1.8; border: 1px solid #000; border-top: none; padding: 12px 14px; }
+        .sign-area { margin-top: 24px; text-align: center; }
+        .sign-date { font-size: 12pt; letter-spacing: 4px; }
+        .sign-name { text-align: right; margin-top: 24px; padding-right: 30px; font-size: 11pt; }
+        .recipient { margin-top: 30px; text-align: center; padding-top: 14px; border-top: 1px solid #999; font-size: 10pt; }
+        .note-box { border: 1px solid #000; padding: 8px 10px; margin-top: 12px; font-size: 7.5pt; line-height: 1.6; }
+        .paper-size { text-align: right; margin-top: 8px; font-size: 7pt; color: #888; }
+            `;
+        }
+
+        // HTML 파일로 저장
+        function downloadAsHTML() {
+            const workerName = getValue('worker_name');
+            if (!workerName) {
+                alert('근로자 성명을 입력해주세요.');
+                return;
+            }
+
+            let pageHtml = '';
+            let docTitle = '';
+            let fileName = '';
+
+            if (currentType === 'leave' || currentType === 'reduced') {
+                pageHtml = generatePrintPreview102();
+                docTitle = '육아휴직 확인서';
+                fileName = `육아휴직확인서_${workerName}.html`;
+            } else if (currentType === 'maternity') {
+                pageHtml = generatePrintPreview107();
+                docTitle = '출산전후휴가 확인서';
+                fileName = `출산전후휴가확인서_${workerName}.html`;
+            } else if (currentType === 'spouse') {
+                pageHtml = generatePrintPreview107_2();
+                docTitle = '배우자출산휴가 확인서';
+                fileName = `배우자출산휴가확인서_${workerName}.html`;
+            }
+
+            const fullHtml = `<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>${docTitle} - ${workerName}</title>
+    <style>${getCommonPrintStyles()}</style>
+</head>
+<body>
+    ${pageHtml}
+</body>
+</html>`;
+
+            const blob = new Blob([fullHtml], { type: 'text/html;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>
