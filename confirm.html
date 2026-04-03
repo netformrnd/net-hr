@@ -1023,9 +1023,70 @@
                     <div class="section-icon">💰</div>
                     <div class="section-title">통상임금 정보</div>
                 </div>
-                <p style="font-size:12px; color:#5f6368; margin-bottom:16px;" id="wage-desc">육아휴직 또는 육아기 근로시간 단축 시작일 기준</p>
+                <div style="background:#fff3e0; border:1px solid #ffe0b2; border-radius:8px; padding:12px 16px; margin-bottom:16px;">
+                    <p style="font-size:13px; color:#e65100; font-weight:600; margin-bottom:4px;">⚠️ 산정 기준일: 육아휴직 또는 육아기 근로시간 단축 <strong>시작일</strong> 기준</p>
+                    <p style="font-size:12px; color:#795548;">매월 정기적·일률적·고정적으로 지급되는 항목만 해당합니다. (성과급·연장수당 제외)</p>
+                </div>
 
-                <div class="form-row">
+                <div style="background:#f8f9fa; border-radius:10px; padding:20px; margin-bottom:16px;">
+                    <p style="font-size:14px; font-weight:700; color:#202124; margin-bottom:14px;">📝 항목별 입력</p>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>기본급 (월)<span class="required">*</span></label>
+                            <input type="text" id="wage_base" placeholder="2,500,000" oninput="formatCurrencyInput(this); calcTotalWage();">
+                        </div>
+                        <div class="form-group">
+                            <label>고정수당 (월) <span style="font-size:11px; color:#888;">식대·교통비 등</span></label>
+                            <input type="text" id="wage_fixed" placeholder="200,000" oninput="formatCurrencyInput(this); calcTotalWage();">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>명절상여금 (연간 총액) <span style="font-size:11px; color:#888;">÷12 자동계산</span></label>
+                            <div style="display:flex; align-items:center; gap:8px;">
+                                <input type="text" id="wage_bonus" placeholder="1,000,000" style="flex:1;" oninput="formatCurrencyInput(this); calcTotalWage();">
+                                <span style="font-size:12px; color:#7c3aed; font-weight:600; white-space:nowrap;" id="bonus_monthly">월 0원</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>직책수당 (연간 총액) <span style="font-size:11px; color:#888;">÷12 자동계산</span></label>
+                            <div style="display:flex; align-items:center; gap:8px;">
+                                <input type="text" id="wage_position" placeholder="600,000" style="flex:1;" oninput="formatCurrencyInput(this); calcTotalWage();">
+                                <span style="font-size:12px; color:#7c3aed; font-weight:600; white-space:nowrap;" id="position_monthly">월 0원</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="wage-info-box" id="wage-info-box" style="display:none;">
+                    <p style="font-size:13px; font-weight:700; color:#202124; margin-bottom:12px;">📊 통상임금 산정 결과</p>
+                    <div class="wage-grid" style="grid-template-columns:repeat(3, 1fr);">
+                        <div class="wage-item">
+                            <div class="label">기본급+고정수당</div>
+                            <div class="value" id="wage-base-display">₩0</div>
+                        </div>
+                        <div class="wage-item">
+                            <div class="label">상여·수당(÷12)</div>
+                            <div class="value" id="wage-bonus-display">₩0</div>
+                        </div>
+                        <div class="wage-item highlight">
+                            <div class="label">월 통상임금 합계</div>
+                            <div class="value" id="wage-display">₩0</div>
+                        </div>
+                    </div>
+                    <div class="wage-grid" style="margin-top:8px;">
+                        <div class="wage-item">
+                            <div class="label">시간급 통상임금</div>
+                            <div class="value" id="hourly-display">₩0</div>
+                        </div>
+                        <div class="wage-item highlight">
+                            <div class="label">확인서 기재 통상임금</div>
+                            <div class="value" id="wage-final-display">₩0</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row" style="margin-top:16px;">
                     <div class="form-group">
                         <label>산정기준<span class="required">*</span></label>
                         <select id="wage_basis">
@@ -1037,34 +1098,21 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>통상임금 (원)<span class="required">*</span></label>
-                        <input type="text" id="wage_amount" placeholder="3,000,000" oninput="formatCurrencyInput(this); updateWageCalc();">
+                        <label>통상임금 합계 (자동계산)</label>
+                        <input type="text" id="wage_amount" readonly placeholder="위 항목 입력 시 자동 계산">
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
                         <label>산정기준 단위기간 소정근로시간</label>
                         <div style="display:flex; align-items:center; gap:8px;">
-                            <input type="number" id="wage_hours" placeholder="209" style="flex:1;" onchange="updateWageCalc()">
+                            <input type="number" id="wage_hours" placeholder="209" style="flex:1;" onchange="calcTotalWage()">
                             <span style="font-size:14px; color:#5f6368;">시간</span>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label>시간급 통상임금 - 자동계산</label>
+                        <label>시간급 통상임금 (자동계산)</label>
                         <input type="text" id="hourly_wage" readonly placeholder="자동 계산됩니다">
-                    </div>
-                </div>
-
-                <div class="wage-info-box" id="wage-info-box" style="display:none;">
-                    <div class="wage-grid">
-                        <div class="wage-item highlight">
-                            <div class="label">통상임금</div>
-                            <div class="value" id="wage-display">₩0</div>
-                        </div>
-                        <div class="wage-item">
-                            <div class="label">시간급 통상임금</div>
-                            <div class="value" id="hourly-display">₩0</div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -1509,19 +1557,45 @@
         }
 
         // 임금 계산
-        function updateWageCalc() {
-            const wageAmount = getNumber('wage_amount');
-            const wageHours = parseInt(document.getElementById('wage_hours').value) || 209;
+        // 통상임금 항목별 계산
+        function calcTotalWage() {
+            var base = getNumber('wage_base');         // 기본급
+            var fixed = getNumber('wage_fixed');       // 고정수당
+            var bonusYear = getNumber('wage_bonus');   // 명절상여금 (연간)
+            var posYear = getNumber('wage_position');  // 직책수당 (연간)
 
-            if (wageAmount > 0) {
-                const hourly = Math.round(wageAmount / wageHours);
+            var bonusMonth = Math.round(bonusYear / 12);
+            var posMonth = Math.round(posYear / 12);
+
+            // 월별 환산 표시
+            document.getElementById('bonus_monthly').textContent = '월 ' + formatCurrency(bonusMonth) + '원';
+            document.getElementById('position_monthly').textContent = '월 ' + formatCurrency(posMonth) + '원';
+
+            var monthlyFixed = base + fixed;
+            var monthlyExtra = bonusMonth + posMonth;
+            var totalWage = monthlyFixed + monthlyExtra;
+
+            // 통상임금 합계 필드에 반영
+            document.getElementById('wage_amount').value = totalWage > 0 ? formatCurrency(totalWage) : '';
+
+            var wageHours = parseInt(document.getElementById('wage_hours').value) || 209;
+
+            if (totalWage > 0) {
+                var hourly = Math.round(totalWage / wageHours);
                 document.getElementById('hourly_wage').value = formatCurrency(hourly) + '원';
-                document.getElementById('wage-display').textContent = '₩' + formatCurrency(wageAmount);
+                document.getElementById('wage-base-display').textContent = '₩' + formatCurrency(monthlyFixed);
+                document.getElementById('wage-bonus-display').textContent = '₩' + formatCurrency(monthlyExtra);
+                document.getElementById('wage-display').textContent = '₩' + formatCurrency(totalWage);
                 document.getElementById('hourly-display').textContent = '₩' + formatCurrency(hourly);
+                document.getElementById('wage-final-display').textContent = '₩' + formatCurrency(totalWage);
                 document.getElementById('wage-info-box').style.display = 'block';
             } else {
                 document.getElementById('wage-info-box').style.display = 'none';
             }
+        }
+
+        function updateWageCalc() {
+            calcTotalWage();
         }
 
         // 체크박스 인쇄용
