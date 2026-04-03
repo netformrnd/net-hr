@@ -1359,14 +1359,17 @@
             document.getElementById('maternity-info-section').classList.toggle('show', type === 'maternity');
             document.getElementById('spouse-info-section').classList.toggle('show', type === 'spouse');
 
-            // 임금 설명문 변경
-            var wageDescMap = {
-                'leave': '육아휴직 또는 육아기 근로시간 단축 시작일 기준',
-                'reduced': '육아휴직 또는 육아기 근로시간 단축 시작일 기준',
-                'maternity': '출산전후휴가 시작일 기준',
-                'spouse': '배우자 출산휴가 시작일 기준'
-            };
-            document.getElementById('wage-desc').textContent = wageDescMap[type] || '';
+            // 임금 설명문 변경 (wage-desc 요소가 있을 경우에만)
+            var wageDescEl = document.getElementById('wage-desc');
+            if (wageDescEl) {
+                var wageDescMap = {
+                    'leave': '육아휴직 또는 육아기 근로시간 단축 시작일 기준',
+                    'reduced': '육아휴직 또는 육아기 근로시간 단축 시작일 기준',
+                    'maternity': '출산전후휴가 시작일 기준',
+                    'spouse': '배우자 출산휴가 시작일 기준'
+                };
+                wageDescEl.textContent = wageDescMap[type] || '';
+            }
 
             // 하단 안내문 변경
             var noticeMap = {
