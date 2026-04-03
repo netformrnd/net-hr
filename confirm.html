@@ -1119,8 +1119,11 @@
         function loadFromApplication() {
             try {
                 var raw = localStorage.getItem('netformLeaveData');
-                if (!raw) return;
+                console.log('=== 확인서 생성기: localStorage 확인 ===');
+                console.log('raw 데이터:', raw);
+                if (!raw) { console.log('데이터 없음 - localStorage가 비어있음'); return; }
                 var data = JSON.parse(raw);
+                console.log('파싱된 데이터:', data);
 
                 // 24시간 이내 데이터만 유효
                 var submitTime = new Date(data.submitTime);
