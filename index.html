@@ -1977,6 +1977,9 @@ async function sendEmail() {
     document.getElementById('loadingModal').classList.add('show');
 
     var type = getLeaveType();
+    console.log('========== 신청서 제출 디버깅 ==========');
+    console.log('선택된 유형:', type);
+    console.log('라디오 상태:', document.querySelector('input[name="leaveType"]:checked'));
     var dateStr = document.getElementById('currentYear').textContent+'년 '+document.getElementById('currentMonth').textContent+'월 '+document.getElementById('currentDay').textContent+'일';
     var period = '';
     if (type==='maternity') period = (document.getElementById('mat-start').value||'')+'~'+(document.getElementById('mat-end').value||'');
@@ -2033,6 +2036,17 @@ async function sendEmail() {
         formFields['전직장휴직'] = document.getElementById('prev-yes').checked?'있음':(document.getElementById('prev-no').checked?'없음':'');
     }
     formFields['신청사유'] = document.getElementById('leave-reason').value||'';
+
+    console.log('전체 formFields:', JSON.stringify(formFields, null, 2));
+    console.log('주요 필드 확인:');
+    console.log('  성명:', formFields['성명']);
+    console.log('  신청유형:', formFields['신청유형']);
+    console.log('  휴가기간:', formFields['휴가기간']);
+    console.log('  자녀성명:', formFields['자녀성명']);
+    console.log('  출산예정일:', formFields['출산예정일']);
+    console.log('  배우자출산일:', formFields['배우자출산일']);
+    console.log('  신청사유:', formFields['신청사유']);
+    console.log('========================================');
 
     // localStorage save for confirmation generator
     var pStart = '', pEnd = '';
