@@ -1851,7 +1851,7 @@ function generateSummaryImage(formFields, signatureDataUrl) {
     return new Promise(function(resolve) {
         var cvs = document.createElement('canvas');
         var c = cvs.getContext('2d');
-        var w = 600, h = 950;
+        var w = 600, h = 1400;
         cvs.width = w; cvs.height = h;
         c.fillStyle = '#ffffff'; c.fillRect(0,0,w,h);
         c.fillStyle = '#2c3e50'; c.fillRect(0,0,w,60);
@@ -1866,13 +1866,15 @@ function generateSummaryImage(formFields, signatureDataUrl) {
             cx.closePath(); if(fill)cx.fill(); if(stroke)cx.stroke();
         }
         function drawSection(title, items, bg) {
-            var sh = 30 + items.length * 26;
+            var filtered = items.filter(function(it) { return it.value && it.value !== '-' && it.value !== ''; });
+            if (filtered.length === 0) return;
+            var sh = 30 + filtered.length * 26;
             c.fillStyle = bg||'#f8f9fa'; c.strokeStyle='#e0e0e0'; c.lineWidth=1;
             roundRect(c, lm-10, y-5, w-2*lm+20, sh, 8, true, true);
             c.fillStyle='#2c3e50'; c.font='bold 14px "Malgun Gothic", sans-serif'; c.textAlign='left';
             c.fillText(title, lm, y+16); y+=32;
             c.font='13px "Malgun Gothic", sans-serif';
-            items.forEach(function(it) {
+            filtered.forEach(function(it) {
                 c.fillStyle='#666'; c.fillText(it.label+':', lm+10, y);
                 c.fillStyle='#333'; c.font='bold 13px "Malgun Gothic", sans-serif';
                 var val = (it.value||'-').substring(0,40);
@@ -1882,22 +1884,68 @@ function generateSummaryImage(formFields, signatureDataUrl) {
             y += 15;
         }
 
+        // 1. 신청인 정보
         drawSection('1. 신청인 정보', [
-            {label:'성명',value:formFields['성명']},{label:'소속부서',value:formFields['소속부서']},
-            {label:'직위',value:formFields['직위']},{label:'연락처',value:formFields['연락처']},
+            {label:'성명',value:formFields['성명']},
+            {label:'생년월일',value:formFields['생년월일']},
+            {label:'소속부서',value:formFields['소속부서']},
+            {label:'직위',value:formFields['직위']},
+            {label:'입사일',value:formFields['입사일']},
+            {label:'근속기간',value:formFields['근속기간']},
+            {label:'연락처',value:formFields['연락처']},
             {label:'이메일',value:formFields['이메일']}
         ], '#f8f9fa');
 
-        drawSection('2. 신청 유형 정보', [
-            {label:'유형',value:formFields['신청유형']},
-            {label:'기간',value:formFields['휴가기간']},
+        // 2. 신청 유형 및 기간
+        drawSection('2. 신청 유형 및 기간', [
+            {label:'신청유형',value:formFields['신청유형']},
+            {label:'휴가/휴직기간',value:formFields['휴가기간']},
             {label:'비고',value:formFields['비고']}
         ], '#e8f5e9');
 
+        // 3. 출산 관련 (출산전후휴가 / 배우자출산휴가)
+        drawSection('3. 출산 관련 정보', [
+            {label:'출산예정일',value:formFields['출산예정일']},
+            {label:'다태아여부',value:formFields['다태아']},
+            {label:'배우자출산일',value:formFields['배우자출산일']}
+        ], '#fce4ec');
+
+        // 4. 자녀 정보 (육아휴직)
+        drawSection('4. 자녀 정보', [
+            {label:'자녀성명',value:formFields['자녀성명']},
+            {label:'자녀생년월일',value:formFields['자녀생년월일']},
+            {label:'자녀나이',value:formFields['자녀나이']},
+            {label:'자녀관계',value:formFields['자녀관계']},
+            {label:'분할사용',value:formFields['분할사용']}
+        ], '#fff3e0');
+
+        // 5. 임신 중 육아휴직
+        drawSection('5. 임신 중 육아휴직', [
+            {label:'임신주수',value:formFields['임신주수']},
+            {label:'출산예정일',value:formFields['출산예정일']}
+        ], '#fff3e0');
+
+        // 6. 배우자 및 추가 정보
+        drawSection('6. 배우자 및 추가 정보', [
+            {label:'배우자휴직사용',value:formFields['배우자휴직사용']},
+            {label:'배우자성명',value:formFields['배우자성명']},
+            {label:'배우자근무처',value:formFields['배우자근무처']},
+            {label:'추가6개월',value:formFields['추가6개월']},
+            {label:'한부모여부',value:formFields['한부모']},
+            {label:'장애아동부모',value:formFields['장애아동부모']},
+            {label:'전직장휴직',value:formFields['전직장휴직']}
+        ], '#e3f2fd');
+
+        // 7. 신청 사유
+        drawSection('7. 신청 사유', [
+            {label:'사유',value:formFields['신청사유']}
+        ], '#f3e5f5');
+
+        // 서명 영역
         c.fillStyle='#fff'; c.strokeStyle='#2c3e50'; c.lineWidth=2;
         roundRect(c, lm-10, y-5, w-2*lm+20, 120, 8, true, true);
         c.fillStyle='#2c3e50'; c.font='bold 14px "Malgun Gothic", sans-serif'; c.textAlign='left';
-        c.fillText('3. 신청인 서명', lm, y+18);
+        c.fillText('서명', lm, y+18);
 
         if (signatureDataUrl && signatureDataUrl !== '서명 없음' && !signatureDataUrl.endsWith('#')) {
             var sigImage = new Image();
