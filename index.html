@@ -439,7 +439,7 @@
                         <li><a class="quick-nav-item" data-section="mat-s5" onclick="scrollToSection('mat-s5')">5. 신청 절차</a></li>
                         <li><a class="quick-nav-item" data-section="mat-s6" onclick="scrollToSection('mat-s6')">6. 필요 서류</a></li>
                     </ul>
-                    <button class="quick-nav-btn pink" onclick="showFormPage()">신청서 작성하기 &rarr;</button>
+                    <button class="quick-nav-btn pink" onclick="showFormPage('maternity')">신청서 작성하기 &rarr;</button>
                 </nav>
                 <!-- Main Content -->
                 <div class="tab-main-content">
@@ -590,7 +590,7 @@
                         </div>
 
                         <div class="apply-btn-wrap">
-                            <button class="apply-btn pink" onclick="showFormPage()">7. 신청서 작성하기</button>
+                            <button class="apply-btn pink" onclick="showFormPage('maternity')">7. 신청서 작성하기</button>
                         </div>
                     </div>
 
@@ -704,7 +704,7 @@
                         </div>
 
                         <div class="apply-btn-wrap">
-                            <button class="apply-btn" style="background:#1565c0;" onclick="showFormPage()">7. 신청서 작성하기</button>
+                            <button class="apply-btn" style="background:#1565c0;" onclick="showFormPage('spouse')">7. 신청서 작성하기</button>
                         </div>
                     </div>
                 </div>
@@ -724,7 +724,7 @@
                         <li><a class="quick-nav-item" data-section="preg-s5" onclick="scrollToSection('preg-s5')">5. 신청 절차</a></li>
                         <li><a class="quick-nav-item" data-section="preg-s6" onclick="scrollToSection('preg-s6')">6. 필요 서류</a></li>
                     </ul>
-                    <button class="quick-nav-btn orange" onclick="showFormPage()">신청서 작성하기 &rarr;</button>
+                    <button class="quick-nav-btn orange" onclick="showFormPage('pregnant')">신청서 작성하기 &rarr;</button>
                 </nav>
                 <div class="tab-main-content" id="tab-pregnant-main">
                     <div class="accordion-controls">
@@ -840,7 +840,7 @@
                     </div>
 
                     <div class="apply-btn-wrap">
-                        <button class="apply-btn orange" onclick="showFormPage()">7. 신청서 작성하기</button>
+                        <button class="apply-btn orange" onclick="showFormPage('pregnant')">7. 신청서 작성하기</button>
                     </div>
                 </div>
             </div>
@@ -862,7 +862,7 @@
                     <p style="font-size:11px; color:#888; margin-top:10px; padding-top:10px; border-top:1px dashed #ddd; line-height:1.5;">
                         💡 상단에서 <strong style="color:#1976d2;">본인</strong> / <strong style="color:#00897b;">배우자</strong> 안내를 선택할 수 있습니다.
                     </p>
-                    <button class="quick-nav-btn blue" onclick="showFormPage()">신청서 작성하기 &rarr;</button>
+                    <button class="quick-nav-btn blue" onclick="showFormPage('childcare')">신청서 작성하기 &rarr;</button>
                 </nav>
                 <div class="tab-main-content" id="tab-childcare-main">
                     <!-- Sub-tab navigation (본인 / 배우자) -->
@@ -1068,7 +1068,7 @@
                     </div>
 
                     <div class="apply-btn-wrap">
-                        <button class="apply-btn blue" onclick="showFormPage()">8. 신청서 작성하기</button>
+                        <button class="apply-btn blue" onclick="showFormPage('childcare', 'self')">8. 신청서 작성하기</button>
                     </div>
                     </div><!-- end cc-sub-self -->
 
@@ -1299,7 +1299,7 @@
                         </div>
 
                         <div class="apply-btn-wrap">
-                            <button class="apply-btn" style="background:#00897b;" onclick="showFormPage()">8. 신청서 작성하기</button>
+                            <button class="apply-btn" style="background:#00897b;" onclick="showFormPage('childcare', 'spouse')">8. 신청서 작성하기</button>
                         </div>
                     </div><!-- end cc-sub-spouse -->
                 </div>
@@ -1393,6 +1393,30 @@
                     <input type="radio" name="leaveType" value="childcare" onchange="onLeaveTypeChange()"> 육아휴직(자녀양육)
                 </label>
             </div>
+        </div>
+
+        <!-- Section 0-Sub: 자녀양육 육아휴직 출산자 구분 (childcare 선택 시만 표시) -->
+        <div class="form-section hidden" id="sec-childcare-sub">
+            <div class="form-section-title" id="section-0-sub" style="display:flex; align-items:center; gap:8px;">
+                <span>출산자 구분</span>
+                <span style="font-size:12px; font-weight:400; color:#888;">(자녀양육 육아휴직 신청 시)</span>
+            </div>
+            <p style="font-size:13px; color:#666; margin-bottom:12px; padding:10px 14px; background:#f8f9fa; border-radius:6px; border-left:3px solid #1976d2;">
+                💡 출산자에 따라 안내 흐름·증빙 서류·추가 혜택이 달라집니다. 본인 상황을 선택해주세요.
+            </p>
+            <div class="radio-group" id="ccSubGroup">
+                <label class="radio-item" id="ri-cc-self" style="border-color:#1976d2;">
+                    <input type="radio" name="ccSub" value="self" onchange="onCcSubChange()">
+                    <span style="font-weight:600; color:#1565c0;">👤 본인 출산</span>
+                    <span style="font-size:12px; color:#666;">(여성 근로자가 출산)</span>
+                </label>
+                <label class="radio-item" id="ri-cc-spouse" style="border-color:#00897b;">
+                    <input type="radio" name="ccSub" value="spouse" onchange="onCcSubChange()">
+                    <span style="font-weight:600; color:#00695c;">💑 배우자 출산</span>
+                    <span style="font-size:12px; color:#666;">(남성 근로자, 부인이 출산)</span>
+                </label>
+            </div>
+            <div id="cc-sub-hint" class="hidden" style="margin-top:12px; padding:10px 14px; border-radius:6px; font-size:13px; line-height:1.6;"></div>
         </div>
 
         <!-- Section 1: Applicant Info - 2 column on PC -->
@@ -1802,10 +1826,32 @@ function scrollToSection(id) {
 }
 
 // ========== Page switching ==========
-function showFormPage() {
+// showFormPage(leaveType, ccSub) - 안내 페이지에서 호출 시 자동 선택
+//   leaveType: 'maternity' | 'spouse' | 'pregnant' | 'childcare' (선택)
+//   ccSub:     'self' | 'spouse' (childcare 일 때만 의미 있음)
+function showFormPage(leaveType, ccSub) {
     document.getElementById('guidePage').classList.add('hidden');
     document.getElementById('formPage').classList.add('active');
     window.scrollTo(0, 0);
+
+    // 안내 페이지에서 leaveType이 전달된 경우 자동 선택
+    if (leaveType) {
+        var radio = document.querySelector('input[name="leaveType"][value="' + leaveType + '"]');
+        if (radio) {
+            radio.checked = true;
+            onLeaveTypeChange();
+        }
+    }
+
+    // childcare + ccSub 전달된 경우 출산자 구분 자동 선택
+    if (leaveType === 'childcare' && ccSub) {
+        var subRadio = document.querySelector('input[name="ccSub"][value="' + ccSub + '"]');
+        if (subRadio) {
+            subRadio.checked = true;
+            onCcSubChange();
+        }
+    }
+
     setTimeout(function() {
         var firstInput = document.getElementById('input-1');
         if (firstInput) { firstInput.focus(); }
@@ -1835,12 +1881,15 @@ var FILE_LABELS = {
 
 function onLeaveTypeChange() {
     var type = getLeaveType();
-    document.querySelectorAll('.radio-item').forEach(function(r) { r.classList.remove('selected'); });
+    document.querySelectorAll('#leaveTypeGroup .radio-item').forEach(function(r) { r.classList.remove('selected'); });
     var selectedRadio = document.querySelector('input[name="leaveType"]:checked');
     if (selectedRadio) selectedRadio.closest('.radio-item').classList.add('selected');
 
-    var secs = ['sec-maternity','sec-spouse','sec-pregnant','sec-childcare','sec-additional'];
-    secs.forEach(function(id) { document.getElementById(id).classList.add('hidden'); });
+    var secs = ['sec-maternity','sec-spouse','sec-pregnant','sec-childcare','sec-additional','sec-childcare-sub'];
+    secs.forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) el.classList.add('hidden');
+    });
 
     if (type === 'maternity') {
         document.getElementById('sec-maternity').classList.remove('hidden');
@@ -1850,6 +1899,8 @@ function onLeaveTypeChange() {
         document.getElementById('sec-pregnant').classList.remove('hidden');
         document.getElementById('sec-additional').classList.remove('hidden');
     } else if (type === 'childcare') {
+        // 자녀양육 선택 시: 출산자 구분 섹션 먼저 표시
+        document.getElementById('sec-childcare-sub').classList.remove('hidden');
         document.getElementById('sec-childcare').classList.remove('hidden');
         document.getElementById('sec-additional').classList.remove('hidden');
     }
@@ -1861,6 +1912,51 @@ function onLeaveTypeChange() {
 
     var titles = { maternity:'출산전후휴가 신청서', spouse:'배우자 출산휴가 신청서', pregnant:'육아휴직 신청서 (임신 중)', childcare:'육아휴직 신청서 (자녀양육)' };
     document.getElementById('formTitle').textContent = titles[type] || '출산휴가·육아휴직 신청서';
+
+    updateProgress();
+}
+
+// ========== 자녀양육 본인/배우자 출산자 구분 ==========
+var FILE_LABELS_CC_SELF = ['가족관계증명서 (자녀 확인용)','출산휴가 종료 증빙 (해당 시)','한부모 증빙서류 (해당 시)','장애인 증명서 (해당 시)','기타 서류'];
+var FILE_LABELS_CC_SPOUSE = ['가족관계증명서 (자녀-부 관계 확인)','배우자(부인) 재직증명서','배우자(부인) 육아휴직 확인서 (별지 102호, 추가 6개월 시)','배우자(부인) 출산 증빙서류','기타 서류'];
+
+function onCcSubChange() {
+    var sub = document.querySelector('input[name="ccSub"]:checked');
+    var subVal = sub ? sub.value : '';
+
+    // 라디오 선택 표시
+    document.querySelectorAll('#ccSubGroup .radio-item').forEach(function(r) { r.classList.remove('selected'); });
+    if (sub) sub.closest('.radio-item').classList.add('selected');
+
+    // 안내 힌트 박스 표시
+    var hint = document.getElementById('cc-sub-hint');
+    if (subVal === 'self') {
+        hint.classList.remove('hidden');
+        hint.style.background = '#e3f2fd';
+        hint.style.border = '1px solid #90caf9';
+        hint.style.color = '#1565c0';
+        hint.innerHTML = '👩 <strong>본인 출산 (여성 근로자)</strong> — 출산전후휴가(90일) 종료 후 이어서 사용하는 육아휴직입니다. 자세한 안내는 안내 페이지의 <strong>[자녀양육 육아휴직 → 본인 육아휴직]</strong> 탭을 참고하세요.';
+
+        // 첨부서류 라벨도 본인 케이스로 변경
+        for (var i = 1; i <= 5; i++) {
+            document.getElementById('doc-label-' + i).textContent = FILE_LABELS_CC_SELF[i-1];
+        }
+        document.getElementById('formTitle').textContent = '육아휴직 신청서 (자녀양육 — 본인 출산)';
+    } else if (subVal === 'spouse') {
+        hint.classList.remove('hidden');
+        hint.style.background = '#e0f2f1';
+        hint.style.border = '1px solid #80cbc4';
+        hint.style.color = '#00695c';
+        hint.innerHTML = '👨 <strong>배우자 출산 (남성 근로자)</strong> — 부인이 출산한 경우 사용하는 육아휴직입니다. 부모 모두 사용 시 추가 6개월·3+3 부모육아휴직제 혜택. 자세한 안내는 안내 페이지의 <strong>[자녀양육 육아휴직 → 배우자 육아휴직]</strong> 탭을 참고하세요.';
+
+        // 첨부서류 라벨도 배우자 케이스로 변경
+        for (var i = 1; i <= 5; i++) {
+            document.getElementById('doc-label-' + i).textContent = FILE_LABELS_CC_SPOUSE[i-1];
+        }
+        document.getElementById('formTitle').textContent = '육아휴직 신청서 (자녀양육 — 배우자 출산)';
+    } else {
+        hint.classList.add('hidden');
+    }
 
     updateProgress();
 }
