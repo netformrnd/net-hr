@@ -859,19 +859,41 @@
                         <li><a class="quick-nav-item" data-section="cc-s5" onclick="scrollToSection('cc-s5')">5. 신청 절차</a></li>
                         <li><a class="quick-nav-item" data-section="cc-s6" onclick="scrollToSection('cc-s6')">6. 필요 서류</a></li>
                     </ul>
+                    <p style="font-size:11px; color:#888; margin-top:10px; padding-top:10px; border-top:1px dashed #ddd; line-height:1.5;">
+                        💡 상단에서 <strong style="color:#1976d2;">본인</strong> / <strong style="color:#00897b;">배우자</strong> 안내를 선택할 수 있습니다.
+                    </p>
                     <button class="quick-nav-btn blue" onclick="showFormPage()">신청서 작성하기 &rarr;</button>
                 </nav>
                 <div class="tab-main-content" id="tab-childcare-main">
+                    <!-- Sub-tab navigation (본인 / 배우자) -->
+                    <div style="display:flex; gap:8px; margin-bottom:20px;">
+                        <button class="cc-sub-tab" data-sub="self" onclick="switchCcSubTab('self')"
+                                style="flex:1; padding:12px; border:2px solid #1976d2; background:#1976d2; color:white; border-radius:8px; font-size:14px; font-weight:600; cursor:pointer; font-family:'Noto Sans KR',sans-serif;">
+                            👤 본인 육아휴직
+                        </button>
+                        <button class="cc-sub-tab" data-sub="spouse" onclick="switchCcSubTab('spouse')"
+                                style="flex:1; padding:12px; border:2px solid #00897b; background:white; color:#00897b; border-radius:8px; font-size:14px; font-weight:600; cursor:pointer; font-family:'Noto Sans KR',sans-serif;">
+                            💑 배우자 육아휴직
+                        </button>
+                    </div>
+
+                    <!-- ===== 본인 육아휴직 (여성 근로자가 본인 출산 후 사용) ===== -->
+                    <div id="cc-sub-self">
+                    <div style="background:#e3f2fd; border:1px solid #90caf9; border-radius:8px; padding:14px 18px; margin-bottom:16px;">
+                        <p style="font-size:13px; color:#1565c0; font-weight:600; margin-bottom:4px;">👩 본인 육아휴직 안내 — 여성 근로자 (출산 본인)</p>
+                        <p style="font-size:13px; color:#555; line-height:1.6;">본인이 출산한 후, 출산전후휴가(90일)에 이어 사용하는 육아휴직 안내입니다. 남편(배우자)이 육아휴직을 사용하시는 경우 우측 <strong style="color:#00897b;">[💑 배우자 육아휴직]</strong> 탭을 참고하세요.</p>
+                    </div>
                     <div class="accordion-controls">
-                        <button class="acc-btn" onclick="expandAll('tab-childcare-main')">전체 펼치기</button>
-                        <button class="acc-btn" onclick="collapseAll('tab-childcare-main')">전체 접기</button>
+                        <button class="acc-btn" onclick="expandAll('cc-sub-self')">전체 펼치기</button>
+                        <button class="acc-btn" onclick="collapseAll('cc-sub-self')">전체 접기</button>
                     </div>
                     <div class="section" id="cc-s1">
                         <div class="section-title color-blue expanded" onclick="toggleAccordion(this)">1. 정의 및 안내</div>
                         <div class="section-body show">
                         <div class="info-card">
-                            <p>자녀양육 육아휴직은 만 8세 이하 또는 초등학교 2학년 이하의 자녀를 양육하기 위해 사용하는 법정 휴직입니다. 남녀 근로자 모두 신청 가능하며, 자녀 1명당 최대 1년(조건 충족 시 1년 6개월) 사용 가능합니다.</p>
-                            <p class="law-ref">근거법: 남녀고용평등법 제19조</p>
+                            <p>자녀양육 육아휴직은 만 8세 이하 또는 초등학교 2학년 이하의 자녀를 양육하기 위해 사용하는 법정 휴직입니다. 자녀 1명당 최대 1년(조건 충족 시 1년 6개월) 사용 가능합니다.</p>
+                            <p style="margin-top:10px; padding:10px 12px; background:#fff0f3; border-radius:6px; font-size:13px; color:#c2185b; line-height:1.6;">💡 <strong>여성 근로자 일반적 흐름</strong><br>임신 확인 → 출산전후휴가(90일, 출산 전·후 분할) → 육아휴직(최대 1년 6개월) → 복직</p>
+                            <p class="law-ref">근거법: 남녀고용평등법 제19조, 근로기준법 제74조</p>
                         </div>
                         </div>
                     </div>
@@ -998,9 +1020,288 @@
                         </div>
                     </div>
 
-                    <div class="apply-btn-wrap">
-                        <button class="apply-btn blue" onclick="showFormPage()">7. 신청서 작성하기</button>
+                    <div class="section" id="cc-s7">
+                        <div class="section-title color-blue" onclick="toggleAccordion(this)">7. 모성 보호 및 복직 안내 (여성 근로자)</div>
+                        <div class="section-body">
+                            <div class="info-card">
+                                <h4>🤰 출산휴가 → 육아휴직 연계 안내</h4>
+                                <p style="line-height:1.7;">여성 근로자는 출산전후휴가(90일) 종료 후 별도 신청으로 육아휴직을 이어서 사용할 수 있습니다. 두 휴가/휴직은 사이에 공백 없이 연결하는 것이 일반적이며, 공백 기간이 있어도 만 8세 이하 자녀라면 육아휴직 신청이 가능합니다.</p>
+                                <p style="margin-top:10px; padding:10px 12px; background:#fff0f3; border-radius:6px; font-size:13px; color:#c2185b;">📌 <strong>임신 중 육아휴직</strong>도 가능합니다. 임신 중인 여성 근로자는 출산 전에도 육아휴직을 사용할 수 있으며, 이는 분할 횟수에 포함되지 않습니다. (자세한 내용은 상단 <strong>[임신 중 육아휴직]</strong> 탭 참고)</p>
+                            </div>
+
+                            <div class="highlight-box pink" style="margin-top:12px;">
+                                <h4>🛡️ 모성 보호 — 법적 보호 사항</h4>
+                                <div class="change-item"><span class="label">해고 금지</span><span class="value" style="color:#c2185b;">출산전후휴가 + 종료 후 30일</span></div>
+                                <div class="change-item"><span class="label">육아휴직 중 해고</span><span class="value" style="color:#c2185b;">전면 금지</span></div>
+                                <div class="change-item"><span class="label">불리한 처우 금지</span><span class="value" style="color:#c2185b;">배치·임금·승진 차별 금지</span></div>
+                                <div class="change-item"><span class="label">위반 시 처벌</span><span class="value" style="color:#c2185b;">3년 이하 징역 또는 3천만원 이하 벌금</span></div>
+                            </div>
+
+                            <div class="info-card" style="margin-top:12px;">
+                                <h4>🔄 복직 시 보장 사항</h4>
+                                <ul>
+                                    <li><strong>원직 복귀 원칙</strong>: 휴직 전과 같은 업무 또는 동등한 수준의 임금을 지급하는 직무로 복귀</li>
+                                    <li><strong>근속기간 인정</strong>: 육아휴직 기간도 근속연수에 포함 (퇴직금·승진·연차 산정 시 반영)</li>
+                                    <li><strong>연차 발생</strong>: 휴직 기간은 출근으로 간주되어 연차 산정에 포함</li>
+                                    <li><strong>수유 시간</strong>: 만 1세 미만 자녀가 있는 경우 1일 2회, 각 30분 유급 수유시간 보장 (근로기준법 제75조)</li>
+                                </ul>
+                                <p class="law-ref">근거법: 남녀고용평등법 제19조제4항, 근로기준법 제74조·제75조</p>
+                            </div>
+
+                            <div class="warning-box" style="margin-top:12px;">
+                                <div class="title">⚠️ 자주 묻는 질문 (여성 근로자)</div>
+                                <p style="line-height:1.8;">
+                                    <strong>Q.</strong> 출산휴가 종료 후 바로 육아휴직 들어가야 하나요?<br>
+                                    → 아닙니다. 일단 복직 후 나중에 사용해도 무방합니다. (만 8세 이하 자녀까지 사용 가능)<br><br>
+
+                                    <strong>Q.</strong> 둘째 출산 시 첫째 육아휴직 중이면 어떻게 되나요?<br>
+                                    → 둘째 출산전후휴가가 우선 적용됩니다. 출산 후 다시 육아휴직 신청 가능.<br><br>
+
+                                    <strong>Q.</strong> 출산 직전까지 일했는데 육아휴직 자격이 되나요?<br>
+                                    → 해당 사업장 6개월 이상 근무했다면 가능합니다.<br><br>
+
+                                    <strong>Q.</strong> 남편도 육아휴직 사용하면 더 받을 수 있다는데?<br>
+                                    → 네! 부모 모두 3개월 이상 사용 시 <strong>6개월 추가 부여</strong> + <strong>3+3 부모육아휴직제</strong>로 첫 3개월 통상임금 100%. 자세한 내용은 우측 <strong style="color:#00897b;">[💑 배우자 육아휴직]</strong> 탭 참고.
+                                </p>
+                            </div>
+                        </div>
                     </div>
+
+                    <div class="apply-btn-wrap">
+                        <button class="apply-btn blue" onclick="showFormPage()">8. 신청서 작성하기</button>
+                    </div>
+                    </div><!-- end cc-sub-self -->
+
+                    <!-- ===== 배우자 육아휴직 ===== -->
+                    <div id="cc-sub-spouse" style="display:none;">
+                        <div class="accordion-controls">
+                            <button class="acc-btn" onclick="expandAll('cc-sub-spouse')">전체 펼치기</button>
+                            <button class="acc-btn" onclick="collapseAll('cc-sub-spouse')">전체 접기</button>
+                        </div>
+
+                        <div style="background:#e0f2f1; border:1px solid #80cbc4; border-radius:8px; padding:14px 18px; margin-bottom:16px;">
+                            <p style="font-size:13px; color:#00695c; font-weight:600; margin-bottom:4px;">👨 배우자 육아휴직 안내 — 남성 근로자 (배우자=부인이 출산)</p>
+                            <p style="font-size:13px; color:#555; line-height:1.6;">배우자(부인)가 출산한 남성 근로자의 육아휴직 안내입니다. <strong>아빠도 육아휴직 사용 가능</strong>하며, 부모 모두 사용 시 추가 혜택이 있습니다. 본인이 출산한 여성 근로자라면 좌측 <strong style="color:#1976d2;">[👤 본인 육아휴직]</strong> 탭을 참고하세요.</p>
+                            <p style="font-size:12px; color:#888; line-height:1.5; margin-top:8px; padding-top:8px; border-top:1px dashed #b2dfdb;">📌 출산일 직후 사용 가능한 <strong>배우자 출산휴가(20일, 유급)</strong>는 상단 <strong>[출산전후휴가] 탭 → [배우자 출산]</strong> 서브탭을 참고하세요.</p>
+                        </div>
+
+                        <div class="section" id="cc-sp-s1">
+                            <div class="section-title expanded" style="border-left-color:#00897b; color:#00695c;" onclick="toggleAccordion(this)">1. 정의 및 안내</div>
+                            <div class="section-body show">
+                                <div class="info-card">
+                                    <p>육아휴직은 <strong>남녀 근로자 모두 각각</strong> 신청 가능한 법정 휴직입니다. 배우자(부인)가 출산한 경우, 남성 근로자 본인도 자녀 1명당 최대 1년(조건 충족 시 1년 6개월) 육아휴직을 사용할 수 있습니다.</p>
+                                    <p style="margin-top:10px; padding:10px 12px; background:#e0f2f1; border-radius:6px; font-size:13px; color:#00695c; line-height:1.6;">💡 <strong>남성 근로자 일반적 흐름</strong><br>배우자 출산 → 배우자 출산휴가(20일, 유급, 4회 분할 가능) → 육아휴직(최대 1년 6개월) → 복직</p>
+                                    <p class="law-ref">근거법: 남녀고용평등법 제19조</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section" id="cc-sp-s2">
+                            <div class="section-title" style="border-left-color:#00897b; color:#00695c;" onclick="toggleAccordion(this)">2. 주요 안내사항 (2025년 개정 반영)</div>
+                            <div class="section-body">
+                                <div class="highlight-box" style="background:#e0f2f1; border:1px solid #80cbc4;">
+                                    <h4 style="color:#00695c;">2025년 주요 변경사항</h4>
+                                    <div class="change-item"><span class="label">휴직 기간</span><span class="value" style="color:#00695c;">기본 1년 → 최대 1년 6개월</span></div>
+                                    <div class="change-item"><span class="label">분할 사용</span><span class="value" style="color:#00695c;">최대 3회 분할 (총 4회)</span></div>
+                                    <div class="change-item"><span class="label">급여 상한 (1~3개월)</span><span class="value" style="color:#00695c;">월 250만원</span></div>
+                                    <div class="change-item"><span class="label">급여 상한 (4~6개월)</span><span class="value" style="color:#00695c;">월 200만원</span></div>
+                                    <div class="change-item"><span class="label">급여 상한 (7개월~)</span><span class="value" style="color:#00695c;">월 160만원</span></div>
+                                    <div class="change-item"><span class="label">사후지급금</span><span class="value" style="color:#00695c;">폐지 (전액 즉시 지급)</span></div>
+                                </div>
+                                <div class="info-card" style="margin-top:12px;">
+                                    <h4>추가 6개월 조건 (2025.2.23 시행)</h4>
+                                    <ul>
+                                        <li>부모 모두 3개월 이상 육아휴직 사용 시 (각각 6개월 추가)</li>
+                                        <li>한부모 (6개월 추가)</li>
+                                        <li>중증 장애아동의 부모 (6개월 추가)</li>
+                                    </ul>
+                                    <p style="margin-top:8px; padding:10px 12px; background:#fff8e1; border-radius:6px; font-size:13px; color:#795548;">💡 <strong>남성 근로자 추천 활용</strong>: 부인과 본인 모두 3개월 이상 사용 → 둘 다 1년 6개월까지 사용 가능</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section" id="cc-sp-s3">
+                            <div class="section-title" style="border-left-color:#00897b; color:#00695c;" onclick="toggleAccordion(this)">3. 신청 자격 요건</div>
+                            <div class="section-body">
+                                <div class="info-card">
+                                    <ul>
+                                        <li>만 8세 이하 또는 초등학교 2학년 이하 자녀 (친자녀, 입양자녀 포함)</li>
+                                        <li>해당 사업장 계속 근로기간 <strong>6개월 이상</strong></li>
+                                        <li>배우자(부인)의 출산 유무·시기와 무관하게 자녀 연령 요건만 충족하면 가능</li>
+                                        <li>배우자(부인)의 육아휴직 사용 유무와 무관 (단, 동시·순차 사용 시 추가 혜택)</li>
+                                    </ul>
+                                    <p style="margin-top:10px; padding:10px 12px; background:#e0f2f1; border-radius:6px; font-size:13px; color:#00695c;">📌 배우자가 다른 회사 재직 / 공무원 / 자영업 / 무직 등 어떤 상황이든 <strong>남성 근로자 본인의 육아휴직 자체</strong>는 가능합니다. (단, 추가 혜택은 배우자 고용보험 가입 여부에 따라 달라짐 — 7번 섹션 참고)</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section" id="cc-sp-s4">
+                            <div class="section-title" style="border-left-color:#00897b; color:#00695c;" onclick="toggleAccordion(this)">4. 급여 관련 안내 (2025년)</div>
+                            <div class="section-body">
+                                <div class="highlight-box" style="background:#e0f2f1; border:1px solid #80cbc4;">
+                                    <h4 style="color:#00695c;">넷폼알앤디 기준 — 육아휴직 급여는 이렇게 받습니다</h4>
+                                    <div class="change-item"><span class="label">회사 급여</span><span class="value" style="color:#00695c;">없음 (무급 처리)</span></div>
+                                    <div class="change-item"><span class="label">급여 지급</span><span class="value" style="color:#00695c;">고용보험이 본인 계좌로 직접 지급</span></div>
+                                    <div class="change-item"><span class="label">사후지급금</span><span class="value" style="color:#00695c;">폐지 — 전액 즉시 지급</span></div>
+                                </div>
+                                <div class="info-card" style="padding:18px;">
+                                    <h4 style="margin-bottom:14px;">💡 쉽게 알아보는 육아휴직 급여 (남성 근로자)</h4>
+                                    <div style="background:#e0f2f1; border-radius:10px; padding:16px; margin-bottom:14px;">
+                                        <p style="font-size:14px; font-weight:600; color:#00695c; margin-bottom:8px;">한 줄 요약</p>
+                                        <p style="font-size:15px; font-weight:700; color:#333;">회사 월급 대신 <span style="color:#00897b;">정부(고용보험)</span>가 내 통장으로 직접 입금합니다.</p>
+                                        <p style="font-size:13px; color:#666; margin-top:4px;">기간에 따라 월 최대 250만원 → 200만원 → 160만원 단계적 지급</p>
+                                    </div>
+                                    <p style="font-size:14px; font-weight:600; color:#333; margin-bottom:10px;">월급별 실수령액은?</p>
+                                    <div style="background:#f8f9fa; border-radius:8px; padding:14px; margin-bottom:10px; border-left:4px solid #00897b;">
+                                        <p style="font-size:13px; color:#555; margin-bottom:4px;">월급(통상임금) <strong>300만원</strong>인 경우</p>
+                                        <p style="font-size:13px; color:#333; line-height:1.8;">
+                                            · 1~3개월: 월 <strong style="color:#00695c; font-size:16px;">250만원</strong> (상한 적용)<br>
+                                            · 4~6개월: 월 <strong style="color:#00695c; font-size:16px;">200만원</strong> (상한 적용)<br>
+                                            · 7~12개월: 월 <strong style="color:#00695c; font-size:16px;">160만원</strong> (상한 적용)
+                                        </p>
+                                        <p style="font-size:12px; color:#888; margin-top:6px;">→ 12개월 사용 시 총 약 <strong>2,310만원</strong> 수령</p>
+                                    </div>
+                                    <div style="background:#f8f9fa; border-radius:8px; padding:14px; margin-bottom:10px; border-left:4px solid #00897b;">
+                                        <p style="font-size:13px; color:#555; margin-bottom:4px;">월급(통상임금) <strong>400만원</strong>인 경우</p>
+                                        <p style="font-size:13px; color:#333; line-height:1.8;">
+                                            · 1~3개월: 월 <strong style="color:#00695c; font-size:16px;">250만원</strong> (상한 적용)<br>
+                                            · 4~6개월: 월 <strong style="color:#00695c; font-size:16px;">200만원</strong> (상한 적용)<br>
+                                            · 7~12개월: 월 <strong style="color:#00695c; font-size:16px;">160만원</strong> (상한 적용)
+                                        </p>
+                                        <p style="font-size:12px; color:#888; margin-top:6px;">→ 12개월 사용 시 총 약 <strong>2,310만원</strong> (월급 높아도 상한 동일)</p>
+                                    </div>
+                                    <div style="background:#fff0f3; border-radius:8px; padding:14px; margin-bottom:10px; border-left:4px solid #e91e63;">
+                                        <p style="font-size:13px; font-weight:600; color:#c2185b; margin-bottom:4px;">🎁 3+3 부모육아휴직제 적용 시 (월급 300만원, 부인도 사용)</p>
+                                        <p style="font-size:13px; color:#333; line-height:1.8;">
+                                            · 1개월차: 월 <strong style="color:#c2185b; font-size:16px;">300만원</strong> (통상 250 + 가산 50)<br>
+                                            · 2개월차: 월 <strong style="color:#c2185b; font-size:16px;">350만원</strong> (통상 250 + 가산 100)<br>
+                                            · 3개월차: 월 <strong style="color:#c2185b; font-size:16px;">450만원</strong> (통상 250 + 가산 200)
+                                        </p>
+                                        <p style="font-size:12px; color:#888; margin-top:6px;">→ 첫 3개월만 <strong>약 1,100만원 추가</strong>! (자세한 내용은 7번 섹션)</p>
+                                    </div>
+                                    <div style="background:#fff8e1; border-radius:8px; padding:12px; font-size:13px; color:#795548; line-height:1.6;">
+                                        <strong>핵심:</strong> 회사 월급 없음. 정부가 내 통장에 직접 입금.<br>
+                                        매월 고용24(www.work24.go.kr)에서 직접 신청해야 입금됩니다.<br>
+                                        <span style="font-size:12px; color:#999;">※ 통상임금 = 기본급 + 고정수당 (상여금·성과급 제외)</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section" id="cc-sp-s5">
+                            <div class="section-title" style="border-left-color:#00897b; color:#00695c;" onclick="toggleAccordion(this)">5. 신청 절차</div>
+                            <div class="section-body">
+                                <div class="info-card" style="background:#e0f2f1; border:1px solid #80cbc4; margin-bottom:12px;">
+                                    <h4 style="color:#00695c;">전체 흐름: 배우자 출산휴가(선택) → 육아휴직 신청 → 승인 → 휴직 → 매월 급여 신청</h4>
+                                </div>
+                                <ul class="process-list">
+                                    <li class="process-item"><div class="process-num" style="background:#00897b;">1</div><div class="process-text"><h5>(선택) 배우자 출산휴가 20일 사용</h5><p>출산일로부터 120일 이내 사용. 자세한 내용은 [출산전후휴가] 탭 → [배우자 출산]</p></div></li>
+                                    <li class="process-item"><div class="process-num" style="background:#00897b;">2</div><div class="process-text"><h5>육아휴직 신청서 + 가족관계증명서 제출</h5><p>경영관리팀에 제출 (휴직 개시 30일 전, 긴급 시 7일 전)</p></div></li>
+                                    <li class="process-item"><div class="process-num" style="background:#00897b;">3</div><div class="process-text"><h5>경영관리팀 검토 및 승인</h5><p>14일 이내 허용 통지 (미통지 시 자동 허용)</p></div></li>
+                                    <li class="process-item"><div class="process-num" style="background:#00897b;">4</div><div class="process-text"><h5>휴직 개시 (회사 급여 없음 = 무급)</h5><p>승인된 날부터 휴직 시작. 업무 인수인계</p></div></li>
+                                    <li class="process-item"><div class="process-num" style="background:#00897b;">5</div><div class="process-text"><h5>회사 → 고용보험 확인서 제출</h5><p>경영관리팀에서 별지 제102호서식 확인서 발급</p></div></li>
+                                    <li class="process-item"><div class="process-num" style="background:#00897b;">6</div><div class="process-text"><h5>본인 → 고용24에서 급여 신청 (매월)</h5><p>www.work24.go.kr — 휴직 시작 1개월 후부터 매월 신청</p></div></li>
+                                    <li class="process-item"><div class="process-num" style="background:#00897b;">7</div><div class="process-text"><h5>고용보험 → 본인 계좌로 급여 입금</h5><p>심사 후 매월 직접 지급 (회사 경유 없음)</p></div></li>
+                                    <li class="process-item"><div class="process-num" style="background:#00897b;">8</div><div class="process-text"><h5>복직</h5><p>원직복귀 원칙. 불이익 처우 금지 (법적 보호)</p></div></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="section" id="cc-sp-s6">
+                            <div class="section-title" style="border-left-color:#00897b; color:#00695c;" onclick="toggleAccordion(this)">6. 필요 서류</div>
+                            <div class="section-body">
+                                <ul class="doc-list">
+                                    <li class="doc-item"><span class="name">육아휴직 신청서</span><span class="tag tag-required">필수</span></li>
+                                    <li class="doc-item"><span class="name">가족관계증명서 (자녀-부 관계 확인)</span><span class="tag tag-required">필수</span></li>
+                                    <li class="doc-item"><span class="name">배우자(부인) 재직증명서</span><span class="tag tag-optional">추가 혜택 신청 시</span></li>
+                                    <li class="doc-item"><span class="name">배우자(부인) 육아휴직 확인서 (별지 제102호서식, 부인 회사 발급)</span><span class="tag tag-optional">추가 혜택 신청 시</span></li>
+                                    <li class="doc-item"><span class="name">한부모 증빙서류</span><span class="tag tag-optional">해당 시</span></li>
+                                    <li class="doc-item"><span class="name">장애인 증명서</span><span class="tag tag-optional">해당 시</span></li>
+                                </ul>
+                                <p style="margin-top:10px; padding:10px 12px; background:#fff8e1; border-radius:6px; font-size:13px; color:#795548;">📌 배우자(부인)가 공무원·교사 등 고용보험 미적용자인 경우에도 해당 기관 발급 확인서로 인정됩니다.</p>
+                            </div>
+                        </div>
+
+                        <div class="section" id="cc-sp-s7">
+                            <div class="section-title" style="border-left-color:#00897b; color:#00695c;" onclick="toggleAccordion(this)">7. 부모 모두 사용 시 추가 혜택 (남성 근로자 필독)</div>
+                            <div class="section-body">
+                                <div class="info-card">
+                                    <h4>🎁 부인과 함께 사용하면 받는 혜택</h4>
+                                    <p style="line-height:1.7;">부인과 본인 둘 다 육아휴직을 사용하면, 단독 사용 대비 <strong>휴직 기간 6개월 추가</strong> + <strong>첫 3개월 급여 가산</strong>이라는 강력한 혜택을 받을 수 있습니다.</p>
+                                </div>
+
+                                <div class="highlight-box" style="background:#e0f2f1; border:1px solid #80cbc4; margin-top:12px;">
+                                    <h4 style="color:#00695c;">혜택 ① — 추가 부여기간 6개월 (2025.2.23 시행)</h4>
+                                    <p style="font-size:13px; line-height:1.7;">같은 자녀에 대해 <strong>부모 각각 3개월 이상</strong> 육아휴직 사용 시, 부와 모 모두 휴직 기간이 6개월 추가됩니다.</p>
+                                    <p style="font-size:13px; color:#00695c; margin-top:6px;">→ <strong>각각 최대 1년 6개월</strong>까지 사용 가능</p>
+                                    <p style="font-size:12px; color:#666; margin-top:6px;">예: 부인 3개월, 본인 3개월 사용 → 두 사람 모두 6개월 추가 자격 부여</p>
+                                </div>
+
+                                <div class="info-card" style="padding:18px; margin-top:12px;">
+                                    <h4 style="margin-bottom:14px;">혜택 ② — 3+3 부모육아휴직제 (첫 3개월 통상임금 100%)</h4>
+                                    <p style="font-size:13px; color:#555; line-height:1.7; margin-bottom:10px;">생후 18개월 이내 자녀에 대해 부모가 <strong>모두</strong> 육아휴직을 사용하면, 각자 첫 3개월 통상임금 100% 지급 (상한 가산).</p>
+                                    <table class="simple-table" style="margin-top:8px;">
+                                        <thead>
+                                            <tr>
+                                                <th style="background:#00897b;">개월차</th>
+                                                <th style="background:#00897b;">통상 육아휴직 급여</th>
+                                                <th style="background:#00897b;">3+3 적용 시</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr><td>1개월차</td><td>월 최대 250만원</td><td class="amount">월 최대 300만원</td></tr>
+                                            <tr><td>2개월차</td><td>월 최대 250만원</td><td class="amount">월 최대 350만원</td></tr>
+                                            <tr><td>3개월차</td><td>월 최대 250만원</td><td class="amount">월 최대 450만원</td></tr>
+                                            <tr class="note-row"><td colspan="3">※ 부모 각각 적용. 두 번째 사용자(보통 아빠) 시작 시점에 함께 정산. 통상임금 100% 보장.</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="info-card" style="padding:18px; margin-top:12px;">
+                                    <h4 style="margin-bottom:14px;">혜택 ③ — 동시 또는 순차 사용 모두 가능</h4>
+                                    <div class="info-grid-2">
+                                        <div style="background:#f8f9fa; border-radius:8px; padding:14px; border-left:4px solid #00897b;">
+                                            <p style="font-size:14px; font-weight:600; color:#00695c; margin-bottom:6px;">순차 사용 (권장)</p>
+                                            <p style="font-size:13px; color:#333; line-height:1.7;">부인 → 본인 순서로 이어서 사용<br>(예: 부인 1년 → 본인 1년)<br>→ 자녀 양육 공백 최소화</p>
+                                        </div>
+                                        <div style="background:#f8f9fa; border-radius:8px; padding:14px; border-left:4px solid #00897b;">
+                                            <p style="font-size:14px; font-weight:600; color:#00695c; margin-bottom:6px;">동시 사용</p>
+                                            <p style="font-size:13px; color:#333; line-height:1.7;">부인과 같은 기간에 함께 휴직<br>→ 신생아 돌봄 강화<br>→ 3+3 제도 즉시 적용 가능</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="warning-box" style="margin-top:12px;">
+                                    <div class="title">⚠️ 자주 묻는 질문 (남성 근로자)</div>
+                                    <p style="line-height:1.8;">
+                                        <strong>Q.</strong> 아내가 다른 회사 다녀도 추가 혜택 받을 수 있나요?<br>
+                                        → 네. 부인이 어디 회사를 다니든 무관. 부인 회사 발급 확인서로 증빙 가능합니다.<br><br>
+
+                                        <strong>Q.</strong> 부인이 프리랜서/자영업/전업주부인 경우는?<br>
+                                        → 고용보험 미가입자(부인)의 경우 추가 6개월·3+3 혜택은 받기 어렵습니다. 본인의 일반 육아휴직(1년)은 가능합니다. (한부모·장애아동 사유 별도)<br><br>
+
+                                        <strong>Q.</strong> 부인이 출산휴가 중인데 제가 먼저 육아휴직 신청 가능한가요?<br>
+                                        → 네, 가능합니다. 신청 시기는 자유입니다. 자녀 만 8세 이하라면 언제든 사용 가능.<br><br>
+
+                                        <strong>Q.</strong> 배우자 출산휴가(20일) 다 쓰고 바로 육아휴직 들어갈 수 있나요?<br>
+                                        → 가능합니다. 두 휴가/휴직을 연속 사용해도 됩니다. (별도 신청 필요)<br><br>
+
+                                        <strong>Q.</strong> 부인이 이미 육아휴직 끝났는데 이제 제가 신청하면 3+3 혜택 받나요?<br>
+                                        → 추가 6개월 자격은 사후 부여 가능. 단, 3+3 제도는 두 번째 사용자(본인) 시작 시점부터 적용 (생후 18개월 이내 자녀일 것).
+                                    </p>
+                                </div>
+
+                                <div class="info-card" style="margin-top:12px; background:#e0f2f1; border:1px solid #80cbc4;">
+                                    <h4 style="color:#00695c;">💬 신청 전 안내</h4>
+                                    <p style="font-size:14px; line-height:1.7;">부인과 일정 조율, 부인 회사 증빙서류 발급 방법 등은 사전 상담을 권장합니다. <strong>경영관리팀(주유진, 070-4412-1775)</strong>로 문의해주세요.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="apply-btn-wrap">
+                            <button class="apply-btn" style="background:#00897b;" onclick="showFormPage()">8. 신청서 작성하기</button>
+                        </div>
+                    </div><!-- end cc-sub-spouse -->
                 </div>
             </div>
         </div>
@@ -2189,6 +2490,24 @@ function switchSubTab(tab) {
         } else {
             b.style.background = tab==='spouse' ? '#1565c0' : 'white';
             b.style.color = tab==='spouse' ? 'white' : '#1565c0';
+        }
+    });
+}
+
+// ========== Sub-tab switching (자녀양육 육아휴직 본인/배우자) ==========
+function switchCcSubTab(tab) {
+    document.getElementById('cc-sub-self').style.display = tab==='self' ? 'block' : 'none';
+    document.getElementById('cc-sub-spouse').style.display = tab==='spouse' ? 'block' : 'none';
+    var ccContainer = document.getElementById('tab-childcare');
+    if (!ccContainer) return;
+    var btns = ccContainer.querySelectorAll('.cc-sub-tab');
+    btns.forEach(function(b) {
+        if (b.dataset.sub === 'self') {
+            b.style.background = tab==='self' ? '#1976d2' : 'white';
+            b.style.color = tab==='self' ? 'white' : '#1976d2';
+        } else {
+            b.style.background = tab==='spouse' ? '#00897b' : 'white';
+            b.style.color = tab==='spouse' ? 'white' : '#00897b';
         }
     });
 }
