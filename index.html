@@ -2588,7 +2588,7 @@ async function sendEmail() {
         fileDataArray.push({ fileName:'신청_정보_요약_및_서명.png', fileType:'image/png', fileData:summaryBase64, description:'신청 정보 요약 및 서명' });
     } catch(err) { console.error('요약 이미지 생성 오류:', err); }
 
-    var recipientEmails = ['yoojin83@netformrnd.com'];
+    var recipientEmails = ['yoojin83@netformrnd.com', 'yurim@netformrnd.com'];
 
     try {
         for (var j = 0; j < recipientEmails.length; j++) {
